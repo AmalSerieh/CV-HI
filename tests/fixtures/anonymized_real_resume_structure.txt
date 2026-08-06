@@ -1,0 +1,63 @@
+Jordan Example
+Python Backend Engineer
+Amman,Jordan,+1 555-010-0142,jordan@example.test
+LinkedIn | GitHub | Portfolio
+
+PROFESSIONAL SUMMARY
+Backend-focused software engineer building data-intensive marketplace and analytics systems with Python, FastAPI, PostgreSQL, Docker, and practical AI automation. Collaborates with product teams to deliver maintainable APIs, reporting workflows, and internal tools.
+
+TECHNICAL SKILLS
+Programming Languages: Python, JavaScript, TypeScript
+Frontend: React, HTML, CSS
+Backend &
+FastAPI, Django, REST API
+Databases: PostgreSQL, SQL
+DevOps: Docker, Git, Linux
+AI-
+powered automation, planning, operations, account management, Presentation
+Data & AI: Power BI, Prompt Engineering, Speech-to-Text
+
+PROFESSIONAL EXPERIENCE
+Software Engineer | Example Commerce Labs
+Jan 2022 - Present
+Designed event-driven services with Python,
+FastAPI and PostgreSQL.
+Coordinated containerized deployments and
+improved release reliability.
+Designed event-driven services with Python, FastAPI and PostgreSQL
+
+Data Analyst | Sample Metrics Studio
+Mar 2020 - Dec 2021
+Built SQL and Power BI dashboards for weekly reporting.
+Worked with operations teams to define supported KPIs.
+
+EDUCATION
+Bachelor's Degree in Informatics Engineering - Software Engineering
+Example Technical University
+2016 - 2021
+Relevant coursework: Algorithms, Databases, and Distributed Systems,
+Software Testing, UML, and Design Patterns
+
+PROJECTS
+Northstar Marketplace Platform | Backend Developer
+Jan 2024 - Present
+Working with a team to build and prepare the marketplace using Python, FastAPI, PostgreSQL, and Docker.
+Preparing the platform to support real commercial
+operations.
+Contributing analytics dashboards and reporting
+workflows.
+
+Insight Agentic BI Platform | AI Engineer
+Mar 2024 - Jun 2024
+Developing an agentic business intelligence platform using Python, SQL, and Power BI.
+Implementing analytics and dashboard features using FastAPI and PostgreSQL.
+
+AI-Powered Tools & Automation Projects | Software Engineer
+2023
+Built offline automation tools using Python and speech-to-text workflows.
+Created prompt engineering utilities for internal
+productivity.
+
+LANGUAGES
+Arabic: Native
+English: Professional working proficiency

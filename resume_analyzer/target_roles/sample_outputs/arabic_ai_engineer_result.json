@@ -1,0 +1,160 @@
+{
+  "target_role": {
+    "primary": {
+      "role_id": "ai_engineer",
+      "title_en": "AI Engineer",
+      "title_ar": "مهندس ذكاء اصطناعي",
+      "confidence": 0.8725,
+      "matched_signals": [
+        "artificial intelligence",
+        "python",
+        "retrieval augmented generation",
+        "llm",
+        "machine learning",
+        "مهندس ذكاء اصطناعي",
+        "langchain"
+      ],
+      "score_breakdown": {
+        "skills": 0.4,
+        "experience_titles": 0.25,
+        "experience_bullets": 0.0825,
+        "projects": 0.1,
+        "summary": 0.04,
+        "education_certifications": 0.0
+      },
+      "evidence": [
+        {
+          "source": "skills",
+          "path": "skills[4]",
+          "value": "ذكاء اصطناعي"
+        },
+        {
+          "source": "skills",
+          "path": "skills[0]",
+          "value": "Python"
+        },
+        {
+          "source": "skills",
+          "path": "skills[1]",
+          "value": "RAG"
+        },
+        {
+          "source": "skills",
+          "path": "skills[2]",
+          "value": "LLM"
+        },
+        {
+          "source": "skills",
+          "path": "skills[3]",
+          "value": "Machine Learning"
+        },
+        {
+          "source": "experience.titles",
+          "path": "experience[0].title",
+          "value": "مهندس ذكاء اصطناعي"
+        },
+        {
+          "source": "experience.bullets",
+          "path": "experience[0].bullets[1]",
+          "value": "بنيت نظام RAG للإجابة عن الأسئلة."
+        },
+        {
+          "source": "projects",
+          "path": "projects[0].description",
+          "value": "بناء نظام RAG وتطبيق ذكاء اصطناعي"
+        },
+        {
+          "source": "projects",
+          "path": "projects[0].technologies[0]",
+          "value": "Python"
+        },
+        {
+          "source": "projects",
+          "path": "projects[0].technologies[1]",
+          "value": "LangChain"
+        },
+        {
+          "source": "summary",
+          "path": "summary",
+          "value": "مهندس ذكاء اصطناعي لديه خبرة في بناء تطبيقات ذكية ونماذج لغوية."
+        }
+      ]
+    },
+    "alternatives": [
+      {
+        "role_id": "data_scientist",
+        "title_en": "Data Scientist",
+        "title_ar": "عالم بيانات",
+        "confidence": 0.2375,
+        "matched_signals": [
+          "python",
+          "machine learning"
+        ],
+        "score_breakdown": {
+          "skills": 0.2,
+          "experience_titles": 0.0,
+          "experience_bullets": 0.0,
+          "projects": 0.0375,
+          "summary": 0.0,
+          "education_certifications": 0.0
+        },
+        "evidence": [
+          {
+            "source": "skills",
+            "path": "skills[0]",
+            "value": "Python"
+          },
+          {
+            "source": "skills",
+            "path": "skills[3]",
+            "value": "Machine Learning"
+          },
+          {
+            "source": "projects",
+            "path": "projects[0].technologies[0]",
+            "value": "Python"
+          }
+        ]
+      },
+      {
+        "role_id": "machine_learning_engineer",
+        "title_en": "Machine Learning Engineer",
+        "title_ar": "مهندس تعلم آلي",
+        "confidence": 0.2375,
+        "matched_signals": [
+          "machine learning",
+          "python"
+        ],
+        "score_breakdown": {
+          "skills": 0.2,
+          "experience_titles": 0.0,
+          "experience_bullets": 0.0,
+          "projects": 0.0375,
+          "summary": 0.0,
+          "education_certifications": 0.0
+        },
+        "evidence": [
+          {
+            "source": "skills",
+            "path": "skills[3]",
+            "value": "Machine Learning"
+          },
+          {
+            "source": "skills",
+            "path": "skills[0]",
+            "value": "Python"
+          },
+          {
+            "source": "projects",
+            "path": "projects[0].technologies[0]",
+            "value": "Python"
+          }
+        ]
+      }
+    ],
+    "insufficient_evidence": false,
+    "method": "deterministic_weighted_matching",
+    "language": "mixed",
+    "warnings": []
+  }
+}

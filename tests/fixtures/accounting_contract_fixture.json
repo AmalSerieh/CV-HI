@@ -1,0 +1,151 @@
+{
+  "fixture_type": "targeted_regression_contract",
+  "source_resume": "Sample-Resume-Accounting_0.pdf",
+  "contact": {
+    "name": "Mohammed Ali",
+    "email": "m.ali@example.test",
+    "phone": "647-647-6477",
+    "location": "Toronto, ON",
+    "contact_score": 92
+  },
+  "sections": {
+    "found_sections": [
+      "summary",
+      "education",
+      "experience",
+      "leadership"
+    ],
+    "missing_required": [
+      "skills"
+    ],
+    "section_score": 80
+  },
+  "skills": {
+    "all_skills": [
+      "Microsoft Excel",
+      "CPA",
+      "NetSuite",
+      "GAAP",
+      "IFRS",
+      "Auditing",
+      "Accounting",
+      "Oracle Database",
+      "SAP",
+      "Communication",
+      "Leadership"
+    ],
+    "hard_skills": [
+      "Microsoft Excel",
+      "CPA",
+      "NetSuite",
+      "GAAP",
+      "IFRS",
+      "Auditing",
+      "Accounting",
+      "Oracle Database",
+      "SAP"
+    ],
+    "soft_skills": [
+      "Communication",
+      "Leadership"
+    ],
+    "categorized_skills": {
+      "finance_accounting": [
+        "GAAP",
+        "IFRS",
+        "Auditing",
+        "Accounting"
+      ],
+      "productivity_tools": [
+        "Microsoft Excel"
+      ],
+      "databases": [
+        "Oracle Database"
+      ]
+    },
+    "skills_score": 87,
+    "top_technologies": [
+      "Microsoft Excel",
+      "NetSuite",
+      "Oracle Database",
+      "SAP"
+    ],
+    "recommendations": []
+  },
+  "experience": {
+    "experiences": [],
+    "count": 4,
+    "professional_experience_months": 25,
+    "volunteer_experience_months": 6,
+    "experience_score": 90,
+    "experience_quality": {
+      "status": "ok",
+      "score": 90,
+      "warnings": []
+    },
+    "recommendations": []
+  },
+  "education": {
+    "education": [
+      {
+        "degree": "Bachelor",
+        "field": "Accounting",
+        "institution": "York University",
+        "graduation_year": 2016
+      },
+      {
+        "degree": "Diploma",
+        "field": "Accounting",
+        "institution": "Seneca College",
+        "graduation_year": 2012
+      }
+    ],
+    "count": 2,
+    "education_score": 92,
+    "education_quality": {
+      "status": "ok",
+      "score": 92,
+      "warnings": []
+    },
+    "recommendations": []
+  },
+  "scores": {
+    "resume_completeness_score": 88,
+    "module_scores": {
+      "contact": 92,
+      "sections": 80,
+      "skills": 87,
+      "experience": 90,
+      "education": 92
+    }
+  },
+  "summary": {
+    "name": "Mohammed Ali",
+    "sections_found": [
+      "summary",
+      "education",
+      "experience",
+      "leadership"
+    ],
+    "top_skills": [
+      "Accounting",
+      "Auditing",
+      "GAAP",
+      "IFRS"
+    ],
+    "top_technologies": [
+      "Microsoft Excel",
+      "NetSuite",
+      "Oracle Database",
+      "SAP"
+    ]
+  },
+  "extraction_quality": {
+    "status": "ok",
+    "score": 92,
+    "warnings": [],
+    "critical_warnings": [],
+    "component_scores": {}
+  },
+  "recommendations": []
+}

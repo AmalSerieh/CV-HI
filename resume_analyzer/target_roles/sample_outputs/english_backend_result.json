@@ -1,0 +1,165 @@
+{
+  "target_role": {
+    "primary": {
+      "role_id": "backend_engineer",
+      "title_en": "Backend Engineer",
+      "title_ar": "مهندس برمجيات خلفية",
+      "confidence": 0.91,
+      "matched_signals": [
+        "rest api",
+        "python",
+        "postgresql",
+        "redis",
+        "docker",
+        "backend developer",
+        "backend",
+        "server",
+        "api",
+        "authentication",
+        "microservices",
+        "web api",
+        "database",
+        "backend engineer"
+      ],
+      "score_breakdown": {
+        "skills": 0.36,
+        "experience_titles": 0.25,
+        "experience_bullets": 0.15,
+        "projects": 0.1,
+        "summary": 0.05,
+        "education_certifications": 0.0
+      },
+      "evidence": [
+        {
+          "source": "skills",
+          "path": "skills[1]",
+          "value": "REST APIs"
+        },
+        {
+          "source": "skills",
+          "path": "skills[0]",
+          "value": "Python"
+        },
+        {
+          "source": "skills",
+          "path": "skills[2]",
+          "value": "Postgres"
+        },
+        {
+          "source": "skills",
+          "path": "skills[4]",
+          "value": "Redis"
+        },
+        {
+          "source": "skills",
+          "path": "skills[3]",
+          "value": "Docker"
+        },
+        {
+          "source": "experience.titles",
+          "path": "experience[0].title",
+          "value": "Backend Developer"
+        },
+        {
+          "source": "experience.bullets",
+          "path": "experience[0].bullets[1]",
+          "value": "Maintained server-side microservices."
+        },
+        {
+          "source": "experience.bullets",
+          "path": "experience[0].bullets[0]",
+          "value": "Built authentication APIs backed by PostgreSQL."
+        },
+        {
+          "source": "projects",
+          "path": "projects[0].description",
+          "value": "Web API with database migrations"
+        },
+        {
+          "source": "projects",
+          "path": "projects[0].technologies[0]",
+          "value": "Python"
+        },
+        {
+          "source": "projects",
+          "path": "projects[0].technologies[1]",
+          "value": "PostgreSQL"
+        },
+        {
+          "source": "summary",
+          "path": "summary",
+          "value": "Backend Engineer focused on reliable API services."
+        }
+      ]
+    },
+    "alternatives": [
+      {
+        "role_id": "full_stack_developer",
+        "title_en": "Full-Stack Developer",
+        "title_ar": "مطور ويب متكامل",
+        "confidence": 0.4975,
+        "matched_signals": [
+          "rest api",
+          "postgresql",
+          "docker",
+          "backend",
+          "database"
+        ],
+        "score_breakdown": {
+          "skills": 0.195,
+          "experience_titles": 0.2,
+          "experience_bullets": 0.025,
+          "projects": 0.0625,
+          "summary": 0.015,
+          "education_certifications": 0.0
+        },
+        "evidence": [
+          {
+            "source": "skills",
+            "path": "skills[1]",
+            "value": "REST APIs"
+          },
+          {
+            "source": "skills",
+            "path": "skills[2]",
+            "value": "Postgres"
+          },
+          {
+            "source": "skills",
+            "path": "skills[3]",
+            "value": "Docker"
+          },
+          {
+            "source": "experience.titles",
+            "path": "experience[0].title",
+            "value": "Backend Developer"
+          },
+          {
+            "source": "experience.bullets",
+            "path": "experience[0].bullets[0]",
+            "value": "Built authentication APIs backed by PostgreSQL."
+          },
+          {
+            "source": "projects",
+            "path": "projects[0].description",
+            "value": "Web API with database migrations"
+          },
+          {
+            "source": "projects",
+            "path": "projects[0].technologies[1]",
+            "value": "PostgreSQL"
+          },
+          {
+            "source": "summary",
+            "path": "summary",
+            "value": "Backend Engineer focused on reliable API services."
+          }
+        ]
+      }
+    ],
+    "insufficient_evidence": false,
+    "method": "deterministic_weighted_matching",
+    "language": "en",
+    "warnings": []
+  }
+}

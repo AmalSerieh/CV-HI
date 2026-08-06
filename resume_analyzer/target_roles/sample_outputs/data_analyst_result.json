@@ -1,0 +1,142 @@
+{
+  "target_role": {
+    "primary": {
+      "role_id": "data_analyst",
+      "title_en": "Data Analyst",
+      "title_ar": "محلل بيانات",
+      "confidence": 0.865,
+      "matched_signals": [
+        "sql",
+        "excel",
+        "data visualization",
+        "power bi",
+        "statistics",
+        "reporting analyst",
+        "reporting",
+        "insights",
+        "kpi",
+        "data analyst"
+      ],
+      "score_breakdown": {
+        "skills": 0.4,
+        "experience_titles": 0.25,
+        "experience_bullets": 0.15,
+        "projects": 0.0,
+        "summary": 0.04,
+        "education_certifications": 0.025
+      },
+      "evidence": [
+        {
+          "source": "skills",
+          "path": "skills.found[0]",
+          "value": "SQL"
+        },
+        {
+          "source": "skills",
+          "path": "skills.found[1]",
+          "value": "Excel"
+        },
+        {
+          "source": "skills",
+          "path": "skills.found[3]",
+          "value": "Data Visualization"
+        },
+        {
+          "source": "skills",
+          "path": "skills.found[2]",
+          "value": "PowerBI"
+        },
+        {
+          "source": "skills",
+          "path": "skills.found[4]",
+          "value": "Statistics"
+        },
+        {
+          "source": "experience.titles",
+          "path": "experience[0].job_title",
+          "value": "Reporting Analyst"
+        },
+        {
+          "source": "experience.bullets",
+          "path": "experience[0].responsibilities[0]",
+          "value": "Built Power BI dashboards for KPI reporting."
+        },
+        {
+          "source": "experience.bullets",
+          "path": "experience[0].responsibilities[1]",
+          "value": "Analyzed SQL datasets and presented insights."
+        },
+        {
+          "source": "summary",
+          "path": "summary",
+          "value": "Data Analyst translating operational data into business insights."
+        },
+        {
+          "source": "education_certifications",
+          "path": "education[0].degree",
+          "value": "BSc Statistics"
+        }
+      ]
+    },
+    "alternatives": [
+      {
+        "role_id": "business_intelligence_analyst",
+        "title_en": "Business Intelligence Analyst",
+        "title_ar": "محلل ذكاء أعمال",
+        "confidence": 0.575,
+        "matched_signals": [
+          "power bi",
+          "sql",
+          "reporting",
+          "bi",
+          "kpi",
+          "statistics"
+        ],
+        "score_breakdown": {
+          "skills": 0.2,
+          "experience_titles": 0.2,
+          "experience_bullets": 0.15,
+          "projects": 0.0,
+          "summary": 0.0,
+          "education_certifications": 0.025
+        },
+        "evidence": [
+          {
+            "source": "skills",
+            "path": "skills.found[2]",
+            "value": "PowerBI"
+          },
+          {
+            "source": "skills",
+            "path": "skills.found[0]",
+            "value": "SQL"
+          },
+          {
+            "source": "experience.titles",
+            "path": "experience[0].job_title",
+            "value": "Reporting Analyst"
+          },
+          {
+            "source": "experience.bullets",
+            "path": "experience[0].responsibilities[0]",
+            "value": "Built Power BI dashboards for KPI reporting."
+          },
+          {
+            "source": "experience.bullets",
+            "path": "experience[0].responsibilities[1]",
+            "value": "Analyzed SQL datasets and presented insights."
+          },
+          {
+            "source": "education_certifications",
+            "path": "education[0].degree",
+            "value": "BSc Statistics"
+          }
+        ]
+      }
+    ],
+    "insufficient_evidence": false,
+    "method": "deterministic_weighted_matching",
+    "language": "en",
+    "warnings": []
+  }
+}

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="{{ 'ar' if direction == 'rtl' else 'en' }}" dir="{{ direction }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Local, evidence-grounded resume analysis for PDF and DOCX documents.">
+  <title>{{ page_title }} · Resume Intelligence Platform</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='vendor/bootstrap/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/rtl.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/print.css') }}" media="print">
+</head>
+<body>
+  {% set backend_build = backend_build_state() %}
+  <a class="visually-hidden-focusable skip-link" href="#main-content">Skip to content</a>
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar" aria-label="Primary navigation">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="/">Resume Intelligence</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNav" aria-controls="primaryNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="primaryNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="/analyze">Analyze resume</a></li>
+          <li class="nav-item"><a class="nav-link" href="/api/health">Health</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% if backend_build.restart_required %}
+  <div class="container mt-3 no-print">
+    <div class="alert alert-danger mb-0" role="alert">
+      <strong>Backend restart required.</strong>
+      Source files changed after this server started. Restart the supported
+      <code>scripts/run_web.ps1</code> or <code>scripts/run_web.sh</code> launcher
+      before analyzing another resume; new submissions are temporarily blocked.
+    </div>
+  </div>
+  {% endif %}
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="border-top py-4 mt-5 no-print">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2 small text-secondary">
+      <span>Resume Intelligence Platform</span>
+      <span>Temporary local processing · Human review required</span>
+    </div>
+  </footer>
+  <script src="{{ url_for('static', path='vendor/bootstrap/bootstrap.bundle.min.js') }}" defer></script>
+  <script src="{{ url_for('static', path='js/app.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

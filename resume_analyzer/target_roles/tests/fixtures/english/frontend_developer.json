@@ -1,0 +1,15 @@
+{
+  "case_id": "english_frontend_001",
+  "language": "en",
+  "description": "Frontend developer with React and accessibility evidence",
+  "input": {
+    "summary": "Frontend Developer building accessible responsive interfaces.",
+    "skills": ["HTML", "CSS", "JavaScript", "ReactJS", "TypeScript", "Accessibility"],
+    "experience": [{"title": "Frontend Engineer", "bullets": ["Created responsive user interfaces and a reusable design system.", "Improved browser accessibility."]}],
+    "projects": [{"name": "Web Portal", "description": "Single page application with a responsive interface", "technologies": ["React", "TypeScript"]}]
+  },
+  "expected_top_roles": ["frontend_developer", "full_stack_developer"],
+  "required_evidence": ["JavaScript", "ReactJS"],
+  "should_be_insufficient": false,
+  "strict_top1": "frontend_developer"
+}

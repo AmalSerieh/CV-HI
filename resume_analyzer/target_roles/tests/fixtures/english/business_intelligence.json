@@ -1,0 +1,15 @@
+{
+  "case_id": "english_bi_001",
+  "language": "en",
+  "description": "Business intelligence analyst with executive dashboards",
+  "input": {
+    "summary": "Business Intelligence Analyst supporting executive decisions.",
+    "skills": ["Power BI", "SQL", "DAX", "ETL", "Data Warehouse", "Dashboard"],
+    "experience": [{"title": "BI Analyst", "bullets": ["Delivered executive dashboards and KPI reporting.", "Modeled a data mart for decision support."]}],
+    "projects": [{"name": "Executive BI", "description": "Business reporting and BI dashboard"}]
+  },
+  "expected_top_roles": ["business_intelligence_analyst", "data_analyst", "data_engineer"],
+  "required_evidence": ["Power BI", "DAX"],
+  "should_be_insufficient": false,
+  "strict_top1": "business_intelligence_analyst"
+}

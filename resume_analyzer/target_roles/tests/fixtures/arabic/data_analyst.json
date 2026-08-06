@@ -1,0 +1,14 @@
+{
+  "case_id": "arabic_data_analyst_001",
+  "language": "ar",
+  "description": "سيرة محلل بيانات عربية",
+  "input": {
+    "summary": "محلل بيانات يحول البيانات التشغيلية إلى رؤى قابلة للتنفيذ.",
+    "skills": ["تحليل البيانات", "SQL", "Excel", "Power BI", "Data Visualization"],
+    "experience": [{"title": "محلل بيانات", "bullets": ["أنشأت لوحات مؤشرات وتقارير دورية.", "حللت بيانات SQL وقدمت رؤى للإدارة."]}]
+  },
+  "expected_top_roles": ["data_analyst", "business_intelligence_analyst"],
+  "required_evidence": ["تحليل البيانات", "SQL"],
+  "should_be_insufficient": false,
+  "strict_top1": "data_analyst"
+}

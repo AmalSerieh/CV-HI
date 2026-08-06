@@ -1,0 +1,53 @@
+# Local environment
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+env/
+
+# Python bytecode and build output
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+
+# Test and quality caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Application runtime and private documents
+runtime/*
+!runtime/.gitkeep
+uploads/
+outputs/
+logs/
+cache/
+generated/
+benchmarks/
+private-baseline/
+
+# Logs and temporary/editor files
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+*.swp
+*.swo
+*~
+
+# IDE and operating-system metadata
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,9 @@
+{
+  "case_id": "malformed_empty_001",
+  "language": "unknown",
+  "description": "Empty resume object",
+  "input": {},
+  "expected_top_roles": [],
+  "required_evidence": [],
+  "should_be_insufficient": true
+}

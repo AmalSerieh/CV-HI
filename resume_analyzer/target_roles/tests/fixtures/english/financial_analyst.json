@@ -1,0 +1,15 @@
+{
+  "case_id": "english_financial_analyst_001",
+  "language": "en",
+  "description": "Financial analyst with modeling and forecasting",
+  "input": {
+    "summary": "Financial Analyst specializing in planning and investment analysis.",
+    "skills": ["Financial Analysis", "Financial Modeling", "Forecasting", "Budgeting", "Excel", "Valuation"],
+    "experience": [{"title": "FP&A Analyst", "bullets": ["Built budget forecasts and variance analysis reports.", "Prepared cash flow and valuation models."]}],
+    "projects": [{"name": "Planning Model", "description": "Financial model for budget forecast"}]
+  },
+  "expected_top_roles": ["financial_analyst", "accountant"],
+  "required_evidence": ["Financial Modeling", "Forecasting"],
+  "should_be_insufficient": false,
+  "strict_top1": "financial_analyst"
+}

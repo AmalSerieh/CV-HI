@@ -1,0 +1,99 @@
+{
+  "target_role": {
+    "primary": {
+      "role_id": "accountant",
+      "title_en": "Accountant",
+      "title_ar": "محاسب",
+      "confidence": 0.8637,
+      "matched_signals": [
+        "accounting",
+        "general ledger",
+        "reconciliation",
+        "excel",
+        "quickbooks",
+        "accounts payable",
+        "accountant",
+        "staff accountant",
+        "journal entries",
+        "month-end close",
+        "financial statements",
+        "cma"
+      ],
+      "score_breakdown": {
+        "skills": 0.4,
+        "experience_titles": 0.25,
+        "experience_bullets": 0.1275,
+        "projects": 0.0,
+        "summary": 0.0362,
+        "education_certifications": 0.05
+      },
+      "evidence": [
+        {
+          "source": "skills",
+          "path": "skills[0]",
+          "value": "Accounting"
+        },
+        {
+          "source": "skills",
+          "path": "skills[1]",
+          "value": "General Ledger"
+        },
+        {
+          "source": "skills",
+          "path": "skills[2]",
+          "value": "Reconciliation"
+        },
+        {
+          "source": "skills",
+          "path": "skills[3]",
+          "value": "Excel"
+        },
+        {
+          "source": "skills",
+          "path": "skills[5]",
+          "value": "QuickBooks"
+        },
+        {
+          "source": "skills",
+          "path": "skills[4]",
+          "value": "Accounts Payable"
+        },
+        {
+          "source": "experience.titles",
+          "path": "experience[0].title",
+          "value": "Staff Accountant"
+        },
+        {
+          "source": "experience.bullets",
+          "path": "experience[0].bullets[0]",
+          "value": "Prepared journal entries and completed account reconciliation."
+        },
+        {
+          "source": "experience.bullets",
+          "path": "experience[0].bullets[1]",
+          "value": "Supported month-end close and financial statement preparation."
+        },
+        {
+          "source": "summary",
+          "path": "summary",
+          "value": "Accountant experienced in monthly close and financial statements."
+        },
+        {
+          "source": "education_certifications",
+          "path": "education[0].degree",
+          "value": "Bachelor of Accounting"
+        },
+        {
+          "source": "education_certifications",
+          "path": "certifications[0]",
+          "value": "CMA"
+        }
+      ]
+    },
+    "alternatives": [],
+    "insufficient_evidence": false,
+    "method": "deterministic_weighted_matching",
+    "language": "en",
+    "warnings": []
+  }
+}

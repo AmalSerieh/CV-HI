@@ -1,0 +1,15 @@
+{
+  "case_id": "mixed_ai_terms_001",
+  "language": "mixed",
+  "description": "Arabic AI resume containing English technical terms",
+  "input": {
+    "summary": "مهندس ذكاء اصطناعي متخصص في Generative AI وLLM applications.",
+    "skills": ["Python", "RAG", "LLM", "Vector Database", "Prompt Engineering"],
+    "projects": [{"name": "مساعد ذكي", "description": "Built a RAG system with LangChain and a vector database"}],
+    "experience": [{"title": "AI Engineer", "bullets": ["طورت تطبيق ذكاء اصطناعي توليدي موثق بالأدلة."]}]
+  },
+  "expected_top_roles": ["ai_engineer", "nlp_engineer", "machine_learning_engineer"],
+  "required_evidence": ["RAG", "LLM"],
+  "should_be_insufficient": false,
+  "strict_top1": "ai_engineer"
+}

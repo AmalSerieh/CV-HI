@@ -1,0 +1,14 @@
+{
+  "case_id": "english_no_skills_001",
+  "language": "en",
+  "description": "Data resume without a dedicated skills field",
+  "input": {
+    "sections": {"sections": {"summary": {"content": "Data Analyst producing dashboards and operational insights."}}},
+    "experience": [{"title": "Data Analyst", "bullets": ["Queried SQL datasets for weekly reporting.", "Built Power BI dashboards and Excel models."]}],
+    "projects": [{"name": "Operations Dashboard", "description": "KPI reporting dashboard"}]
+  },
+  "expected_top_roles": ["data_analyst", "business_intelligence_analyst"],
+  "required_evidence": ["Queried SQL datasets for weekly reporting."],
+  "should_be_insufficient": false,
+  "strict_top1": "data_analyst"
+}

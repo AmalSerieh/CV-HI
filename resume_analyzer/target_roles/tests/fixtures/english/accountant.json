@@ -1,0 +1,16 @@
+{
+  "case_id": "english_accountant_001",
+  "language": "en",
+  "description": "Accountant with ledger and reconciliation evidence",
+  "input": {
+    "summary": "Accountant experienced in monthly close and financial statements.",
+    "skills": ["Accounting", "General Ledger", "Reconciliation", "Excel", "Accounts Payable", "QuickBooks"],
+    "experience": [{"title": "Staff Accountant", "bullets": ["Prepared journal entries and completed account reconciliation.", "Supported month-end close and financial statement preparation."]}],
+    "education": [{"degree": "Bachelor of Accounting"}],
+    "certifications": ["CMA"]
+  },
+  "expected_top_roles": ["accountant", "financial_analyst"],
+  "required_evidence": ["Accounting", "General Ledger"],
+  "should_be_insufficient": false,
+  "strict_top1": "accountant"
+}

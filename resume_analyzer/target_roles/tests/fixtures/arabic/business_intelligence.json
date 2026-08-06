@@ -1,0 +1,14 @@
+{
+  "case_id": "arabic_bi_001",
+  "language": "ar",
+  "description": "سيرة محلل ذكاء أعمال",
+  "input": {
+    "summary": "محلل ذكاء أعمال يبني لوحات تنفيذية لدعم القرار.",
+    "skills": ["Business Intelligence", "Power BI", "SQL", "DAX", "ETL", "Dashboard"],
+    "experience": [{"title": "محلل ذكاء أعمال", "bullets": ["بنيت لوحة مؤشرات تنفيذية وتقارير KPI.", "صممت مستودع بيانات لذكاء الأعمال."]}]
+  },
+  "expected_top_roles": ["business_intelligence_analyst", "data_analyst", "data_engineer"],
+  "required_evidence": ["Power BI", "DAX"],
+  "should_be_insufficient": false,
+  "strict_top1": "business_intelligence_analyst"
+}

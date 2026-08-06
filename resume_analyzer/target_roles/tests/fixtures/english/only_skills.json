@@ -1,0 +1,10 @@
+{
+  "case_id": "english_only_skills_001",
+  "language": "en",
+  "description": "Incomplete resume containing only backend skills",
+  "input": {"skills": ["Python", "REST API", "SQL", "PostgreSQL", "Docker", "Redis"]},
+  "expected_top_roles": ["backend_engineer", "full_stack_developer"],
+  "required_evidence": ["Python", "REST API"],
+  "should_be_insufficient": false,
+  "strict_top1": "backend_engineer"
+}

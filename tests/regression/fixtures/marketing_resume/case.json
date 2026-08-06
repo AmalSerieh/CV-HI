@@ -1,0 +1,7 @@
+{
+  "case_id": "synthetic_marketing_resume",
+  "source": "source.txt",
+  "expected": "expected.json",
+  "privacy": "synthetic",
+  "schema_version": "2.1.0"
+}

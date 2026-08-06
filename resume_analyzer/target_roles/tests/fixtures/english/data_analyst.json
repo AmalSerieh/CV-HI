@@ -1,0 +1,15 @@
+{
+  "case_id": "english_data_analyst_001",
+  "language": "en",
+  "description": "Data analyst with SQL dashboards and reporting",
+  "input": {
+    "summary": "Data Analyst translating operational data into business insights.",
+    "skills": {"found": ["SQL", "Excel", "PowerBI", "Data Visualization", "Statistics"], "has_clear_skills_section": true},
+    "experience": [{"job_title": "Reporting Analyst", "responsibilities": ["Built Power BI dashboards for KPI reporting.", "Analyzed SQL datasets and presented insights."]}],
+    "education": [{"degree": "BSc Statistics", "institution": "Example University"}]
+  },
+  "expected_top_roles": ["data_analyst", "business_intelligence_analyst", "data_scientist"],
+  "required_evidence": ["SQL", "PowerBI"],
+  "should_be_insufficient": false,
+  "strict_top1": "data_analyst"
+}

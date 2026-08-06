@@ -1,0 +1,9 @@
+{
+  "case_id": "malformed_nulls_001",
+  "language": "unknown",
+  "description": "All optional fields are null",
+  "input": {"summary": null, "skills": null, "experience": null, "education": null, "projects": null, "languages": null, "certifications": null},
+  "expected_top_roles": [],
+  "required_evidence": [],
+  "should_be_insufficient": true
+}

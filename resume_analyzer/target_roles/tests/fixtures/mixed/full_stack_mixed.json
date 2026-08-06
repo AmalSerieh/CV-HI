@@ -1,0 +1,15 @@
+{
+  "case_id": "mixed_fullstack_001",
+  "language": "mixed",
+  "description": "سيرة مختلطة لمطور ويب متكامل",
+  "input": {
+    "summary": "مطور ويب متكامل builds end-to-end web applications.",
+    "skills": ["React", "Node", "JavaScript", "Postgres", "REST APIs", "Docker"],
+    "experience": [{"title": "مطور ويب متكامل", "bullets": ["طورت frontend وbackend لمنصة ويب.", "Integrated APIs with PostgreSQL database."]}],
+    "projects": [{"name": "منصة حجوزات", "description": "Full stack web application with API integration"}]
+  },
+  "expected_top_roles": ["full_stack_developer", "backend_engineer", "frontend_developer"],
+  "required_evidence": ["React", "Node"],
+  "should_be_insufficient": false,
+  "strict_top1": "full_stack_developer"
+}

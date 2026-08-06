@@ -1,0 +1,7 @@
+@page { margin:1.2cm; }
+.no-print,.navbar,footer,.results-tabs { display:none!important; }
+body,.results-shell { background:#fff!important; color:#000!important; }
+.tab-pane { display:block!important; opacity:1!important; border-bottom:1px solid #bbb; page-break-inside:avoid; }
+.tab-content,.card,.content-card,.metric-card { box-shadow:none!important; border-color:#bbb!important; }
+.json-view { color:#000!important; background:#fff!important; max-height:none; }
+a { color:#000; text-decoration:none; }

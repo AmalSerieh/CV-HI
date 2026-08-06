@@ -1,0 +1,4 @@
+html[dir="rtl"] body { font-family:"Segoe UI",Tahoma,Arial,sans-serif; }
+html[dir="rtl"] .navbar-nav { margin-left:0!important; margin-right:auto!important; }
+html[dir="rtl"] .json-view { direction:ltr; text-align:left; }
+html[dir="rtl"] .eyebrow { letter-spacing:0; }

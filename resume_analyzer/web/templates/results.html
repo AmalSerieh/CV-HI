@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% macro evidence_refs(ids) -%}
+  {% if ids %}
+  <details class="supporting-evidence small mt-2">
+    <summary>Why this result? {{ ids|length }} supporting item{% if ids|length != 1 %}s{% endif %}</summary>
+    <div class="mt-2">
+      {% for evidence_id in ids %}
+      {% if loop.index <= 3 %}
+      {% set evidence = evidence_by_id.get(evidence_id) %}
+      {% if evidence %}
+      <div class="evidence-preview">
+        <div><strong>{{ evidence['label'] }}</strong> <span class="badge text-bg-light">{{ evidence['kind'] }}</span></div>
+        <div class="text-secondary">{{ evidence['value']|string|truncate(240, true, '…') }}</div>
+      </div>
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+      {% if ids|length > 3 %}<p class="text-secondary mb-0 mt-2">Plus {{ ids|length - 3 }} additional audit item(s). The complete registry is available in the JSON download.</p>{% endif %}
+    </div>
+  </details>
+  {% endif %}
+{%- endmacro %}
+{% block content %}
+{% set ats = report['ats'] %}{% set entities = report['entities'] %}{% set rewrites = report['rewrites'] %}{% set data_quality = report['data_quality'] %}
+{% set layout_state = namespace(risk='low') %}
+{% for page in report['extraction']['page_layouts'] %}
+  {% if page['reading_order_risk'] == 'high' %}{% set layout_state.risk = 'high' %}
+  {% elif page['reading_order_risk'] == 'medium' and layout_state.risk != 'high' %}{% set layout_state.risk = 'medium' %}
+  {% endif %}
+{% endfor %}
+{% set ats_max = {'text_extractability':15,'section_structure':20,'layout_safety':20,'formatting_consistency':15,'content_clarity':15,'contact_accessibility':5,'consistency':10} %}
+{% set role_max = {'skills':40,'experience_titles':25,'experience_bullets':15,'projects':10,'summary':5,'education_certifications':5} %}
+{% set notice_labels = {'MODEL_OUTPUT_TRUNCATED':'Model response was incomplete','NO_MATERIAL_CHANGE':'No material change','BULLET_REWRITE_LIMIT_APPLIED':'Processing limit applied','INVALID_MODEL_RESPONSE':'Model response was rejected','AI_PROVIDER_TIMEOUT':'Local model timed out','AI_PROVIDER_UNAVAILABLE':'Local model unavailable','SKILLS_DETERMINISTIC_FALLBACK_APPLIED':'Safe skills grouping used'} %}
+{% set message_labels = {'AI_PROVIDER_TIMEOUT':'Local AI timeout','RECOMMENDATION_FALLBACK_APPLIED':'Recommendation fallback used','rewrite_warning':'Rewrite notice','ats_warning':'ATS notice','ai_warmup_failed':'Model warm-up notice'} %}
+<section class="container-fluid results-shell py-4 py-lg-5">
+  <div class="container-xxl">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+      <div><span class="eyebrow">Canonical report · schema {{ report['schema_version'] }}</span><h1 class="h2 mt-2 mb-1">{{ report['document']['name'] }}</h1><p class="text-secondary mb-0">Review every suggestion before editing your resume.</p></div>
+      <div class="d-flex flex-wrap gap-2 no-print"><a class="btn btn-outline-secondary" href="/analyze">New analysis</a><button class="btn btn-outline-secondary" type="button" id="print-result">Print</button><a class="btn btn-primary" href="/api/analyses/{{ analysis_id }}/download">Download JSON</a></div>
+    </div>
+    <ul class="nav nav-tabs results-tabs no-print" id="resultTabs" role="tablist">
+      {% for key, label in [('overview','Overview'),('candidate','Candidate'),('sections','Sections'),('roles','Target role'),('ats','ATS'),('recommendations','Recommendations'),('rewrites','Rewrites'),('evidence','Evidence'),('messages','Warnings'),('json','Raw JSON')] %}
+      <li class="nav-item" role="presentation"><button class="nav-link {% if loop.first %}active{% endif %}" id="{{ key }}-tab" data-bs-toggle="tab" data-bs-target="#{{ key }}" type="button" role="tab" aria-controls="{{ key }}" aria-selected="{{ 'true' if loop.first else 'false' }}">{{ label }}</button></li>
+      {% endfor %}
+    </ul>
+    <div class="tab-content card border-0 shadow-sm rounded-top-0" id="resultTabContent">
+      <section class="tab-pane fade show active p-4" id="overview" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">ATS compatibility</span><strong class="metric-value">{{ ats['ats_compatibility_score'] if ats['ats_compatibility_score'] is not none else '—' }}</strong><span class="badge text-bg-{{ 'success' if ats['score_label'] in ['excellent','good'] else 'warning' if ats['score_label']=='fair' else 'secondary' }}">{{ ats['score_label'] }}</span>{% if ats['ats_compatibility_score'] is not none %}<progress class="score-progress mt-3" max="100" value="{{ ats['ats_compatibility_score'] }}">{{ ats['ats_compatibility_score'] }}%</progress>{% endif %}</div></div>
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">Parsing integrity</span><strong class="metric-value">{{ data_quality['parsing_integrity_score'] if data_quality['parsing_integrity_score'] is not none else '—' }}</strong><span class="small text-secondary">{{ data_quality['status']|replace('_',' ') }}</span></div></div>
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">Extraction confidence</span><strong class="metric-value">{{ data_quality['text_extraction_quality'] if data_quality['text_extraction_quality'] is not none else report['extraction']['quality_score'] }}</strong><span class="small text-secondary">{{ report['extraction']['engine'] }} · {{ report['document']['pages'] }} page(s)</span></div></div>
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">Job match</span><strong class="metric-value">{{ ats['job_match']['match_score'] if ats['job_match']['match_score'] is not none else '—' }}</strong><span class="small text-secondary">{{ ats['job_match']['status'] }}</span></div></div>
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">Layout risk</span><strong class="metric-value text-capitalize">{{ layout_state.risk }}</strong><span class="small text-secondary">Reading-order reconstruction</span></div></div>
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">Contact readability</span><strong class="metric-value text-capitalize">{{ data_quality['contact_readability']|replace('_',' ') }}</strong><span class="small text-secondary">{{ report['extraction']['visual_metadata']['contact_ocr_status']|replace('_',' ') }} OCR status</span></div></div>
+        </div>
+        <div class="alert {{ 'alert-success' if data_quality['status']=='good' else 'alert-warning' }} mt-4 mb-0"><strong>Parsing integrity:</strong> {{ data_quality['interpretation'] }}{% if data_quality['issues'] %}<ul class="mb-0 mt-2">{% for issue in data_quality['issues'] %}<li>{{ issue['message'] }}</li>{% endfor %}</ul>{% endif %}</div>
+        {% if data_quality['breakdown'] %}
+        <details class="content-card mt-4">
+          <summary><strong>How parsing integrity was calculated</strong></summary>
+          <div class="row g-3 mt-1">
+            {% for name, detail in data_quality['breakdown']['dimensions'].items() %}
+            <div class="col-md-6"><div class="status-card h-100">
+              <div class="d-flex justify-content-between gap-3"><span>{{ name|replace('_',' ')|title }}</span><strong>{{ detail['score'] }} / 100</strong></div>
+              <progress class="score-progress my-2" max="100" value="{{ detail['score'] }}">{{ detail['score'] }}%</progress>
+              <div class="small text-secondary">Weight {{ (detail['weight'] * 100)|round|int }}% · contribution {{ detail['weighted_points']|round(2) }}</div>
+              {% for explanation in detail['explanations'] %}<div class="small mt-1">{{ explanation }}</div>{% endfor %}
+            </div></div>
+            {% endfor %}
+          </div>
+          <div class="mt-3"><strong>Weighted subtotal:</strong> {{ data_quality['breakdown']['weighted_subtotal'] }}</div>
+          {% for adjustment in data_quality['breakdown']['adjustments'] %}<div class="alert alert-warning py-2 mt-2 mb-0"><strong>{{ adjustment['points'] }} point adjustment:</strong> {{ adjustment['explanation'] }}</div>{% endfor %}
+          <div class="mt-2"><strong>Final parsing integrity:</strong> {{ data_quality['breakdown']['total'] }}</div>
+        </details>
+        {% endif %}
+        {% if ats['parsing_integrity_context'] %}<div class="alert alert-info mt-3 mb-0"><strong>ATS and parsing context:</strong> {{ ats['parsing_integrity_context'] }}</div>{% endif %}
+        {% if data_quality['fields_requiring_review'] %}<div class="mt-4"><h2 class="h5">Fields requiring review</h2><div class="d-flex flex-wrap gap-2">{% for field in data_quality['fields_requiring_review'] %}<span class="badge text-bg-warning">Needs review · {{ field|replace('entities.','')|replace('extraction.','')|replace('_',' ') }}</span>{% endfor %}</div></div>{% endif %}
+        {% if data_quality['ambiguities'] %}<div class="mt-4"><h2 class="h5">Detected ambiguities</h2><ul>{% for ambiguity in data_quality['ambiguities'] %}<li>{{ ambiguity|replace('_',' ')|replace(':',' · ') }}</li>{% endfor %}</ul></div>{% endif %}
+        {% if data_quality['issues'] %}
+        <div class="mt-4"><h2 class="h5">Parsing issue groups</h2>
+          {% for area, label in [('layout','Layout'),('contact','Contact'),('sections','Sections'),('experience','Experience'),('projects','Projects'),('education','Education'),('skills','Skills'),('content_quality','Content quality'),('evidence','Evidence')] %}
+          {% set grouped_issues = data_quality['issues']|selectattr('area','equalto',area)|list %}
+          {% if grouped_issues %}<section class="content-card mb-3"><h3 class="h6">{{ label }}</h3>{% for issue in grouped_issues %}<div class="d-flex justify-content-between gap-3"><span>{{ issue['title'] or issue['message'] }}</span><span class="badge severity-{{ issue['severity'] }}">{{ issue['severity'] }}</span></div><p class="small text-secondary mb-2">{{ issue['suggested_action'] or issue['message'] }}</p>{% endfor %}</section>{% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+        <h2 class="h5 mt-5">Module status</h2><div class="row g-3">{% for name, status in report['module_status'].items() %}<div class="col-sm-6 col-xl"><div class="status-card"><span>{{ name|replace('_',' ')|title }}</span><span class="badge text-bg-light">{{ status['status'] }}</span></div></div>{% endfor %}</div>
+      </section>
+      <section class="tab-pane fade p-4" id="candidate" role="tabpanel" aria-labelledby="candidate-tab" tabindex="0">
+        <h2 class="h4">Candidate information</h2><dl class="row definition-grid">{% for name, value in entities['contact'].items() if name not in ['evidence_ids','source_types'] %}<dt class="col-sm-4">{{ name|replace('_',' ')|title }}</dt><dd class="col-sm-8">{% if name == 'phone' and not value %}No reliable phone number was extracted.{% else %}{{ value or 'Not found' }}{% endif %}{% if value and entities['contact']['source_types'].get(name) %} <span class="badge text-bg-light">{{ entities['contact']['source_types'][name]|replace('_',' ') }}</span>{% endif %}</dd>{% endfor %}</dl>
+        {% if report['extraction']['ocr_usage']['used'] %}<div class="alert alert-info"><strong>OCR scope:</strong> {{ report['extraction']['ocr_usage']['scope']|replace('_',' ') }}{% if report['extraction']['ocr_usage']['pages'] %} · page(s) {{ report['extraction']['ocr_usage']['pages']|join(', ') }}{% endif %}{% if report['extraction']['ocr_usage']['fields'] %} · field(s) {{ report['extraction']['ocr_usage']['fields']|join(', ') }}{% endif %}</div>{% endif %}
+        {% if report['extraction']['visual_metadata']['possible_image_only_contact'] %}<div class="alert alert-warning"><strong>Needs review:</strong> Contact information may be embedded in an image.</div>{% endif %}
+        <h3 class="h5 mt-4">Summary</h3><p class="preserve-lines">{{ entities['summary'] or 'No summary was extracted.' }}</p>
+        {% for collection, label in [('skills','Skills'),('experience','Experience'),('education','Education'),('projects','Projects'),('languages','Languages'),('certifications','Certifications')] %}<h3 class="h5 mt-4">{{ label }}</h3><div class="stack-list">{% for item in entities[collection] %}<article class="content-card">{% if collection == 'experience' %}<div class="d-flex flex-wrap gap-2 mb-3"><span class="badge {{ 'text-bg-warning' if item['parsing_needs_review'] else 'text-bg-success' }}">Parsing {{ 'needs review' if item['parsing_needs_review'] else 'verified' }}</span><span class="badge {{ 'text-bg-warning' if item['content_needs_review'] else 'text-bg-info' if item['review_reasons'] else 'text-bg-success' }}">Content {{ 'needs review' if item['content_needs_review'] else 'suggestions noted' if item['review_reasons'] else 'checks passed' }}</span></div>{% endif %}<dl class="mb-0">{% for key, value in item.items() if key not in ['evidence_ids','needs_review','parsing_needs_review','content_needs_review','review_reasons'] %}<div><dt>{{ key|replace('_',' ')|title }}</dt><dd>{{ value if value not in [none, '', []] else '—' }}</dd></div>{% endfor %}</dl>{% if collection == 'experience' and item['review_reasons'] %}<div class="mt-3"><strong>Content review notes</strong><ul class="mb-0 mt-1">{% for reason in item['review_reasons'] %}<li>{{ reason|replace('_',' ') }}</li>{% endfor %}</ul></div>{% endif %}</article>{% else %}<p class="empty-state">No {{ label|lower }} extracted.</p>{% endfor %}</div>{% endfor %}
+      </section>
+      <section class="tab-pane fade p-4" id="sections" role="tabpanel" aria-labelledby="sections-tab" tabindex="0"><h2 class="h4">Extracted sections</h2>{% for key, section in report['extraction']['sections'].items() %}<article class="content-card mb-3" id="section-{{ key|replace('_','-') }}"><div class="d-flex justify-content-between gap-3"><h3 class="h6">{{ section['heading'] or key|replace('_',' ')|title }}</h3><span class="badge text-bg-light">{{ section['words'] }} words</span></div><p class="preserve-lines mb-0">{{ section['content'] or 'No content.' }}</p></article>{% else %}<p class="empty-state">No sections were detected.</p>{% endfor %}</section>
+      <section class="tab-pane fade p-4" id="roles" role="tabpanel" aria-labelledby="roles-tab" tabindex="0">
+        <h2 class="h4">Target-role evidence match</h2>
+        <div class="alert alert-info">
+          This section is calculated by deterministic rules, not by the language model.
+          The percentage measures weighted resume evidence that matches the role catalog; it is not a hiring probability or seniority rating.
+        </div>
+        {% if report['target_role'] and report['target_role']['primary'] %}
+        {% set role=report['target_role']['primary'] %}
+        <article class="highlight-card">
+          <span class="eyebrow">Strongest catalog match</span>
+          <h3 class="h4 mt-2">{{ role['title_en'] }} · {{ role['title_ar'] }}</h3>
+          <p class="mb-2"><strong>Evidence match:</strong> {{ (role['confidence'] * 100)|round|int }}%</p>
+          <progress class="score-progress mb-3" max="100" value="{{ role['confidence'] * 100 }}">{{ (role['confidence'] * 100)|round|int }}%</progress>
+          <p class="small text-secondary mb-2">Matched resume signals</p>
+          <div class="d-flex flex-wrap gap-2">{% for signal in role['matched_signals'] %}<span class="badge text-bg-primary-subtle">{{ signal }}</span>{% endfor %}</div>
+          <details class="mt-3">
+            <summary>How the score was calculated</summary>
+            <div class="row g-2 mt-2">
+              {% for key, contribution in role['score_breakdown'].items() %}
+              <div class="col-sm-6"><div class="status-card"><span>{{ key|replace('_',' ')|title }}</span><strong>{{ (contribution * 100)|round|int }} / {{ role_max.get(key, 0) }}</strong></div></div>
+              {% endfor %}
+            </div>
+            <p class="small text-secondary mt-2 mb-0">Maximum weights: skills 40, job titles 25, experience bullets 15, projects 10, summary 5, education/certifications 5.</p>
+          </details>
+        </article>
+        <h3 class="h5 mt-4">Other evidence-supported matches</h3>
+        <div class="row g-3">
+          {% for alternative in report['target_role']['alternatives'] %}
+          <div class="col-md-6"><article class="content-card h-100">
+            <strong>{{ alternative['title_en'] }}</strong>
+            <div>{{ alternative['title_ar'] }}</div>
+            <p class="mb-2"><strong>{{ (alternative['confidence']*100)|round|int }}%</strong> evidence match</p>
+            <div class="d-flex flex-wrap gap-1">{% for signal in alternative['matched_signals'][:6] %}<span class="badge text-bg-light">{{ signal }}</span>{% endfor %}</div>
+          </article></div>
+          {% else %}<p class="empty-state">No alternative roles met the evidence threshold.</p>{% endfor %}
+        </div>
+        {% else %}<p class="empty-state">There was not enough independent resume evidence to suggest a target role.</p>{% endif %}
+      </section>
+      <section class="tab-pane fade p-4" id="ats" role="tabpanel" aria-labelledby="ats-tab" tabindex="0">
+        <h2 class="h4">ATS compatibility</h2>
+        <div class="alert alert-info">
+          ATS compatibility measures whether software can read and navigate the document. It does not measure candidate quality, hiring probability, or semantic correctness; parsing integrity is reported separately on the Overview tab.
+          <div class="mt-2">{{ ats['interpretation'] }}</div>
+          {% if ats['parsing_integrity_context'] %}<div class="mt-2"><strong>Separate parsing result:</strong> {{ ats['parsing_integrity_context'] }}</div>{% endif %}
+        </div>
+        <div class="row g-3 my-2">{% for key, value in ats['score_breakdown'].items() %}<div class="col-sm-6 col-lg-4"><div class="status-card"><span>{{ key|replace('_',' ')|title }}</span><strong>{{ value }} / {{ ats_max.get(key, '—') }}</strong></div></div>{% endfor %}</div>
+        <p class="small text-secondary">The category values add up to the ATS score. A deduction appears in the related issue below.</p>
+        <h3 class="h5 mt-4">Issues affecting the score</h3>
+        {% for issue in ats['issues'] %}<article class="content-card mb-3"><div class="d-flex justify-content-between gap-3"><h4 class="h6">{{ issue['title'] }}</h4><span class="badge severity-{{ issue['severity'] }}">{{ issue['severity'] }}</span></div><p>{{ issue['problem'] }}</p><p class="mb-2"><strong>Suggested action:</strong> {{ issue['suggestion'] }}</p>{{ evidence_refs(issue['evidence_ids']) }}</article>{% else %}<p class="empty-state">No ATS issues were reported.</p>{% endfor %}
+        <h3 class="h5 mt-4">Strengths</h3>{% for strength in ats['strengths'] %}<article class="content-card mb-2"><strong>{{ strength['title'] }}</strong></article>{% else %}<p class="empty-state">No strengths were reported.</p>{% endfor %}
+        <h3 class="h5 mt-4">Job-description match</h3>
+        {% if ats['job_match']['status'] == 'not_run' %}
+        <div class="alert alert-secondary mb-0"><strong>Not calculated.</strong> Add a job description and keep “Job-description matching” enabled to compare keywords. “None” here does not mean zero compatibility.</div>
+        {% else %}
+        <p>Status: {{ ats['job_match']['status'] }}{% if ats['job_match']['match_score'] is not none %} · {{ ats['job_match']['match_score'] }}%{% endif %}</p>
+        <div class="row g-3"><div class="col-md-6"><h4 class="h6">Matched keywords</h4><p>{{ ats['job_match']['matched_keywords']|join(', ') or 'None' }}</p></div><div class="col-md-6"><h4 class="h6">Conditional missing keywords</h4><ul>{% for item in ats['job_match']['missing_keywords'] %}<li>{{ item['phrase'] }} — {{ item['suggestion'] }}</li>{% else %}<li>None</li>{% endfor %}</ul></div></div>
+        {% endif %}
+      </section>
+      <section class="tab-pane fade p-4" id="recommendations" role="tabpanel" aria-labelledby="recommendations-tab" tabindex="0">
+        <h2 class="h4">Recommendations</h2>
+        {% set recommendation_status = report['module_status']['recommendations'] %}
+        {% if recommendation_status['status'] == 'fallback' %}
+        <div class="alert alert-secondary"><strong>Method: evidence-based rules.</strong> No local-model recommendation was accepted for this result. A conservative deterministic recommendation was used instead.</div>
+        {% elif report['recommendations'] and report['recommendations'][0]['source'] == 'hybrid' %}
+        <div class="alert alert-primary"><strong>Method: deterministic evidence focus with validated local-model response.</strong> The application selected and worded the grounded focus; Provider: {{ recommendation_status['provider'] or 'local provider' }}{% if recommendation_status['model'] %} · Model: <code>{{ recommendation_status['model'] }}</code>{% endif %} returned the constrained response.</div>
+        {% else %}
+        <div class="alert alert-primary"><strong>Method: local AI.</strong> Provider: {{ recommendation_status['provider'] or 'local provider' }}{% if recommendation_status['model'] %} · Model: <code>{{ recommendation_status['model'] }}</code>{% endif %}. The output passed schema and evidence validation.</div>
+        {% endif %}
+        <p class="text-secondary">Only grounded, actionable gaps are listed. If the resume has one remaining supported gap, seeing one recommendation is expected.</p>
+        <div class="row g-3">{% for rec in report['recommendations'] %}<div class="col-lg-6"><article class="content-card h-100"><div class="d-flex justify-content-between gap-3"><h3 class="h6">{{ rec['title'] }}</h3><div><span class="badge text-bg-light">{{ 'Rule based' if rec['source']=='fallback' else ('Evidence ranked + local model' if rec['source']=='hybrid' else 'Local AI') }}</span> <span class="badge severity-{{ rec['severity'] }}">{{ rec['severity'] }}</span></div></div><p>{{ rec['problem'] }}</p><p><strong>Action:</strong> {{ rec['suggestion'] }}</p>{{ evidence_refs(rec['evidence_ids']) }}</article></div>{% else %}<p class="empty-state">No grounded recommendation was needed.</p>{% endfor %}</div>
+      </section>
+      <section class="tab-pane fade p-4" id="rewrites" role="tabpanel" aria-labelledby="rewrites-tab" tabindex="0">
+        <div class="alert alert-warning"><strong>Review-only proposals.</strong> Nothing on this page edits the uploaded resume or creates a replacement document automatically.</div>
+        {% if rewrites['provider'] %}
+        <p class="small text-secondary"><strong>Generation provider:</strong> {{ rewrites['provider'] }}{% if rewrites['model'] %} · <strong>Model:</strong> <code>{{ rewrites['model'] }}</code>{% endif %}. Individual components below clearly state when deterministic rules were used instead.</p>
+        {% endif %}
+        {% for notice in rewrites['notices'] %}
+        <div class="alert {{ 'alert-info' if notice['severity']=='information' else 'alert-warning' }}">
+          <strong>{{ notice_labels.get(notice['code'], 'Rewrite notice') }}</strong>
+          {% if notice['code'] == 'BULLET_REWRITE_LIMIT_APPLIED' %}
+          <div>{{ rewrites['bullet_stats']['selected'] }} of {{ rewrites['bullet_stats']['total_eligible'] }} complete bullets were selected. The other {{ rewrites['bullet_stats']['skipped'] }} were intentionally not sent to the model; this is a performance choice, not an error.</div>
+          {% elif notice['code'] == 'SKILLS_DETERMINISTIC_FALLBACK_APPLIED' %}
+          <div>The existing supported skills were organized into categories without calling the language model. No skill was invented, and the original resume was not changed.</div>
+          {% else %}<div>{{ notice['message'] }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <h2 class="h4">Summary rewrite</h2>
+        <div class="comparison-grid"><div><h3 class="h6">Original</h3><p class="preserve-lines">{{ rewrites['summary']['original'] or 'Not available' }}</p></div>
+        {% if rewrites['summary']['status'] in ['improved','generated'] and rewrites['summary']['improved'] %}<div><h3 class="h6">Proposed</h3><p class="preserve-lines" id="rewrite-summary">{{ rewrites['summary']['improved'] }}</p>{% for warning in rewrites['summary']['warnings'] %}<p class="alert alert-warning small">{{ warning }}</p>{% endfor %}<button class="btn btn-sm btn-outline-secondary copy-button no-print" type="button" data-copy-target="rewrite-summary">Copy proposal</button></div>
+        {% elif rewrites['summary']['status']=='unchanged' %}<div><h3 class="h6">Result</h3><p>No material improvement was produced.</p></div>
+        {% elif rewrites['summary']['status'] in ['rejected','unavailable'] %}<div><h3 class="h6">Result</h3><p>No valid rewrite was generated.</p>{% if rewrites['summary']['warnings'] %}<p class="small text-secondary">{{ rewrites['summary']['warnings'][0] }}</p>{% endif %}</div>
+        {% else %}<div><h3 class="h6">Result</h3><p>Summary rewriting was not run.</p></div>{% endif %}</div>
+        <h2 class="h4 mt-4">Experience bullets</h2>
+        {% if rewrites['bullet_stats']['total_eligible'] %}<p class="text-secondary"><strong>{{ rewrites['bullet_stats']['processed'] }}</strong> processed · {{ rewrites['bullet_stats']['selected'] }} selected from {{ rewrites['bullet_stats']['total_eligible'] }} complete bullets · {{ rewrites['bullet_stats']['skipped'] }} intentionally skipped</p>{% endif %}
+        {% for bullet in rewrites['experience_bullets'] %}
+        <article class="comparison-grid content-card mb-3">
+          <div><h3 class="h6">Original</h3><p>{{ bullet['original'] }}</p></div>
+          {% if bullet['status'] in ['improved','generated'] and bullet['improved'] %}
+          <div><h3 class="h6">Proposed</h3><p>{{ bullet['improved'] }}</p>{% for warning in bullet['warnings'] %}<p class="alert alert-warning small">{{ warning }}</p>{% endfor %}</div>
+          {% elif bullet['status']=='unchanged' %}
+          <div><h3 class="h6">Result</h3><p>No material improvement was produced.</p>{% for warning in bullet['warnings'] %}<p class="small text-secondary">{{ warning }}</p>{% endfor %}</div>
+          {% else %}
+          <div><h3 class="h6">Result</h3><p>No valid rewrite was generated.</p>{% for warning in bullet['warnings'] %}<p class="small text-secondary">{{ warning }}</p>{% endfor %}</div>
+          {% endif %}
+        </article>
+        {% else %}<p class="empty-state">No bullet rewrites were produced.</p>{% endfor %}
+        <h2 class="h4 mt-4">Skills organization</h2>
+        {% if rewrites['skills_section']['method'] == 'deterministic' %}<div class="alert alert-secondary"><strong>Method: deterministic organization.</strong> The application only regrouped supported skills already extracted from the resume; no language model generated or added skills.</div>
+        {% elif rewrites['skills_section']['method'] == 'ai' %}<div class="alert alert-primary"><strong>Method: validated local-AI proposal.</strong> Every returned item was checked against the original supported skills.</div>{% endif %}
+        {% for group in rewrites['skills_section']['improved_groups'] %}<article class="content-card mb-2"><strong>{{ group['group'] }}</strong><p class="mb-0">{{ group['items']|join(', ') }}</p></article>{% else %}{% if rewrites['skills_section']['status'] in ['rejected','unavailable'] %}<p class="empty-state">No valid skills organization was generated.</p>{% else %}<p class="empty-state">Skills organization was not run.</p>{% endif %}{% endfor %}
+        {% if not rewrites['notices'] %}{% for warning in rewrites['skills_section']['warnings'] %}<p class="alert alert-info mt-2 mb-0">{{ warning }}</p>{% endfor %}{% endif %}
+      </section>
+      <section class="tab-pane fade p-4" id="evidence" role="tabpanel" aria-labelledby="evidence-tab" tabindex="0">
+        <h2 class="h4">Evidence and audit trail</h2>
+        <div class="alert alert-info"><strong>Most users can ignore this tab.</strong> Evidence means the exact resume text or layout observation used to justify a result. Relevant evidence is now shown in plain language directly under each recommendation or issue; internal IDs are intentionally not displayed here.</div>
+        <div class="row g-3">
+          <div class="col-sm-6 col-lg-3"><div class="metric-card"><span class="metric-label">Total audit records</span><strong class="metric-value">{{ report['evidence']|length }}</strong></div></div>
+          <div class="col-sm-6 col-lg-3"><div class="metric-card"><span class="metric-label">Present facts</span><strong class="metric-value">{{ report['evidence']|selectattr('kind','equalto','present')|list|length }}</strong></div></div>
+          <div class="col-sm-6 col-lg-3"><div class="metric-card"><span class="metric-label">Layout observations</span><strong class="metric-value">{{ report['evidence']|selectattr('kind','equalto','layout')|list|length }}</strong></div></div>
+          <div class="col-sm-6 col-lg-3"><div class="metric-card"><span class="metric-label">Missing fields</span><strong class="metric-value">{{ report['evidence']|selectattr('kind','equalto','missing')|list|length }}</strong></div></div>
+        </div>
+        <p class="text-secondary mt-4 mb-0">The complete machine-readable registry remains available through “Download JSON” for audit and development use.</p>
+      </section>
+      <section class="tab-pane fade p-4" id="messages" role="tabpanel" aria-labelledby="messages-tab" tabindex="0"><h2 class="h4">Warnings and errors</h2>{% for kind in ['warnings','errors'] %}<h3 class="h5 mt-4">{{ kind|title }}</h3>{% for message in report[kind] %}<article class="alert {{ 'alert-warning' if kind == 'warnings' else 'alert-danger' }}"><strong>{{ message_labels.get(message['code'], 'Processing notice' if kind == 'warnings' else 'Processing error') }}</strong><div>{{ message['message'] }}</div><details class="small mt-2"><summary>Technical details</summary><code>{{ message['stage'] }} · {{ message['code'] }}</code></details></article>{% else %}<p class="empty-state">No {{ kind }}.</p>{% endfor %}{% endfor %}</section>
+      <section class="tab-pane fade p-4" id="json" role="tabpanel" aria-labelledby="json-tab" tabindex="0" data-result-url="/api/analyses/{{ analysis_id }}/result">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3"><div><h2 class="h4">Canonical JSON</h2><p class="text-secondary mb-0">Developer-oriented technical data. It is not loaded into the page until requested.</p></div><div class="d-flex gap-2"><button class="btn btn-sm btn-outline-primary no-print" id="load-json" type="button">Load technical JSON</button><button class="btn btn-sm btn-outline-secondary copy-button no-print" id="copy-json" type="button" data-copy-target="raw-json" disabled>Copy JSON</button></div></div>
+        <div id="json-status" class="alert alert-secondary mt-3 mb-0">JSON is not loaded. Use the normal report tabs unless you need the canonical developer output.</div>
+        <pre id="raw-json" class="json-view mt-3 d-none"></pre>
+      </section>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', path='js/results.js') }}" defer></script>{% endblock %}

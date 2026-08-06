@@ -1,0 +1,15 @@
+{
+  "case_id": "english_data_scientist_001",
+  "language": "en",
+  "description": "Data scientist with statistical and predictive modeling",
+  "input": {
+    "summary": "Data Scientist applying statistics and experimentation to predictive problems.",
+    "skills": ["Python", "Machine Learning", "Statistics", "Pandas", "Scikit-learn", "Feature Engineering"],
+    "experience": [{"title": "Data Scientist", "bullets": ["Developed predictive models and designed experiments.", "Performed statistical analysis and feature engineering."]}],
+    "projects": [{"name": "Demand Forecast", "description": "Forecasting model with exploratory data analysis"}]
+  },
+  "expected_top_roles": ["data_scientist", "machine_learning_engineer", "data_analyst"],
+  "required_evidence": ["Statistics", "Machine Learning"],
+  "should_be_insufficient": false,
+  "strict_top1": "data_scientist"
+}

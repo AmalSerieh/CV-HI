@@ -1,0 +1,42 @@
+[flake8]
+max-line-length = 100
+extend-ignore = E203,E501,W503
+per-file-ignores =
+    ai/providers/__init__.py:F401
+    ats/__init__.py:F401
+    contracts/__init__.py:F401
+    contracts/analysis_contract.py:F401
+    schemas/__init__.py:F401
+    resume_analyzer/extractors/__init__.py:F401
+    resume_analyzer/schemas/__init__.py:F401
+exclude =
+    .venv,
+    .git,
+    __pycache__,
+    backups,
+    ProjectResume-backups,
+    outputs,
+    models,
+    resume_analyzer/extraction/contact,
+    resume_analyzer/extraction/contact_extractor.py,
+    resume_analyzer/extraction/continuation_header_cleaner.py,
+    resume_analyzer/extraction/cv_sections.py,
+    resume_analyzer/extraction/document_intelligence.py,
+    resume_analyzer/extraction/docx_structure_analyzer.py,
+    resume_analyzer/extraction/duplicate_content_cleaner.py,
+    resume_analyzer/extraction/education_extractor.py,
+    resume_analyzer/extraction/evidence_reconciler.py,
+    resume_analyzer/extraction/experience_extractor.py,
+    resume_analyzer/extraction/keywords.py,
+    resume_analyzer/extraction/languages_extractor.py,
+    resume_analyzer/extraction/projects_extractor.py,
+    resume_analyzer/extraction/reporting_policy.py,
+    resume_analyzer/extraction/result_quality_refiner.py,
+    resume_analyzer/extraction/section_extractor.py,
+    resume_analyzer/extraction/skills_extractor.py,
+    resume_analyzer/extraction/text_cleaner.py,
+    resume_analyzer/extraction/text_extractor.py,
+    tests/test_cross_resume_regression_matrix.py,
+    tests/test_pdf_docx_parity_visual_templates.py,
+    tests/test_reporting_recommendation_polish.py,
+    tests/test_template_document_intelligence.py

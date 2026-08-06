@@ -1,0 +1,12 @@
+{
+  "target_role": {
+    "primary": null,
+    "alternatives": [],
+    "insufficient_evidence": true,
+    "method": "deterministic_weighted_matching",
+    "language": "unknown",
+    "warnings": [
+      "Not enough resume evidence to suggest a reliable target role."
+    ]
+  }
+}

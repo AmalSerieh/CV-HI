@@ -1,0 +1,10 @@
+{
+  "case_id": "english_only_experience_001",
+  "language": "en",
+  "description": "Incomplete resume containing only QA experience",
+  "input": {"experience": {"experiences": [{"job_title": "QA Engineer", "responsibilities": ["Executed regression testing and documented defects.", "Created software test plans and test cases."]}]}},
+  "expected_top_roles": ["qa_engineer"],
+  "required_evidence": ["QA Engineer", "Executed regression testing and documented defects."],
+  "should_be_insufficient": false,
+  "strict_top1": "qa_engineer"
+}

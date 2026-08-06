@@ -1,0 +1,3673 @@
+{
+  "success": true,
+  "schema_version": "1.1.0",
+  "pipeline_version": "1.6.2",
+  "analyzed_at": "2026-07-17T22:12:33",
+  "processing_time_seconds": 1.64,
+  "file": {
+    "path": "tests/fixtures/synthetic-visual-resume.docx",
+    "name": "free-english-cv-for-women.docx",
+    "extension": ".docx",
+    "size_bytes": 146672
+  },
+  "text_extraction": {
+    "success": true,
+    "file_type": "docx",
+    "pages": 1,
+    "source_words": 404,
+    "source_chars": 2693,
+    "words": 382,
+    "chars": 2693,
+    "links": [],
+    "layout": "single_column",
+    "reading_order": "top_to_bottom",
+    "engine": "docx",
+    "quality_score": 100,
+    "warnings": [
+      "docx_has_no_pdf_coordinates"
+    ],
+    "ocr_used": false,
+    "ocr_available": true,
+    "ocr_error": null,
+    "error": null,
+    "page_layouts": [
+      {
+        "page": 1,
+        "width": 0.0,
+        "height": 0.0,
+        "layout": "single_column",
+        "reading_order": "top_to_bottom",
+        "split_x": null,
+        "confidence": 0.8,
+        "engine": "unknown",
+        "block_ids": [
+          "p1_b0",
+          "p1_b1",
+          "p1_b2",
+          "p1_b3",
+          "p1_b4",
+          "p1_b5",
+          "p1_b6",
+          "p1_b7",
+          "p1_b8",
+          "p1_b9",
+          "p1_b10",
+          "p1_b11",
+          "p1_b12",
+          "p1_b13",
+          "p1_b14",
+          "p1_b15",
+          "p1_b16",
+          "p1_b17",
+          "p1_b18",
+          "p1_b19",
+          "p1_b20",
+          "p1_b21",
+          "p1_b22",
+          "p1_b23",
+          "p1_b24",
+          "p1_b25",
+          "p1_b26",
+          "p1_b27",
+          "p1_b28",
+          "p1_b29",
+          "p1_b30",
+          "p1_b31",
+          "p1_b32",
+          "p1_b33",
+          "p1_b34",
+          "p1_b35",
+          "p1_b36",
+          "p1_b37",
+          "p1_b38",
+          "p1_b39",
+          "p1_b40",
+          "p1_b41",
+          "p1_b42",
+          "p1_b43"
+        ],
+        "warnings": [
+          "docx_has_no_pdf_coordinates"
+        ]
+      }
+    ],
+    "continuation_header_cleanup": {
+      "status": "no_continuation_header_detected",
+      "removed_block_count": 0,
+      "detected_pages": []
+    }
+  },
+  "extracted_resume_text": {
+    "raw_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\nSKILLS\nSKILLS\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nEDUCATION\nEDUCATION\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish – C2 Chinese – A1 German – A2\nSpanish – C2 Chinese – A1 German – A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nEXPERIENCE\nEXPERIENCE\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+    "preliminary_ordered_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\nSKILLS\nSKILLS\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nEDUCATION\nEDUCATION\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nEXPERIENCE\nEXPERIENCE\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+    "ordered_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\nSKILLS\nSKILLS\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nEDUCATION\nEDUCATION\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish – C2 Chinese – A1 German – A2\nSpanish – C2 Chinese – A1 German – A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nEXPERIENCE\nEXPERIENCE\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+    "cleaned_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\nSKILLS\nSKILLS\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nEDUCATION\nEDUCATION\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nEXPERIENCE\nEXPERIENCE\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+    "analysis_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\n\nSkills\n\nSkills\n\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\n\nEducation\n\nEducation\n\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\n\nExperience\n\nExperience\n\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+    "text_file": "fixtures/synthetic/visual_resume_extracted_text.txt"
+  },
+  "layout_data": {
+    "blocks": [
+      {
+        "id": "p1_b0",
+        "page": 1,
+        "text": "JORDAN EXAMPLE",
+        "bbox": null,
+        "column": "single",
+        "order": 0,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b1",
+        "page": 1,
+        "text": "JORDAN EXAMPLE",
+        "bbox": null,
+        "column": "single",
+        "order": 1,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b2",
+        "page": 1,
+        "text": "SKILLS",
+        "bbox": null,
+        "column": "single",
+        "order": 2,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b3",
+        "page": 1,
+        "text": "SKILLS",
+        "bbox": null,
+        "column": "single",
+        "order": 3,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b4",
+        "page": 1,
+        "text": "Project management Strong decision maker Complex problem solver Creative design",
+        "bbox": null,
+        "column": "single",
+        "order": 4,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b5",
+        "page": 1,
+        "text": "Project management Strong decision maker Complex problem solver Creative design",
+        "bbox": null,
+        "column": "single",
+        "order": 5,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b6",
+        "page": 1,
+        "text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+        "bbox": null,
+        "column": "single",
+        "order": 6,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b7",
+        "page": 1,
+        "text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+        "bbox": null,
+        "column": "single",
+        "order": 7,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b8",
+        "page": 1,
+        "text": "EDUCATION",
+        "bbox": null,
+        "column": "single",
+        "order": 8,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b9",
+        "page": 1,
+        "text": "EDUCATION",
+        "bbox": null,
+        "column": "single",
+        "order": 9,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b10",
+        "page": 1,
+        "text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+        "bbox": null,
+        "column": "single",
+        "order": 10,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b11",
+        "page": 1,
+        "text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+        "bbox": null,
+        "column": "single",
+        "order": 11,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b12",
+        "page": 1,
+        "text": "Spanish – C2 Chinese – A1 German – A2",
+        "bbox": null,
+        "column": "single",
+        "order": 12,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b13",
+        "page": 1,
+        "text": "Spanish – C2 Chinese – A1 German – A2",
+        "bbox": null,
+        "column": "single",
+        "order": 13,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b14",
+        "page": 1,
+        "text": "LANGUAGES",
+        "bbox": null,
+        "column": "single",
+        "order": 14,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b15",
+        "page": 1,
+        "text": "LANGUAGES",
+        "bbox": null,
+        "column": "single",
+        "order": 15,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b16",
+        "page": 1,
+        "text": "Writing Sketching Photography",
+        "bbox": null,
+        "column": "single",
+        "order": 16,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b17",
+        "page": 1,
+        "text": "Writing Sketching Photography",
+        "bbox": null,
+        "column": "single",
+        "order": 17,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b18",
+        "page": 1,
+        "text": "HOBBIES",
+        "bbox": null,
+        "column": "single",
+        "order": 18,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b19",
+        "page": 1,
+        "text": "HOBBIES",
+        "bbox": null,
+        "column": "single",
+        "order": 19,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b20",
+        "page": 1,
+        "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+        "bbox": null,
+        "column": "single",
+        "order": 20,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b21",
+        "page": 1,
+        "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+        "bbox": null,
+        "column": "single",
+        "order": 21,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b22",
+        "page": 1,
+        "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+        "bbox": null,
+        "column": "single",
+        "order": 22,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b23",
+        "page": 1,
+        "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+        "bbox": null,
+        "column": "single",
+        "order": 23,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b24",
+        "page": 1,
+        "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+        "bbox": null,
+        "column": "single",
+        "order": 24,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b25",
+        "page": 1,
+        "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+        "bbox": null,
+        "column": "single",
+        "order": 25,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b26",
+        "page": 1,
+        "text": "EXPERIENCE",
+        "bbox": null,
+        "column": "single",
+        "order": 26,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b27",
+        "page": 1,
+        "text": "EXPERIENCE",
+        "bbox": null,
+        "column": "single",
+        "order": 27,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b28",
+        "page": 1,
+        "text": "GRAPHIC DESIGNER",
+        "bbox": null,
+        "column": "single",
+        "order": 28,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b29",
+        "page": 1,
+        "text": "GRAPHIC DESIGNER",
+        "bbox": null,
+        "column": "single",
+        "order": 29,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b30",
+        "page": 1,
+        "text": "London, England",
+        "bbox": null,
+        "column": "single",
+        "order": 30,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b31",
+        "page": 1,
+        "text": "+1 555 010 0300",
+        "bbox": null,
+        "column": "single",
+        "order": 31,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b32",
+        "page": 1,
+        "text": "jordan.visual @example.test",
+        "bbox": null,
+        "column": "single",
+        "order": 32,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b33",
+        "page": 1,
+        "text": "/ jordan.example",
+        "bbox": null,
+        "column": "single",
+        "order": 33,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b34",
+        "page": 1,
+        "text": "in",
+        "bbox": null,
+        "column": "single",
+        "order": 34,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b35",
+        "page": 1,
+        "text": "London, England",
+        "bbox": null,
+        "column": "single",
+        "order": 35,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b36",
+        "page": 1,
+        "text": "+1 555 010 0300",
+        "bbox": null,
+        "column": "single",
+        "order": 36,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b37",
+        "page": 1,
+        "text": "jordan.visual @example.test",
+        "bbox": null,
+        "column": "single",
+        "order": 37,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b38",
+        "page": 1,
+        "text": "/ jordan.example",
+        "bbox": null,
+        "column": "single",
+        "order": 38,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b39",
+        "page": 1,
+        "text": "in",
+        "bbox": null,
+        "column": "single",
+        "order": 39,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b40",
+        "page": 1,
+        "text": "Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+        "bbox": null,
+        "column": "single",
+        "order": 40,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b41",
+        "page": 1,
+        "text": "Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+        "bbox": null,
+        "column": "single",
+        "order": 41,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b42",
+        "page": 1,
+        "text": "OBJECTIVE",
+        "bbox": null,
+        "column": "single",
+        "order": 42,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      },
+      {
+        "id": "p1_b43",
+        "page": 1,
+        "text": "OBJECTIVE",
+        "bbox": null,
+        "column": "single",
+        "order": 43,
+        "engine": "docx",
+        "block_type": "paragraph",
+        "is_repeated_header_footer": false,
+        "is_continuation_header": false,
+        "excluded_from_ordered_text": false,
+        "exclusion_reason": null
+      }
+    ]
+  },
+  "document_issues": [],
+  "evidence_reconciliation": {
+    "soft_skill_evidence": [],
+    "document_metrics": [],
+    "leadership_experience": {
+      "months": 0,
+      "years": 0,
+      "periods": [],
+      "merged_periods": [],
+      "source_section": "leadership"
+    },
+    "quality_flags": {
+      "skills_evidence_conflict": false,
+      "metrics_evidence_conflict": false
+    },
+    "mode": "cross_section_evidence_reconciliation",
+    "canonical_metric_count": 0,
+    "raw_document_metrics": [],
+    "raw_metric_evidence_count": 0
+  },
+  "extraction_quality": {
+    "status": "needs_review",
+    "score": 54,
+    "component_scores": {
+      "text": 100,
+      "contact": 43,
+      "sections": 80,
+      "education": 98,
+      "experience": 0,
+      "skills": 6
+    },
+    "warnings": [
+      "docx_has_no_pdf_coordinates",
+      "rejected_experience_candidates:1"
+    ],
+    "resolved_warnings": [],
+    "critical_warnings": [
+      "contact_identity_ambiguous",
+      "candidate_name_unreliable",
+      "experience_extraction_needs_review"
+    ]
+  },
+  "scores": {
+    "status": "needs_review",
+    "trusted": false,
+    "raw_resume_completeness_score": 36,
+    "resume_completeness_score": 36,
+    "raw_overall_score": 36,
+    "overall_score": 36,
+    "overall_score_meaning": "resume_completeness_score",
+    "ats_score": null,
+    "ats_status": "job_description_required",
+    "score_cap": 54,
+    "module_scores": {
+      "contact": 43,
+      "sections": 80,
+      "experience": 0,
+      "skills": 6,
+      "education": 98,
+      "projects": 0,
+      "languages": 93
+    },
+    "module_applicability": {
+      "contact": true,
+      "sections": true,
+      "experience": true,
+      "skills": true,
+      "education": true,
+      "projects": false,
+      "languages": true
+    },
+    "active_weights": {
+      "contact": 10,
+      "sections": 10,
+      "experience": 35,
+      "skills": 25,
+      "education": 20,
+      "languages": 5
+    }
+  },
+  "summary": {
+    "resume_completeness_score": 36,
+    "overall_score": 36,
+    "overall_score_meaning": "resume_completeness_score",
+    "ats_score": null,
+    "ats_status": "job_description_required",
+    "name": "Jordan Example",
+    "email": null,
+    "phone": "555 010 0300",
+    "location": "London, England",
+    "job_title": null,
+    "sections_found": [
+      "skills",
+      "education",
+      "languages",
+      "interests",
+      "experience"
+    ],
+    "missing_required_sections": [
+      "summary"
+    ],
+    "experience_count": 0,
+    "professional_experience_months": 0,
+    "professional_experience_years": 0,
+    "volunteer_experience_months": 0,
+    "leadership_experience_months": 0,
+    "total_validated_experience_months": 0,
+    "total_validated_experience_years": 0,
+    "current_position": null,
+    "education_count": 1,
+    "highest_degree": "Bachelor",
+    "projects_count": 0,
+    "languages_count": 3,
+    "top_skills": [
+      "Computer Information Systems",
+      "NY"
+    ],
+    "top_technologies": [],
+    "undated_volunteer_activity_count": 0,
+    "volunteer_activity_count": 0,
+    "volunteer_date_status": "dated_or_not_present",
+    "volunteer_activities": [],
+    "professional_role_count": 0,
+    "volunteer_role_count": 0,
+    "professional_duration_status": null
+  },
+  "contact": {
+    "name": "Jordan Example",
+    "name_status": "resolved",
+    "name_placeholder": null,
+    "job_title": null,
+    "email": null,
+    "email_status": "unresolved",
+    "phone": "555 010 0300",
+    "phone_status": "resolved",
+    "location": "London, England",
+    "linkedin": null,
+    "github": null,
+    "portfolio": null,
+    "website": null,
+    "links": [],
+    "all_emails": [],
+    "all_phones": [
+      "555 010 0300"
+    ],
+    "confidence": {
+      "name": 0.47,
+      "email": 0.0,
+      "phone": 0.15,
+      "location": 0.45
+    },
+    "quality": {
+      "status": "needs_review",
+      "score": 43,
+      "warnings": [
+        "candidate_email_not_resolved"
+      ]
+    },
+    "evidence": {
+      "name": {
+        "page": 1,
+        "text": "JORDAN EXAMPLE",
+        "bbox": null,
+        "block_id": "p1_b1",
+        "is_repeated_header_footer": false
+      },
+      "email": null,
+      "phone": {
+        "page": 1,
+        "text": "+1 555 010 0300",
+        "bbox": null,
+        "block_id": "p1_b31",
+        "is_repeated_header_footer": false
+      },
+      "location": {
+        "page": 1,
+        "text": "London, England",
+        "bbox": null,
+        "block_id": "p1_b30",
+        "is_repeated_header_footer": false
+      }
+    },
+    "candidates": {
+      "names": [
+        {
+          "value": "Jordan Example",
+          "score": 47,
+          "line_index": 0,
+          "reasons": [],
+          "source": {
+            "page": 1,
+            "text": "JORDAN EXAMPLE",
+            "bbox": null,
+            "block_id": "p1_b1",
+            "is_repeated_header_footer": false
+          }
+        },
+        {
+          "value": "Jordan Example",
+          "score": 47,
+          "line_index": 1,
+          "reasons": [],
+          "source": {
+            "page": 1,
+            "text": "JORDAN EXAMPLE",
+            "bbox": null,
+            "block_id": "p1_b1",
+            "is_repeated_header_footer": false
+          }
+        },
+        {
+          "value": "Graphic Designer",
+          "score": 47,
+          "line_index": 28,
+          "reasons": [
+            "near_contact"
+          ],
+          "source": {
+            "page": 1,
+            "text": "GRAPHIC DESIGNER",
+            "bbox": null,
+            "block_id": "p1_b28",
+            "is_repeated_header_footer": false
+          }
+        },
+        {
+          "value": "Graphic Designer",
+          "score": 47,
+          "line_index": 29,
+          "reasons": [
+            "near_contact"
+          ],
+          "source": {
+            "page": 1,
+            "text": "GRAPHIC DESIGNER",
+            "bbox": null,
+            "block_id": "p1_b28",
+            "is_repeated_header_footer": false
+          }
+        },
+        {
+          "value": "Writing Sketching Photography",
+          "score": 15,
+          "line_index": 16,
+          "reasons": [],
+          "source": {
+            "page": 1,
+            "text": "Writing Sketching Photography",
+            "bbox": null,
+            "block_id": "p1_b16",
+            "is_repeated_header_footer": false
+          }
+        },
+        {
+          "value": "Writing Sketching Photography",
+          "score": 15,
+          "line_index": 17,
+          "reasons": [],
+          "source": {
+            "page": 1,
+            "text": "Writing Sketching Photography",
+            "bbox": null,
+            "block_id": "p1_b16",
+            "is_repeated_header_footer": false
+          }
+        }
+      ],
+      "emails": [],
+      "phones": [
+        {
+          "value": "555 010 0300",
+          "digits": "2076668555",
+          "score": 15,
+          "line_index": 31,
+          "raw_line_index": 31,
+          "reasons": [
+            "present_in_ordered_text"
+          ],
+          "source": {
+            "page": 1,
+            "text": "+1 555 010 0300",
+            "bbox": null,
+            "block_id": "p1_b31",
+            "is_repeated_header_footer": false
+          }
+        }
+      ],
+      "locations": [
+        {
+          "value": "London, England",
+          "score": 45,
+          "line_index": 30,
+          "reasons": [
+            "near_contact_cluster"
+          ],
+          "source": {
+            "page": 1,
+            "text": "London, England",
+            "bbox": null,
+            "block_id": "p1_b30",
+            "is_repeated_header_footer": false
+          }
+        },
+        {
+          "value": "London, England",
+          "score": 30,
+          "line_index": 35,
+          "reasons": [
+            "near_contact_cluster"
+          ],
+          "source": {
+            "page": 1,
+            "text": "London, England",
+            "bbox": null,
+            "block_id": "p1_b30",
+            "is_repeated_header_footer": false
+          }
+        }
+      ]
+    },
+    "rejected_candidates": [],
+    "mode": "ranked_layout_aware_contact",
+    "template_signals": [],
+    "recommendations": [
+      {
+        "severity": "medium",
+        "type": "missing_email",
+        "message": "Add a clear personal or professional email address."
+      },
+      {
+        "severity": "medium",
+        "type": "missing_linkedin",
+        "message": "Add a LinkedIn profile if you maintain one."
+      }
+    ],
+    "duplicate_contact_evidence": [
+      {
+        "field": "name",
+        "value": "JORDAN EXAMPLE",
+        "occurrence_count": 2,
+        "continuation_header_occurrence_count": 0,
+        "pages": [
+          1
+        ],
+        "occurrences": [
+          {
+            "id": "p1_b0",
+            "page": 1,
+            "order": 0,
+            "text": "JORDAN EXAMPLE",
+            "bbox": null,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b1",
+            "page": 1,
+            "order": 1,
+            "text": "JORDAN EXAMPLE",
+            "bbox": null,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          }
+        ]
+      }
+    ]
+  },
+  "sections": {
+    "sections": {
+      "summary": {
+        "heading": "OBJECTIVE",
+        "source_headings": [
+          "OBJECTIVE"
+        ],
+        "content": "",
+        "words": 0,
+        "confidence": 100
+      },
+      "experience": {
+        "heading": "Experience",
+        "source_headings": [
+          "Experience"
+        ],
+        "content": "GRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+        "words": 140,
+        "confidence": 100
+      },
+      "education": {
+        "heading": "Education",
+        "source_headings": [
+          "Education"
+        ],
+        "content": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2",
+        "words": 32,
+        "confidence": 100
+      },
+      "skills": {
+        "heading": "Skills",
+        "source_headings": [
+          "Skills"
+        ],
+        "content": "Project management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+        "words": 40,
+        "confidence": 100
+      },
+      "certifications": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "projects": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "languages": {
+        "heading": "LANGUAGES",
+        "source_headings": [
+          "LANGUAGES"
+        ],
+        "content": "Writing Sketching Photography\nWriting Sketching Photography",
+        "words": 6,
+        "confidence": 100
+      },
+      "volunteer": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "awards": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "publications": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "interests": {
+        "heading": "HOBBIES",
+        "source_headings": [
+          "HOBBIES"
+        ],
+        "content": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+        "words": 144,
+        "confidence": 100
+      },
+      "references": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "courses": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "bootcamps": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "internships": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "freelance": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "leadership": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "organizations": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "military": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "additional_info": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "fields": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "programs": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "contact": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "achievements": {
+        "heading": "",
+        "source_headings": [],
+        "content": "",
+        "words": 0,
+        "confidence": 0
+      },
+      "contact_header": {
+        "heading": "Contact Header",
+        "source_headings": [
+          "Contact Header"
+        ],
+        "content": "JORDAN EXAMPLE\nJORDAN EXAMPLE",
+        "words": 8,
+        "confidence": 100
+      }
+    },
+    "found_sections": [
+      "skills",
+      "education",
+      "languages",
+      "interests",
+      "experience"
+    ],
+    "missing_required": [
+      "summary"
+    ],
+    "section_order": [
+      "contact_header",
+      "skills",
+      "education",
+      "languages",
+      "interests",
+      "experience",
+      "summary"
+    ],
+    "total_words": 362,
+    "detected_headings": [
+      {
+        "line_index": 2,
+        "heading": "Skills",
+        "section": "skills",
+        "confidence": 100
+      },
+      {
+        "line_index": 3,
+        "heading": "Skills",
+        "section": "skills",
+        "confidence": 100
+      },
+      {
+        "line_index": 8,
+        "heading": "Education",
+        "section": "education",
+        "confidence": 100
+      },
+      {
+        "line_index": 9,
+        "heading": "Education",
+        "section": "education",
+        "confidence": 100
+      },
+      {
+        "line_index": 14,
+        "heading": "LANGUAGES",
+        "section": "languages",
+        "confidence": 100
+      },
+      {
+        "line_index": 15,
+        "heading": "LANGUAGES",
+        "section": "languages",
+        "confidence": 100
+      },
+      {
+        "line_index": 18,
+        "heading": "HOBBIES",
+        "section": "interests",
+        "confidence": 100
+      },
+      {
+        "line_index": 19,
+        "heading": "HOBBIES",
+        "section": "interests",
+        "confidence": 100
+      },
+      {
+        "line_index": 26,
+        "heading": "Experience",
+        "section": "experience",
+        "confidence": 100
+      },
+      {
+        "line_index": 27,
+        "heading": "Experience",
+        "section": "experience",
+        "confidence": 100
+      },
+      {
+        "line_index": 42,
+        "heading": "OBJECTIVE",
+        "section": "summary",
+        "confidence": 100
+      },
+      {
+        "line_index": 43,
+        "heading": "OBJECTIVE",
+        "section": "summary",
+        "confidence": 100
+      }
+    ]
+  },
+  "skills": {
+    "all_skills": [
+      "Computer Information Systems",
+      "NY"
+    ],
+    "hard_skills": [
+      "Computer Information Systems",
+      "NY"
+    ],
+    "soft_skills": [],
+    "domain_context": [],
+    "categorized_skills": {
+      "other": [
+        "Computer Information Systems",
+        "NY"
+      ]
+    },
+    "total_count": 2,
+    "hard_count": 2,
+    "soft_count": 0,
+    "domain_count": 0,
+    "detected_sector": "business_management",
+    "sector_evidence": [],
+    "sector_match": {
+      "sector": "business_management",
+      "sector_key": "business_management",
+      "status": "sector_detected_job_description_required",
+      "evidence_skills": [],
+      "evidence_count": 0,
+      "matching": [],
+      "missing": [],
+      "coverage": null,
+      "relevance": null,
+      "density": null,
+      "match_rate": null
+    },
+    "recommendations": [
+      {
+        "severity": "high",
+        "type": "quantity",
+        "message": "عدد المهارات ممتاز (2)."
+      },
+      {
+        "severity": "medium",
+        "type": "hard_skills",
+        "message": "أضف مهارات تقنية/عملية أكثر مرتبطة بالوظيفة."
+      },
+      {
+        "severity": "medium",
+        "type": "soft_skills",
+        "message": "أضف 2-4 مهارات شخصية مثل Communication, Teamwork, Leadership."
+      }
+    ],
+    "top_technologies": [],
+    "mode": "rules+spacy+sbert",
+    "model_usage": {
+      "spacy": {
+        "available": true,
+        "documents_processed": 34,
+        "candidates_generated": 0
+      },
+      "sbert": {
+        "available": true,
+        "encode_calls": 1,
+        "items_encoded": 2,
+        "classified_items": [],
+        "unclassified_items": [
+          {
+            "skill": "Computer Information Systems",
+            "best_category": "productivity_tools",
+            "similarity": 0.4264
+          },
+          {
+            "skill": "NY",
+            "best_category": "design_creative",
+            "similarity": 0.0928
+          }
+        ],
+        "cache_hits": 0,
+        "cache_misses": 2,
+        "category_embedding_builds": 1,
+        "category_items_encoded": 16
+      },
+      "rules": {
+        "dictionary_matches": 0,
+        "dictionary_match_items": [],
+        "raw_dictionary_matches": [],
+        "accepted_dictionary_matches": [],
+        "rejected_before_semantic_analysis": [],
+        "expanded_compound_skills": [],
+        "regex_sector_detected": false
+      }
+    },
+    "skills_score": 6,
+    "skills_quality": {
+      "status": "degraded",
+      "score": 6,
+      "warnings": []
+    },
+    "soft_skill_evidence": [],
+    "sections_scanned": [
+      "skills",
+      "summary",
+      "experience",
+      "leadership",
+      "projects",
+      "volunteer"
+    ],
+    "skill_filtering": {
+      "mode": "evidence_aware_postprocessing",
+      "removed_false_positives": []
+    },
+    "score_breakdown": {
+      "quantity": 4,
+      "hard_skill_presence": 5,
+      "soft_skill_evidence": 0,
+      "categorization": 0,
+      "sector_evidence": 0,
+      "raw_total": 9,
+      "score_cap": 95
+    },
+    "categorized_count": 0,
+    "uncategorized_count": 2,
+    "categorized_ratio": 0.0,
+    "general_skills": [],
+    "general_count": 0,
+    "canonicalization": {
+      "soft_skill_aliases_resolved": [],
+      "domain_context_reclassified": [],
+      "general_skills_excluded_from_hard_score": [],
+      "duplicate_soft_skills_removed": 0,
+      "semantic_duplicates_removed": 0,
+      "invalid_skills_removed": []
+    },
+    "score_adjustments": {
+      "original_score": 9,
+      "generic_skill_penalty": 0,
+      "uncategorized_ratio_penalty": 3,
+      "final_score": 6
+    },
+    "sector": "business_management",
+    "sector_label": "business_management",
+    "role_family": null,
+    "current_role": null,
+    "seniority": null
+  },
+  "education": {
+    "education": [
+      {
+        "degree": "Bachelor",
+        "field": "Information Systems",
+        "institution": "Columbia University",
+        "location": "NY",
+        "start_date": null,
+        "end_date": "2014",
+        "graduation_year": "2014",
+        "gpa": null,
+        "honors": null,
+        "accreditation": null,
+        "description": "",
+        "current": false,
+        "raw_text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+        "confidence": 96,
+        "graduation_date_status": "provided",
+        "field_quality": {
+          "status": "ok",
+          "score": 98,
+          "warnings": [],
+          "informational_warnings": []
+        },
+        "education_completeness_score": 98,
+        "education_score_breakdown": {
+          "degree": 30,
+          "institution": 30,
+          "field": 20,
+          "core_completeness_bonus": 8,
+          "graduation_date_bonus": 7,
+          "location_bonus": 3,
+          "accreditation_bonus": 0,
+          "gpa_bonus": 0,
+          "honors_bonus": 0
+        }
+      }
+    ],
+    "highest_degree": "Bachelor",
+    "education_score": 98,
+    "education_quality": {
+      "status": "ok",
+      "score": 98,
+      "warnings": [],
+      "informational_warnings": [],
+      "entry_count": 1
+    },
+    "recommendations": [
+      {
+        "severity": "good",
+        "type": "complete",
+        "message": "Education section looks complete."
+      }
+    ],
+    "count": 1,
+    "has_education": true,
+    "raw_education_text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2",
+    "rejected_entries": [],
+    "mode": "explicit_education_section",
+    "spacy_available": true,
+    "score_policy": {
+      "core_fields": [
+        "degree",
+        "institution",
+        "field"
+      ],
+      "optional_bonus_fields": [
+        "graduation_date",
+        "location",
+        "accreditation",
+        "gpa",
+        "honors"
+      ],
+      "graduation_date_absence_penalized": false,
+      "gpa_or_honors_absence_penalized": false
+    }
+  },
+  "experience": {
+    "experiences": [],
+    "experience_groups": [],
+    "shared_responsibility_group_count": 0,
+    "count": 0,
+    "has_experience": false,
+    "total_experience_months": 0,
+    "total_experience_years": 0,
+    "professional_experience_months": 0,
+    "professional_experience_years": 0,
+    "paid_experience_months": 0,
+    "volunteer_experience_months": 0,
+    "volunteer_experience_years": 0,
+    "undated_volunteer_activities": [],
+    "total_validated_experience_months": 0,
+    "total_validated_experience_years": 0,
+    "current_position": null,
+    "top_companies": [],
+    "top_titles": [],
+    "top_technologies": [],
+    "overlapping_experiences": [],
+    "overlap_count": 0,
+    "experience_score": 0,
+    "experience_quality": {
+      "status": "needs_review",
+      "score": 0,
+      "valid_count": 0,
+      "rejected_count": 1,
+      "warnings": [
+        "rejected_experience_candidates:1"
+      ],
+      "informational_warnings": [],
+      "entry_quality": []
+    },
+    "rejected_entries": [
+      {
+        "raw_text": "GRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+        "reasons": [
+          "missing_dates_and_responsibilities",
+          "insufficient_structural_evidence"
+        ],
+        "parsed": {
+          "job_title": "Graphic Designer",
+          "company": "London",
+          "start_date": null,
+          "end_date": null,
+          "confidence": 53
+        }
+      }
+    ],
+    "recommendations": [
+      {
+        "severity": "medium",
+        "type": "missing",
+        "message": "No clear work experience found."
+      }
+    ],
+    "raw_experience_text": "GRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+    "mode": "explicit_experience_section",
+    "layout_mode": "entry_first",
+    "extractor_mode": "rule+regex+dictionary+spacy+sbert",
+    "spacy_available": true,
+    "sbert_available": true,
+    "document_metrics": [],
+    "leadership_experience_months": 0,
+    "leadership_experience_years": 0,
+    "leadership_periods": [],
+    "leadership_merged_periods": [],
+    "undated_volunteer_activity_count": 0,
+    "volunteer_date_status": "dated_or_not_present",
+    "duration_as_of": "2026-07-17"
+  },
+  "projects": {
+    "projects": [],
+    "count": 0,
+    "has_projects": false,
+    "top_technologies": [],
+    "project_score": 0,
+    "recommendations": [],
+    "raw_projects_text": "",
+    "mode": "skipped_no_project_section"
+  },
+  "languages": {
+    "languages": [
+      {
+        "language": "Spanish",
+        "proficiency": "Fluent",
+        "proficiency_rank": 4,
+        "cefr": "C2",
+        "test_score": null,
+        "evidence": "Spanish - C2 Chinese - A1 German - A2",
+        "confidence": 68
+      },
+      {
+        "language": "German",
+        "proficiency": "Fluent",
+        "proficiency_rank": 4,
+        "cefr": "C2",
+        "test_score": null,
+        "evidence": "Spanish - C2 Chinese - A1 German - A2",
+        "confidence": 68
+      },
+      {
+        "language": "Chinese",
+        "proficiency": "Fluent",
+        "proficiency_rank": 4,
+        "cefr": "C2",
+        "test_score": null,
+        "evidence": "Spanish - C2 Chinese - A1 German - A2",
+        "confidence": 68
+      }
+    ],
+    "count": 3,
+    "has_languages": true,
+    "native_languages": [],
+    "fluent_languages": [
+      "Spanish",
+      "German",
+      "Chinese"
+    ],
+    "language_score": 93,
+    "recommendations": [
+      {
+        "severity": "good",
+        "type": "complete",
+        "message": "Languages section looks complete."
+      }
+    ],
+    "raw_languages_text": "Writing Sketching Photography\nWriting Sketching Photography",
+    "spacy_available": true,
+    "mode": "rule+regex+dictionary+spacy",
+    "status": "present",
+    "applicable": true
+  },
+  "recommendations": [
+    {
+      "severity": "medium",
+      "type": "missing_email",
+      "message": "Add a clear personal or professional email address.",
+      "area": "contact"
+    },
+    {
+      "severity": "medium",
+      "type": "missing_linkedin",
+      "message": "Add a LinkedIn profile if you maintain one.",
+      "area": "contact"
+    },
+    {
+      "severity": "high",
+      "type": "quantity",
+      "message": "عدد المهارات ممتاز (2).",
+      "area": "skills"
+    },
+    {
+      "severity": "medium",
+      "type": "hard_skills",
+      "message": "أضف مهارات تقنية/عملية أكثر مرتبطة بالوظيفة.",
+      "area": "skills"
+    },
+    {
+      "severity": "medium",
+      "type": "soft_skills",
+      "message": "أضف 2-4 مهارات شخصية مثل Communication, Teamwork, Leadership.",
+      "area": "skills"
+    },
+    {
+      "severity": "good",
+      "type": "complete",
+      "message": "Education section looks complete.",
+      "area": "education"
+    },
+    {
+      "severity": "medium",
+      "type": "missing",
+      "message": "No clear work experience found.",
+      "area": "experience"
+    },
+    {
+      "severity": "good",
+      "type": "complete",
+      "message": "Languages section looks complete.",
+      "area": "languages"
+    }
+  ],
+  "errors": {},
+  "date_placeholders": {
+    "detected": false,
+    "count": 0,
+    "items": [],
+    "counts_by_section": {},
+    "mode": "generic_placeholder_date_detection"
+  },
+  "document_profile": {
+    "document_type": "resume",
+    "is_template": false,
+    "template_confidence": 0,
+    "signals": [],
+    "signal_types": [],
+    "detection_mode": "weighted_generic_template_signals"
+  },
+  "document_style": {
+    "status": "ok",
+    "has_color": false,
+    "is_multicolor": false,
+    "detected_color_count": 13,
+    "chromatic_color_count": 0,
+    "palette": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "weight": 69588.0,
+        "coverage": 0.672985,
+        "saturation": 0.0,
+        "luminance": 1.0,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#000000",
+        "rgb": [
+          0,
+          0,
+          0
+        ],
+        "weight": 28402.0,
+        "coverage": 0.274676,
+        "saturation": 0.0,
+        "luminance": 0.0,
+        "sources": [
+          "text"
+        ],
+        "usage": [
+          "body",
+          "header",
+          "footer"
+        ]
+      },
+      {
+        "hex": "#EBEBEB",
+        "rgb": [
+          235,
+          235,
+          235
+        ],
+        "weight": 908.25,
+        "coverage": 0.008784,
+        "saturation": 0.0,
+        "luminance": 0.8308,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#A7A7A7",
+        "rgb": [
+          167,
+          167,
+          167
+        ],
+        "weight": 855.0,
+        "coverage": 0.008269,
+        "saturation": 0.0,
+        "luminance": 0.3864,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#BBBBBB",
+        "rgb": [
+          187,
+          187,
+          187
+        ],
+        "weight": 829.75,
+        "coverage": 0.008025,
+        "saturation": 0.0,
+        "luminance": 0.4969,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#7A7A7A",
+        "rgb": [
+          122,
+          122,
+          122
+        ],
+        "weight": 642.0,
+        "coverage": 0.006209,
+        "saturation": 0.0,
+        "luminance": 0.1946,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#8F8F8F",
+        "rgb": [
+          143,
+          143,
+          143
+        ],
+        "weight": 568.0,
+        "coverage": 0.005493,
+        "saturation": 0.0,
+        "luminance": 0.2747,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#DADADA",
+        "rgb": [
+          218,
+          218,
+          218
+        ],
+        "weight": 524.25,
+        "coverage": 0.00507,
+        "saturation": 0.0,
+        "luminance": 0.7011,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#CDCDCD",
+        "rgb": [
+          205,
+          205,
+          205
+        ],
+        "weight": 476.25,
+        "coverage": 0.004606,
+        "saturation": 0.0,
+        "luminance": 0.6105,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#636363",
+        "rgb": [
+          99,
+          99,
+          99
+        ],
+        "weight": 300.0,
+        "coverage": 0.002901,
+        "saturation": 0.0,
+        "luminance": 0.1248,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#9B9B9B",
+        "rgb": [
+          155,
+          155,
+          155
+        ],
+        "weight": 162.75,
+        "coverage": 0.001574,
+        "saturation": 0.0,
+        "luminance": 0.3278,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#6E6E6E",
+        "rgb": [
+          110,
+          110,
+          110
+        ],
+        "weight": 100.25,
+        "coverage": 0.00097,
+        "saturation": 0.0,
+        "luminance": 0.1559,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      },
+      {
+        "hex": "#545454",
+        "rgb": [
+          84,
+          84,
+          84
+        ],
+        "weight": 45.5,
+        "coverage": 0.00044,
+        "saturation": 0.0,
+        "luminance": 0.0887,
+        "sources": [
+          "raster"
+        ],
+        "usage": [
+          "page"
+        ]
+      }
+    ],
+    "primary_color": null,
+    "accent_colors": [],
+    "text_colors": [
+      "#000000"
+    ],
+    "graphic_colors": [],
+    "background_color": "#FFFFFF",
+    "contrast_status": "good",
+    "body_chromatic_text_ratio": 0.0,
+    "ats_color_risk": "low",
+    "palette_method": "pdf_text_vector_and_quantized_raster_clustering",
+    "fixed_palette_used": false
+  },
+  "source_readiness": {
+    "status": "ready",
+    "score": 100,
+    "score_cap": 100,
+    "warnings": [],
+    "required_actions": []
+  },
+  "document_intelligence": {
+    "version": "1.0.0",
+    "applied": true,
+    "areas": [
+      "template_detection",
+      "placeholder_dates",
+      "aligned_metadata_rows",
+      "education_row_pairing",
+      "dynamic_color_palette",
+      "skill_disambiguation",
+      "source_readiness"
+    ],
+    "fixed_palette_used": false
+  },
+  "semantic_quality_refinement": {
+    "version": "1.2.0",
+    "applied": true,
+    "areas": [
+      "experience",
+      "experience_groups",
+      "volunteer",
+      "skills",
+      "domain_context",
+      "summary",
+      "sector",
+      "education",
+      "scores",
+      "document_profile",
+      "document_style",
+      "placeholder_dates",
+      "aligned_metadata_rows",
+      "source_readiness"
+    ]
+  },
+  "contract_version": "1.1.0",
+  "analysis": {
+    "facts": {
+      "source_document": {
+        "path": "tests/fixtures/synthetic-visual-resume.docx",
+        "name": "free-english-cv-for-women.docx",
+        "extension": ".docx",
+        "size_bytes": 146672
+      },
+      "text": {
+        "raw_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\nSKILLS\nSKILLS\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nEDUCATION\nEDUCATION\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish – C2 Chinese – A1 German – A2\nSpanish – C2 Chinese – A1 German – A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nEXPERIENCE\nEXPERIENCE\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+        "preliminary_ordered_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\nSKILLS\nSKILLS\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nEDUCATION\nEDUCATION\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nEXPERIENCE\nEXPERIENCE\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+        "ordered_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\nSKILLS\nSKILLS\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nEDUCATION\nEDUCATION\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish – C2 Chinese – A1 German – A2\nSpanish – C2 Chinese – A1 German – A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nEXPERIENCE\nEXPERIENCE\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+        "cleaned_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\nSKILLS\nSKILLS\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nEDUCATION\nEDUCATION\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nEXPERIENCE\nEXPERIENCE\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+        "analysis_text": "JORDAN EXAMPLE\nJORDAN EXAMPLE\n\nSkills\n\nSkills\n\nProject management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\n\nEducation\n\nEducation\n\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2\nLANGUAGES\nLANGUAGES\nWriting Sketching Photography\nWriting Sketching Photography\nHOBBIES\nHOBBIES\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\n\nExperience\n\nExperience\n\nGRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nOBJECTIVE\nOBJECTIVE",
+        "text_file": "fixtures/synthetic/visual_resume_extracted_text.txt"
+      },
+      "layout": {
+        "blocks": [
+          {
+            "id": "p1_b0",
+            "page": 1,
+            "text": "JORDAN EXAMPLE",
+            "bbox": null,
+            "column": "single",
+            "order": 0,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b1",
+            "page": 1,
+            "text": "JORDAN EXAMPLE",
+            "bbox": null,
+            "column": "single",
+            "order": 1,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b2",
+            "page": 1,
+            "text": "SKILLS",
+            "bbox": null,
+            "column": "single",
+            "order": 2,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b3",
+            "page": 1,
+            "text": "SKILLS",
+            "bbox": null,
+            "column": "single",
+            "order": 3,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b4",
+            "page": 1,
+            "text": "Project management Strong decision maker Complex problem solver Creative design",
+            "bbox": null,
+            "column": "single",
+            "order": 4,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b5",
+            "page": 1,
+            "text": "Project management Strong decision maker Complex problem solver Creative design",
+            "bbox": null,
+            "column": "single",
+            "order": 5,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b6",
+            "page": 1,
+            "text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+            "bbox": null,
+            "column": "single",
+            "order": 6,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b7",
+            "page": 1,
+            "text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+            "bbox": null,
+            "column": "single",
+            "order": 7,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b8",
+            "page": 1,
+            "text": "EDUCATION",
+            "bbox": null,
+            "column": "single",
+            "order": 8,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b9",
+            "page": 1,
+            "text": "EDUCATION",
+            "bbox": null,
+            "column": "single",
+            "order": 9,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b10",
+            "page": 1,
+            "text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+            "bbox": null,
+            "column": "single",
+            "order": 10,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b11",
+            "page": 1,
+            "text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+            "bbox": null,
+            "column": "single",
+            "order": 11,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b12",
+            "page": 1,
+            "text": "Spanish – C2 Chinese – A1 German – A2",
+            "bbox": null,
+            "column": "single",
+            "order": 12,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b13",
+            "page": 1,
+            "text": "Spanish – C2 Chinese – A1 German – A2",
+            "bbox": null,
+            "column": "single",
+            "order": 13,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b14",
+            "page": 1,
+            "text": "LANGUAGES",
+            "bbox": null,
+            "column": "single",
+            "order": 14,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b15",
+            "page": 1,
+            "text": "LANGUAGES",
+            "bbox": null,
+            "column": "single",
+            "order": 15,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b16",
+            "page": 1,
+            "text": "Writing Sketching Photography",
+            "bbox": null,
+            "column": "single",
+            "order": 16,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b17",
+            "page": 1,
+            "text": "Writing Sketching Photography",
+            "bbox": null,
+            "column": "single",
+            "order": 17,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b18",
+            "page": 1,
+            "text": "HOBBIES",
+            "bbox": null,
+            "column": "single",
+            "order": 18,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b19",
+            "page": 1,
+            "text": "HOBBIES",
+            "bbox": null,
+            "column": "single",
+            "order": 19,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b20",
+            "page": 1,
+            "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+            "bbox": null,
+            "column": "single",
+            "order": 20,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b21",
+            "page": 1,
+            "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+            "bbox": null,
+            "column": "single",
+            "order": 21,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b22",
+            "page": 1,
+            "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+            "bbox": null,
+            "column": "single",
+            "order": 22,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b23",
+            "page": 1,
+            "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+            "bbox": null,
+            "column": "single",
+            "order": 23,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b24",
+            "page": 1,
+            "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+            "bbox": null,
+            "column": "single",
+            "order": 24,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b25",
+            "page": 1,
+            "text": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+            "bbox": null,
+            "column": "single",
+            "order": 25,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b26",
+            "page": 1,
+            "text": "EXPERIENCE",
+            "bbox": null,
+            "column": "single",
+            "order": 26,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b27",
+            "page": 1,
+            "text": "EXPERIENCE",
+            "bbox": null,
+            "column": "single",
+            "order": 27,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b28",
+            "page": 1,
+            "text": "GRAPHIC DESIGNER",
+            "bbox": null,
+            "column": "single",
+            "order": 28,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b29",
+            "page": 1,
+            "text": "GRAPHIC DESIGNER",
+            "bbox": null,
+            "column": "single",
+            "order": 29,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b30",
+            "page": 1,
+            "text": "London, England",
+            "bbox": null,
+            "column": "single",
+            "order": 30,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b31",
+            "page": 1,
+            "text": "+1 555 010 0300",
+            "bbox": null,
+            "column": "single",
+            "order": 31,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b32",
+            "page": 1,
+            "text": "jordan.visual @example.test",
+            "bbox": null,
+            "column": "single",
+            "order": 32,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b33",
+            "page": 1,
+            "text": "/ jordan.example",
+            "bbox": null,
+            "column": "single",
+            "order": 33,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b34",
+            "page": 1,
+            "text": "in",
+            "bbox": null,
+            "column": "single",
+            "order": 34,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b35",
+            "page": 1,
+            "text": "London, England",
+            "bbox": null,
+            "column": "single",
+            "order": 35,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b36",
+            "page": 1,
+            "text": "+1 555 010 0300",
+            "bbox": null,
+            "column": "single",
+            "order": 36,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b37",
+            "page": 1,
+            "text": "jordan.visual @example.test",
+            "bbox": null,
+            "column": "single",
+            "order": 37,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b38",
+            "page": 1,
+            "text": "/ jordan.example",
+            "bbox": null,
+            "column": "single",
+            "order": 38,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b39",
+            "page": 1,
+            "text": "in",
+            "bbox": null,
+            "column": "single",
+            "order": 39,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b40",
+            "page": 1,
+            "text": "Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+            "bbox": null,
+            "column": "single",
+            "order": 40,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b41",
+            "page": 1,
+            "text": "Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+            "bbox": null,
+            "column": "single",
+            "order": 41,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b42",
+            "page": 1,
+            "text": "OBJECTIVE",
+            "bbox": null,
+            "column": "single",
+            "order": 42,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          },
+          {
+            "id": "p1_b43",
+            "page": 1,
+            "text": "OBJECTIVE",
+            "bbox": null,
+            "column": "single",
+            "order": 43,
+            "engine": "docx",
+            "block_type": "paragraph",
+            "is_repeated_header_footer": false,
+            "is_continuation_header": false,
+            "excluded_from_ordered_text": false,
+            "exclusion_reason": null
+          }
+        ]
+      },
+      "contact": {
+        "name": "Jordan Example",
+        "name_status": "resolved",
+        "name_placeholder": null,
+        "job_title": null,
+        "email": null,
+        "email_status": "unresolved",
+        "phone": "555 010 0300",
+        "phone_status": "resolved",
+        "location": "London, England",
+        "linkedin": null,
+        "github": null,
+        "portfolio": null,
+        "website": null,
+        "links": [],
+        "all_emails": [],
+        "all_phones": [
+          "555 010 0300"
+        ],
+        "confidence": {
+          "name": 0.47,
+          "email": 0.0,
+          "phone": 0.15,
+          "location": 0.45
+        },
+        "quality": {
+          "status": "needs_review",
+          "score": 43,
+          "warnings": [
+            "candidate_email_not_resolved"
+          ]
+        },
+        "evidence": {
+          "name": {
+            "page": 1,
+            "text": "JORDAN EXAMPLE",
+            "bbox": null,
+            "block_id": "p1_b1",
+            "is_repeated_header_footer": false
+          },
+          "email": null,
+          "phone": {
+            "page": 1,
+            "text": "+1 555 010 0300",
+            "bbox": null,
+            "block_id": "p1_b31",
+            "is_repeated_header_footer": false
+          },
+          "location": {
+            "page": 1,
+            "text": "London, England",
+            "bbox": null,
+            "block_id": "p1_b30",
+            "is_repeated_header_footer": false
+          }
+        },
+        "candidates": {
+          "names": [
+            {
+              "value": "Jordan Example",
+              "score": 47,
+              "line_index": 0,
+              "reasons": [],
+              "source": {
+                "page": 1,
+                "text": "JORDAN EXAMPLE",
+                "bbox": null,
+                "block_id": "p1_b1",
+                "is_repeated_header_footer": false
+              }
+            },
+            {
+              "value": "Jordan Example",
+              "score": 47,
+              "line_index": 1,
+              "reasons": [],
+              "source": {
+                "page": 1,
+                "text": "JORDAN EXAMPLE",
+                "bbox": null,
+                "block_id": "p1_b1",
+                "is_repeated_header_footer": false
+              }
+            },
+            {
+              "value": "Graphic Designer",
+              "score": 47,
+              "line_index": 28,
+              "reasons": [
+                "near_contact"
+              ],
+              "source": {
+                "page": 1,
+                "text": "GRAPHIC DESIGNER",
+                "bbox": null,
+                "block_id": "p1_b28",
+                "is_repeated_header_footer": false
+              }
+            },
+            {
+              "value": "Graphic Designer",
+              "score": 47,
+              "line_index": 29,
+              "reasons": [
+                "near_contact"
+              ],
+              "source": {
+                "page": 1,
+                "text": "GRAPHIC DESIGNER",
+                "bbox": null,
+                "block_id": "p1_b28",
+                "is_repeated_header_footer": false
+              }
+            },
+            {
+              "value": "Writing Sketching Photography",
+              "score": 15,
+              "line_index": 16,
+              "reasons": [],
+              "source": {
+                "page": 1,
+                "text": "Writing Sketching Photography",
+                "bbox": null,
+                "block_id": "p1_b16",
+                "is_repeated_header_footer": false
+              }
+            },
+            {
+              "value": "Writing Sketching Photography",
+              "score": 15,
+              "line_index": 17,
+              "reasons": [],
+              "source": {
+                "page": 1,
+                "text": "Writing Sketching Photography",
+                "bbox": null,
+                "block_id": "p1_b16",
+                "is_repeated_header_footer": false
+              }
+            }
+          ],
+          "emails": [],
+          "phones": [
+            {
+              "value": "555 010 0300",
+              "digits": "2076668555",
+              "score": 15,
+              "line_index": 31,
+              "raw_line_index": 31,
+              "reasons": [
+                "present_in_ordered_text"
+              ],
+              "source": {
+                "page": 1,
+                "text": "+1 555 010 0300",
+                "bbox": null,
+                "block_id": "p1_b31",
+                "is_repeated_header_footer": false
+              }
+            }
+          ],
+          "locations": [
+            {
+              "value": "London, England",
+              "score": 45,
+              "line_index": 30,
+              "reasons": [
+                "near_contact_cluster"
+              ],
+              "source": {
+                "page": 1,
+                "text": "London, England",
+                "bbox": null,
+                "block_id": "p1_b30",
+                "is_repeated_header_footer": false
+              }
+            },
+            {
+              "value": "London, England",
+              "score": 30,
+              "line_index": 35,
+              "reasons": [
+                "near_contact_cluster"
+              ],
+              "source": {
+                "page": 1,
+                "text": "London, England",
+                "bbox": null,
+                "block_id": "p1_b30",
+                "is_repeated_header_footer": false
+              }
+            }
+          ]
+        },
+        "rejected_candidates": [],
+        "mode": "ranked_layout_aware_contact",
+        "template_signals": [],
+        "recommendations": [
+          {
+            "severity": "medium",
+            "type": "missing_email",
+            "message": "Add a clear personal or professional email address."
+          },
+          {
+            "severity": "medium",
+            "type": "missing_linkedin",
+            "message": "Add a LinkedIn profile if you maintain one."
+          }
+        ],
+        "duplicate_contact_evidence": [
+          {
+            "field": "name",
+            "value": "JORDAN EXAMPLE",
+            "occurrence_count": 2,
+            "continuation_header_occurrence_count": 0,
+            "pages": [
+              1
+            ],
+            "occurrences": [
+              {
+                "id": "p1_b0",
+                "page": 1,
+                "order": 0,
+                "text": "JORDAN EXAMPLE",
+                "bbox": null,
+                "is_continuation_header": false,
+                "excluded_from_ordered_text": false,
+                "exclusion_reason": null
+              },
+              {
+                "id": "p1_b1",
+                "page": 1,
+                "order": 1,
+                "text": "JORDAN EXAMPLE",
+                "bbox": null,
+                "is_continuation_header": false,
+                "excluded_from_ordered_text": false,
+                "exclusion_reason": null
+              }
+            ]
+          }
+        ]
+      },
+      "sections": {
+        "sections": {
+          "summary": {
+            "heading": "OBJECTIVE",
+            "source_headings": [
+              "OBJECTIVE"
+            ],
+            "content": "",
+            "words": 0,
+            "confidence": 100
+          },
+          "experience": {
+            "heading": "Experience",
+            "source_headings": [
+              "Experience"
+            ],
+            "content": "GRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+            "words": 140,
+            "confidence": 100
+          },
+          "education": {
+            "heading": "Education",
+            "source_headings": [
+              "Education"
+            ],
+            "content": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2",
+            "words": 32,
+            "confidence": 100
+          },
+          "skills": {
+            "heading": "Skills",
+            "source_headings": [
+              "Skills"
+            ],
+            "content": "Project management Strong decision maker Complex problem solver Creative design\nProject management Strong decision maker Complex problem solver Creative design\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+            "words": 40,
+            "confidence": 100
+          },
+          "certifications": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "projects": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "languages": {
+            "heading": "LANGUAGES",
+            "source_headings": [
+              "LANGUAGES"
+            ],
+            "content": "Writing Sketching Photography\nWriting Sketching Photography",
+            "words": 6,
+            "confidence": 100
+          },
+          "volunteer": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "awards": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "publications": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "interests": {
+            "heading": "HOBBIES",
+            "source_headings": [
+              "HOBBIES"
+            ],
+            "content": "Job Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement\nJob Title Company Name, Location | Jan 2020 - current Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement Key responsibility or achievement",
+            "words": 144,
+            "confidence": 100
+          },
+          "references": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "courses": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "bootcamps": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "internships": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "freelance": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "leadership": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "organizations": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "military": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "additional_info": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "fields": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "programs": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "contact": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "achievements": {
+            "heading": "",
+            "source_headings": [],
+            "content": "",
+            "words": 0,
+            "confidence": 0
+          },
+          "contact_header": {
+            "heading": "Contact Header",
+            "source_headings": [
+              "Contact Header"
+            ],
+            "content": "JORDAN EXAMPLE\nJORDAN EXAMPLE",
+            "words": 8,
+            "confidence": 100
+          }
+        },
+        "found_sections": [
+          "skills",
+          "education",
+          "languages",
+          "interests",
+          "experience"
+        ],
+        "missing_required": [
+          "summary"
+        ],
+        "section_order": [
+          "contact_header",
+          "skills",
+          "education",
+          "languages",
+          "interests",
+          "experience",
+          "summary"
+        ],
+        "total_words": 362,
+        "detected_headings": [
+          {
+            "line_index": 2,
+            "heading": "Skills",
+            "section": "skills",
+            "confidence": 100
+          },
+          {
+            "line_index": 3,
+            "heading": "Skills",
+            "section": "skills",
+            "confidence": 100
+          },
+          {
+            "line_index": 8,
+            "heading": "Education",
+            "section": "education",
+            "confidence": 100
+          },
+          {
+            "line_index": 9,
+            "heading": "Education",
+            "section": "education",
+            "confidence": 100
+          },
+          {
+            "line_index": 14,
+            "heading": "LANGUAGES",
+            "section": "languages",
+            "confidence": 100
+          },
+          {
+            "line_index": 15,
+            "heading": "LANGUAGES",
+            "section": "languages",
+            "confidence": 100
+          },
+          {
+            "line_index": 18,
+            "heading": "HOBBIES",
+            "section": "interests",
+            "confidence": 100
+          },
+          {
+            "line_index": 19,
+            "heading": "HOBBIES",
+            "section": "interests",
+            "confidence": 100
+          },
+          {
+            "line_index": 26,
+            "heading": "Experience",
+            "section": "experience",
+            "confidence": 100
+          },
+          {
+            "line_index": 27,
+            "heading": "Experience",
+            "section": "experience",
+            "confidence": 100
+          },
+          {
+            "line_index": 42,
+            "heading": "OBJECTIVE",
+            "section": "summary",
+            "confidence": 100
+          },
+          {
+            "line_index": 43,
+            "heading": "OBJECTIVE",
+            "section": "summary",
+            "confidence": 100
+          }
+        ]
+      },
+      "experience": {
+        "experiences": [],
+        "experience_groups": [],
+        "shared_responsibility_group_count": 0,
+        "count": 0,
+        "has_experience": false,
+        "total_experience_months": 0,
+        "total_experience_years": 0,
+        "professional_experience_months": 0,
+        "professional_experience_years": 0,
+        "paid_experience_months": 0,
+        "volunteer_experience_months": 0,
+        "volunteer_experience_years": 0,
+        "undated_volunteer_activities": [],
+        "total_validated_experience_months": 0,
+        "total_validated_experience_years": 0,
+        "current_position": null,
+        "top_companies": [],
+        "top_titles": [],
+        "top_technologies": [],
+        "overlapping_experiences": [],
+        "overlap_count": 0,
+        "experience_score": 0,
+        "experience_quality": {
+          "status": "needs_review",
+          "score": 0,
+          "valid_count": 0,
+          "rejected_count": 1,
+          "warnings": [
+            "rejected_experience_candidates:1"
+          ],
+          "informational_warnings": [],
+          "entry_quality": []
+        },
+        "rejected_entries": [
+          {
+            "raw_text": "GRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+            "reasons": [
+              "missing_dates_and_responsibilities",
+              "insufficient_structural_evidence"
+            ],
+            "parsed": {
+              "job_title": "Graphic Designer",
+              "company": "London",
+              "start_date": null,
+              "end_date": null,
+              "confidence": 53
+            }
+          }
+        ],
+        "recommendations": [
+          {
+            "severity": "medium",
+            "type": "missing",
+            "message": "No clear work experience found."
+          }
+        ],
+        "raw_experience_text": "GRAPHIC DESIGNER\nGRAPHIC DESIGNER\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nLondon, England\n+1 555 010 0300\njordan.visual @example.test\n/ jordan.example\nin\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .\nDescribe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter. Describe in a few lines your career path, your key skills for the position and your career goals. This is actually an introduction to your cover letter .",
+        "mode": "explicit_experience_section",
+        "layout_mode": "entry_first",
+        "extractor_mode": "rule+regex+dictionary+spacy+sbert",
+        "spacy_available": true,
+        "sbert_available": true,
+        "document_metrics": [],
+        "leadership_experience_months": 0,
+        "leadership_experience_years": 0,
+        "leadership_periods": [],
+        "leadership_merged_periods": [],
+        "undated_volunteer_activity_count": 0,
+        "volunteer_date_status": "dated_or_not_present",
+        "duration_as_of": "2026-07-17"
+      },
+      "education": {
+        "education": [
+          {
+            "degree": "Bachelor",
+            "field": "Information Systems",
+            "institution": "Columbia University",
+            "location": "NY",
+            "start_date": null,
+            "end_date": "2014",
+            "graduation_year": "2014",
+            "gpa": null,
+            "honors": null,
+            "accreditation": null,
+            "description": "",
+            "current": false,
+            "raw_text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY",
+            "confidence": 96,
+            "graduation_date_status": "provided",
+            "field_quality": {
+              "status": "ok",
+              "score": 98,
+              "warnings": [],
+              "informational_warnings": []
+            },
+            "education_completeness_score": 98,
+            "education_score_breakdown": {
+              "degree": 30,
+              "institution": 30,
+              "field": 20,
+              "core_completeness_bonus": 8,
+              "graduation_date_bonus": 7,
+              "location_bonus": 3,
+              "accreditation_bonus": 0,
+              "gpa_bonus": 0,
+              "honors_bonus": 0
+            }
+          }
+        ],
+        "highest_degree": "Bachelor",
+        "education_score": 98,
+        "education_quality": {
+          "status": "ok",
+          "score": 98,
+          "warnings": [],
+          "informational_warnings": [],
+          "entry_count": 1
+        },
+        "recommendations": [
+          {
+            "severity": "good",
+            "type": "complete",
+            "message": "Education section looks complete."
+          }
+        ],
+        "count": 1,
+        "has_education": true,
+        "raw_education_text": "Bachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nBachelor of Science: Computer Information Systems | 2014 Columbia University , NY\nSpanish - C2 Chinese - A1 German - A2\nSpanish - C2 Chinese - A1 German - A2",
+        "rejected_entries": [],
+        "mode": "explicit_education_section",
+        "spacy_available": true,
+        "score_policy": {
+          "core_fields": [
+            "degree",
+            "institution",
+            "field"
+          ],
+          "optional_bonus_fields": [
+            "graduation_date",
+            "location",
+            "accreditation",
+            "gpa",
+            "honors"
+          ],
+          "graduation_date_absence_penalized": false,
+          "gpa_or_honors_absence_penalized": false
+        }
+      },
+      "skills": {
+        "all_skills": [
+          "Computer Information Systems",
+          "NY"
+        ],
+        "hard_skills": [
+          "Computer Information Systems",
+          "NY"
+        ],
+        "soft_skills": [],
+        "categorized_skills": {
+          "other": [
+            "Computer Information Systems",
+            "NY"
+          ]
+        },
+        "top_technologies": []
+      },
+      "projects": {
+        "projects": [],
+        "count": 0,
+        "has_projects": false,
+        "top_technologies": [],
+        "project_score": 0,
+        "recommendations": [],
+        "raw_projects_text": "",
+        "mode": "skipped_no_project_section"
+      },
+      "languages": {
+        "languages": [
+          {
+            "language": "Spanish",
+            "proficiency": "Fluent",
+            "proficiency_rank": 4,
+            "cefr": "C2",
+            "test_score": null,
+            "evidence": "Spanish - C2 Chinese - A1 German - A2",
+            "confidence": 68
+          },
+          {
+            "language": "German",
+            "proficiency": "Fluent",
+            "proficiency_rank": 4,
+            "cefr": "C2",
+            "test_score": null,
+            "evidence": "Spanish - C2 Chinese - A1 German - A2",
+            "confidence": 68
+          },
+          {
+            "language": "Chinese",
+            "proficiency": "Fluent",
+            "proficiency_rank": 4,
+            "cefr": "C2",
+            "test_score": null,
+            "evidence": "Spanish - C2 Chinese - A1 German - A2",
+            "confidence": 68
+          }
+        ],
+        "count": 3,
+        "has_languages": true,
+        "native_languages": [],
+        "fluent_languages": [
+          "Spanish",
+          "German",
+          "Chinese"
+        ],
+        "language_score": 93,
+        "recommendations": [
+          {
+            "severity": "good",
+            "type": "complete",
+            "message": "Languages section looks complete."
+          }
+        ],
+        "raw_languages_text": "Writing Sketching Photography\nWriting Sketching Photography",
+        "spacy_available": true,
+        "mode": "rule+regex+dictionary+spacy",
+        "status": "present",
+        "applicable": true
+      },
+      "metrics": []
+    },
+    "inferences": {
+      "candidate_profile": {
+        "sector": {
+          "value": "business_management",
+          "confidence": 0.7,
+          "method": "rules_regex",
+          "evidence": []
+        },
+        "seniority": {
+          "value": "entry",
+          "confidence": 0.68,
+          "method": "professional_experience_duration_v1",
+          "evidence": {
+            "professional_experience_years": 0.0
+          }
+        },
+        "role_family": {
+          "value": "business_management",
+          "confidence": 0.75,
+          "method": "sector_role_family_v1",
+          "evidence": []
+        }
+      },
+      "semantic_skills": [],
+      "strengths": [
+        {
+          "type": "complete",
+          "area": "education",
+          "message": "Education section looks complete.",
+          "evidence": []
+        },
+        {
+          "type": "complete",
+          "area": "languages",
+          "message": "Languages section looks complete.",
+          "evidence": []
+        }
+      ],
+      "gaps": [
+        {
+          "type": "missing_email",
+          "area": "contact",
+          "severity": "medium",
+          "message": "Add a clear personal or professional email address.",
+          "evidence": []
+        },
+        {
+          "type": "missing_linkedin",
+          "area": "contact",
+          "severity": "medium",
+          "message": "Add a LinkedIn profile if you maintain one.",
+          "evidence": []
+        },
+        {
+          "type": "quantity",
+          "area": "skills",
+          "severity": "high",
+          "message": "عدد المهارات ممتاز (2).",
+          "evidence": []
+        },
+        {
+          "type": "hard_skills",
+          "area": "skills",
+          "severity": "medium",
+          "message": "أضف مهارات تقنية/عملية أكثر مرتبطة بالوظيفة.",
+          "evidence": []
+        },
+        {
+          "type": "soft_skills",
+          "area": "skills",
+          "severity": "medium",
+          "message": "أضف 2-4 مهارات شخصية مثل Communication, Teamwork, Leadership.",
+          "evidence": []
+        },
+        {
+          "type": "missing",
+          "area": "experience",
+          "severity": "medium",
+          "message": "No clear work experience found.",
+          "evidence": []
+        }
+      ],
+      "model_usage": {
+        "skills": {
+          "spacy": {
+            "available": true,
+            "documents_processed": 34,
+            "candidates_generated": 0
+          },
+          "sbert": {
+            "available": true,
+            "encode_calls": 1,
+            "items_encoded": 2,
+            "classified_items": [],
+            "unclassified_items": [
+              {
+                "skill": "Computer Information Systems",
+                "best_category": "productivity_tools",
+                "similarity": 0.4264
+              },
+              {
+                "skill": "NY",
+                "best_category": "design_creative",
+                "similarity": 0.0928
+              }
+            ],
+            "cache_hits": 0,
+            "cache_misses": 2,
+            "category_embedding_builds": 1,
+            "category_items_encoded": 16
+          },
+          "rules": {
+            "dictionary_matches": 0,
+            "dictionary_match_items": [],
+            "raw_dictionary_matches": [],
+            "accepted_dictionary_matches": [],
+            "rejected_before_semantic_analysis": [],
+            "expanded_compound_skills": [],
+            "regex_sector_detected": false
+          }
+        },
+        "experience": {
+          "mode": "explicit_experience_section",
+          "extractor_mode": "rule+regex+dictionary+spacy+sbert",
+          "spacy_available": true,
+          "sbert_available": true
+        }
+      }
+    },
+    "generated_insights": {
+      "status": "not_generated",
+      "provider": null,
+      "model": null,
+      "personalized_summary": null,
+      "recommendations": []
+    }
+  },
+  "quality": {
+    "status": "needs_review",
+    "score": 54,
+    "component_scores": {
+      "text": 100,
+      "contact": 43,
+      "sections": 80,
+      "education": 98,
+      "experience": 0,
+      "skills": 6
+    },
+    "warnings": [
+      "docx_has_no_pdf_coordinates",
+      "rejected_experience_candidates:1"
+    ],
+    "resolved_warnings": [],
+    "critical_warnings": [
+      "contact_identity_ambiguous",
+      "candidate_name_unreliable",
+      "experience_extraction_needs_review"
+    ]
+  },
+  "compatibility": {
+    "legacy_top_level_modules_preserved": true,
+    "canonical_analysis_path": "analysis",
+    "full_text_preserved": true
+  },
+  "contract_validation": {
+    "valid": true,
+    "status": "valid",
+    "schema_version": "1.1.0",
+    "errors": []
+  }
+}

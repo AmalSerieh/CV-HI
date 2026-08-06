@@ -1,0 +1,10 @@
+{
+  "summary": "Backend Engineer building API services.",
+  "skills": ["Python", "REST API", "SQL", "PostgreSQL", "Docker"],
+  "experience": [
+    {
+      "title": "Backend Developer",
+      "bullets": ["Built authentication APIs and database services."]
+    }
+  ]
+}

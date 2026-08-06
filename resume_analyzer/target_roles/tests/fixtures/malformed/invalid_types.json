@@ -1,0 +1,10 @@
+{
+  "case_id": "malformed_invalid_type_001",
+  "language": "unknown",
+  "description": "Recognized fields contain clearly invalid scalar types",
+  "input": {"skills": 42, "experience": false},
+  "expected_top_roles": [],
+  "required_evidence": [],
+  "should_be_insufficient": true,
+  "expected_error": true
+}

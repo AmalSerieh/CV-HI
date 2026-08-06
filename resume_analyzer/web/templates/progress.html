@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container py-5" id="progress-view" data-analysis-id="{{ analysis_id }}">
+  <div class="row justify-content-center"><div class="col-lg-8">
+    <div class="card border-0 shadow-sm"><div class="card-body p-4 p-lg-5">
+      <span class="eyebrow">Analysis {{ analysis_id }}</span>
+      <h1 class="h3 mt-2">Building the canonical report</h1>
+      <p class="text-secondary">Progress is reported by known stages. The application does not invent percentages for pipeline internals.</p>
+      <div id="progress-alert" class="alert alert-danger d-none" role="alert" aria-live="assertive"></div>
+      <ol class="stage-list mt-4" aria-live="polite">
+        {% for key, label in [
+          ('uploading','Uploading'), ('validating_document','Validating document'),
+          ('extracting_text','Extracting text'), ('detecting_sections','Detecting sections'),
+          ('extracting_entities','Extracting entities'), ('suggesting_target_role','Suggesting target role'),
+          ('generating_recommendations','Generating recommendations'), ('calculating_ats','Calculating ATS score'),
+          ('matching_job','Matching job description'), ('generating_rewrites','Generating rewrites'),
+          ('validating_final_report','Validating final report'), ('completed','Completed')
+        ] %}
+        <li class="stage-item" data-stage="{{ key }}"><span class="stage-marker" aria-hidden="true"></span><span>{{ label }}</span></li>
+        {% endfor %}
+      </ol>
+      <p class="small text-secondary mt-4 mb-0">Closing this page does not cancel an analysis already running. Temporary files are still cleaned automatically.</p>
+    </div></div>
+  </div></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', path='js/progress.js') }}" defer></script>{% endblock %}

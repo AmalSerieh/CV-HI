@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero-section py-5 py-lg-6">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <span class="eyebrow">Private by default · Runs locally</span>
+        <h1 class="display-4 fw-bold mt-3">Turn a resume into evidence-grounded career intelligence.</h1>
+        <p class="lead text-secondary mt-3">Analyze PDF and DOCX resumes in English, Arabic, or mixed language. Review extraction quality, ATS compatibility, target roles, job matching, recommendations, and guarded rewrite proposals.</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a class="btn btn-primary btn-lg" href="/analyze">Analyze Resume</a>
+          <a class="btn btn-outline-secondary btn-lg" href="/api/system">View system status</a>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card shadow-sm border-0 feature-summary">
+          <div class="card-body p-4 p-lg-5">
+            <h2 class="h5">Supported workflow</h2>
+            <ul class="feature-list mt-3 mb-0">
+              <li>PDF and DOCX documents</li>
+              <li>English, Arabic, and mixed text</li>
+              <li>Optional job description matching</li>
+              <li>Offline deterministic fallbacks</li>
+              <li>Temporary, automatically expired results</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="py-5 bg-light-subtle border-top border-bottom">
+  <div class="container">
+    <div class="row g-4">
+      {% for title, text in [
+        ('Evidence first', 'Every recommendation and finding is tied to the canonical evidence registry.'),
+        ('ATS clarity', 'Separate compatibility scoring, category breakdowns, issues, strengths, and job match.'),
+        ('Safe rewriting', 'Proposals preserve facts and remain clearly marked for human review.'),
+        ('Local options', 'Use no-model mode, local Ollama, or an explicitly installed Transformers model.')
+      ] %}
+      <div class="col-md-6 col-xl-3">
+        <article class="card h-100 border-0 shadow-sm">
+          <div class="card-body"><h2 class="h5">{{ title }}</h2><p class="text-secondary mb-0">{{ text }}</p></div>
+        </article>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<section class="container py-5">
+  <div class="privacy-panel p-4 rounded-4">
+    <h2 class="h4">Your documents stay on this machine</h2>
+    <p class="mb-0">Uploads use private generated temporary paths and are removed after processing. Results live in memory for a limited time and disappear when the application restarts or their retention period expires.</p>
+  </div>
+</section>
+{% endblock %}

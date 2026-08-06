@@ -1,0 +1,14 @@
+{
+  "case_id": "arabic_hr_001",
+  "language": "ar",
+  "description": "سيرة أخصائي موارد بشرية",
+  "input": {
+    "summary": "أخصائي موارد بشرية لديه خبرة في التوظيف وعلاقات الموظفين.",
+    "skills": ["موارد بشرية", "Recruitment", "Onboarding", "HRIS", "Performance Management"],
+    "experience": [{"title": "أخصائي موارد بشرية", "bullets": ["نسقت عمليات التوظيف وتهيئة الموظفين الجدد.", "طبقت سياسات الموارد البشرية وتابعت علاقات الموظفين."]}]
+  },
+  "expected_top_roles": ["human_resources_specialist", "administrative_assistant"],
+  "required_evidence": ["موارد بشرية", "Recruitment"],
+  "should_be_insufficient": false,
+  "strict_top1": "human_resources_specialist"
+}

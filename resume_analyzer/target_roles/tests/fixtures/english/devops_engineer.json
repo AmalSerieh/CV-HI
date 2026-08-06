@@ -1,0 +1,15 @@
+{
+  "case_id": "english_devops_001",
+  "language": "en",
+  "description": "DevOps engineer with CI, containers, and infrastructure",
+  "input": {
+    "summary": "DevOps Engineer automating reliable delivery pipelines.",
+    "skills": ["CI/CD", "Docker", "Linux", "Kubernetes", "Terraform", "GitHub Actions", "Monitoring"],
+    "experience": [{"title": "Platform Engineer", "bullets": ["Automated deployment pipelines and infrastructure as code.", "Operated container orchestration and monitoring."]}],
+    "projects": [{"name": "Delivery Platform", "description": "Deployment pipeline using Terraform and Kubernetes"}]
+  },
+  "expected_top_roles": ["devops_engineer", "cloud_engineer", "software_engineer"],
+  "required_evidence": ["Docker", "Terraform"],
+  "should_be_insufficient": false,
+  "strict_top1": "devops_engineer"
+}

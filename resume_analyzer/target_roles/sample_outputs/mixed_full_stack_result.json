@@ -1,0 +1,181 @@
+{
+  "target_role": {
+    "primary": {
+      "role_id": "full_stack_developer",
+      "title_en": "Full-Stack Developer",
+      "title_ar": "مطور ويب متكامل",
+      "confidence": 0.8975,
+      "matched_signals": [
+        "javascript",
+        "react",
+        "node.js",
+        "rest api",
+        "postgresql",
+        "docker",
+        "مطور ويب متكامل",
+        "frontend",
+        "database",
+        "full stack",
+        "web application",
+        "api integration",
+        "end-to-end"
+      ],
+      "score_breakdown": {
+        "skills": 0.4,
+        "experience_titles": 0.25,
+        "experience_bullets": 0.1075,
+        "projects": 0.1,
+        "summary": 0.04,
+        "education_certifications": 0.0
+      },
+      "evidence": [
+        {
+          "source": "skills",
+          "path": "skills[2]",
+          "value": "JavaScript"
+        },
+        {
+          "source": "skills",
+          "path": "skills[0]",
+          "value": "React"
+        },
+        {
+          "source": "skills",
+          "path": "skills[1]",
+          "value": "Node"
+        },
+        {
+          "source": "skills",
+          "path": "skills[4]",
+          "value": "REST APIs"
+        },
+        {
+          "source": "skills",
+          "path": "skills[3]",
+          "value": "Postgres"
+        },
+        {
+          "source": "skills",
+          "path": "skills[5]",
+          "value": "Docker"
+        },
+        {
+          "source": "experience.titles",
+          "path": "experience[0].title",
+          "value": "مطور ويب متكامل"
+        },
+        {
+          "source": "experience.bullets",
+          "path": "experience[0].bullets[0]",
+          "value": "طورت frontend وbackend لمنصة ويب."
+        },
+        {
+          "source": "experience.bullets",
+          "path": "experience[0].bullets[1]",
+          "value": "Integrated APIs with PostgreSQL database."
+        },
+        {
+          "source": "projects",
+          "path": "projects[0].description",
+          "value": "Full stack web application with API integration"
+        },
+        {
+          "source": "summary",
+          "path": "summary",
+          "value": "مطور ويب متكامل builds end-to-end web applications."
+        }
+      ]
+    },
+    "alternatives": [
+      {
+        "role_id": "backend_engineer",
+        "title_en": "Backend Engineer",
+        "title_ar": "مهندس برمجيات خلفية",
+        "confidence": 0.41,
+        "matched_signals": [
+          "rest api",
+          "node.js",
+          "postgresql",
+          "docker",
+          "api",
+          "database"
+        ],
+        "score_breakdown": {
+          "skills": 0.295,
+          "experience_titles": 0.0,
+          "experience_bullets": 0.115,
+          "projects": 0.0,
+          "summary": 0.0,
+          "education_certifications": 0.0
+        },
+        "evidence": [
+          {
+            "source": "skills",
+            "path": "skills[4]",
+            "value": "REST APIs"
+          },
+          {
+            "source": "skills",
+            "path": "skills[1]",
+            "value": "Node"
+          },
+          {
+            "source": "skills",
+            "path": "skills[3]",
+            "value": "Postgres"
+          },
+          {
+            "source": "skills",
+            "path": "skills[5]",
+            "value": "Docker"
+          },
+          {
+            "source": "experience.bullets",
+            "path": "experience[0].bullets[1]",
+            "value": "Integrated APIs with PostgreSQL database."
+          }
+        ]
+      },
+      {
+        "role_id": "frontend_developer",
+        "title_en": "Frontend Developer",
+        "title_ar": "مطور واجهات أمامية",
+        "confidence": 0.21,
+        "matched_signals": [
+          "javascript",
+          "react",
+          "frontend"
+        ],
+        "score_breakdown": {
+          "skills": 0.165,
+          "experience_titles": 0.0,
+          "experience_bullets": 0.045,
+          "projects": 0.0,
+          "summary": 0.0,
+          "education_certifications": 0.0
+        },
+        "evidence": [
+          {
+            "source": "skills",
+            "path": "skills[2]",
+            "value": "JavaScript"
+          },
+          {
+            "source": "skills",
+            "path": "skills[0]",
+            "value": "React"
+          },
+          {
+            "source": "experience.bullets",
+            "path": "experience[0].bullets[0]",
+            "value": "طورت frontend وbackend لمنصة ويب."
+          }
+        ]
+      }
+    ],
+    "insufficient_evidence": false,
+    "method": "deterministic_weighted_matching",
+    "language": "mixed",
+    "warnings": []
+  }
+}

@@ -1,0 +1,4 @@
+# Optional, heavyweight capabilities. The default pipeline does not need them.
+spacy>=3.7,<4
+sentence-transformers>=3,<6
+transformers>=4.44,<6

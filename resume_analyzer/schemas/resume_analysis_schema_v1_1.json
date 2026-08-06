@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/resume-analysis-v1.1.0.json",
+  "title": "Resume Analysis Result",
+  "type": "object",
+  "required": [
+    "success",
+    "schema_version",
+    "pipeline_version",
+    "analysis",
+    "quality",
+    "scores",
+    "summary"
+  ],
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "pipeline_version": {
+      "type": "string"
+    },
+    "analyzed_at": {
+      "type": "string"
+    },
+    "processing_time_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "analysis": {
+      "type": "object",
+      "required": [
+        "facts",
+        "inferences",
+        "generated_insights"
+      ],
+      "properties": {
+        "facts": {
+          "type": "object",
+          "description": "Deterministic extractor outputs only.",
+          "required": [
+            "contact",
+            "sections",
+            "experience",
+            "education",
+            "skills"
+          ],
+          "properties": {
+            "contact": {
+              "type": "object"
+            },
+            "sections": {
+              "type": "object"
+            },
+            "experience": {
+              "type": "object"
+            },
+            "education": {
+              "type": "object"
+            },
+            "skills": {
+              "type": "object"
+            },
+            "projects": {
+              "type": "object"
+            },
+            "languages": {
+              "type": "object"
+            }
+          },
+          "additionalProperties": true
+        },
+        "inferences": {
+          "type": "object",
+          "description": "NLP/SBERT-derived interpretations with evidence and confidence.",
+          "properties": {
+            "candidate_profile": {
+              "type": "object"
+            },
+            "semantic_skills": {
+              "type": "array"
+            },
+            "strengths": {
+              "type": "array"
+            },
+            "gaps": {
+              "type": "array"
+            },
+            "model_usage": {
+              "type": "object"
+            }
+          },
+          "additionalProperties": true
+        },
+        "generated_insights": {
+          "type": "object",
+          "description": "LLM-generated personalized explanations. Must never overwrite facts.",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "personalized_summary": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "recommendations": {
+              "type": "array"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "quality": {
+      "type": "object",
+      "required": [
+        "status",
+        "score"
+      ],
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "warnings": {
+          "type": "array"
+        },
+        "critical_warnings": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": true
+    },
+    "scores": {
+      "type": "object",
+      "required": [
+        "resume_completeness_score",
+        "module_scores"
+      ],
+      "properties": {
+        "resume_completeness_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "ats_score": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "ats_status": {
+          "type": "string"
+        },
+        "module_scores": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": true
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "name",
+        "sections_found",
+        "top_skills",
+        "top_technologies"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "location": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "job_title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sections_found": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "top_skills": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "top_technologies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

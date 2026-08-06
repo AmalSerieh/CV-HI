@@ -1,0 +1,15 @@
+{
+  "case_id": "english_qa_001",
+  "language": "en",
+  "description": "QA engineer with manual and automated testing",
+  "input": {
+    "summary": "QA Engineer focused on repeatable software quality.",
+    "skills": ["Software Testing", "Test Cases", "Quality Assurance", "Selenium", "API Testing", "Jira"],
+    "experience": [{"title": "Software Test Engineer", "bullets": ["Authored test plans and regression test cases.", "Automated browser testing and tracked defects."]}],
+    "projects": [{"name": "Test Suite", "description": "Test automation framework for API testing"}]
+  },
+  "expected_top_roles": ["qa_engineer", "software_engineer"],
+  "required_evidence": ["Software Testing", "Selenium"],
+  "should_be_insufficient": false,
+  "strict_top1": "qa_engineer"
+}

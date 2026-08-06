@@ -1,0 +1,12 @@
+{
+  "document_name": "synthetic_marketing_resume.txt",
+  "contact": {
+    "name": "Jordan Example",
+    "email": "jordan.marketing@example.test",
+    "phone": "+15550100200"
+  },
+  "required_sections": ["summary", "skills", "experience", "education"],
+  "required_skills": ["Campaign planning", "Microsoft Excel"],
+  "required_metrics": ["six retail locations", "25 vendors", "20%"],
+  "privacy": "synthetic"
+}

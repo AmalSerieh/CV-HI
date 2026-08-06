@@ -1,0 +1,15 @@
+{
+  "case_id": "english_backend_001",
+  "language": "en",
+  "description": "Backend engineer with API and database evidence",
+  "input": {
+    "summary": "Backend Engineer focused on reliable API services.",
+    "skills": ["Python", "REST APIs", "Postgres", "Docker", "Redis"],
+    "experience": [{"title": "Backend Developer", "company": "Example Systems", "bullets": ["Built authentication APIs backed by PostgreSQL.", "Maintained server-side microservices."]}],
+    "projects": [{"name": "Service API", "description": "Web API with database migrations", "technologies": ["Python", "PostgreSQL"]}]
+  },
+  "expected_top_roles": ["backend_engineer", "full_stack_developer", "software_engineer"],
+  "required_evidence": ["Python", "REST APIs"],
+  "should_be_insufficient": false,
+  "strict_top1": "backend_engineer"
+}

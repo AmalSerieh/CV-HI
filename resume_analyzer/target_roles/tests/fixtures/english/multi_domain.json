@@ -1,0 +1,15 @@
+{
+  "case_id": "english_multi_domain_001",
+  "language": "en",
+  "description": "Resume with data, frontend, and infrastructure signals",
+  "input": {
+    "summary": "Data Analyst who also contributes to web and deployment work.",
+    "skills": ["SQL", "Excel", "Power BI", "React", "Docker", "Python"],
+    "experience": [{"title": "Data Analyst", "bullets": ["Built KPI dashboards and analyzed SQL data.", "Helped maintain a React reporting interface."]}],
+    "projects": [{"name": "Analytics Portal", "description": "Dashboard with a React interface and Docker deployment"}]
+  },
+  "expected_top_roles": ["data_analyst", "business_intelligence_analyst", "frontend_developer"],
+  "required_evidence": ["SQL", "Power BI"],
+  "should_be_insufficient": false,
+  "strict_top1": "data_analyst"
+}
