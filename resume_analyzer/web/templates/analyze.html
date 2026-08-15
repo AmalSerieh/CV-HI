@@ -14,104 +14,228 @@
         <button class="btn btn-sm btn-outline-secondary" type="button" id="direction-toggle" aria-label="Switch layout direction; this does not translate labels" title="Changes text direction only; it does not translate the interface.">RTL / LTR</button>
       </div>
       <form id="analysis-form" action="/api/analyses" method="post" enctype="multipart/form-data" class="card border-0 shadow-sm" novalidate>
-        <div class="card-body p-4 p-lg-5">
-          <div id="form-error" class="alert alert-danger d-none" role="alert" aria-live="assertive"></div>
-          <fieldset>
-            <legend class="h5">Resume document</legend>
-            <label id="drop-zone" class="upload-zone mt-3" for="resume-file">
-              <span class="upload-title">Drop a PDF or DOCX here</span>
-              <span class="text-secondary">or choose a file · maximum {{ settings.max_upload_mb }} MB · up to {{ settings.max_pages }} PDF pages</span>
-              <span id="selected-file" class="small fw-semibold mt-2">No file selected</span>
-            </label>
-            <input class="visually-hidden" id="resume-file" name="resume" type="file" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
-          </fieldset>
-          <hr class="my-4">
-          <fieldset>
-            <legend class="h5">Optional job description</legend>
-            <label class="form-label" for="job-description">Paste the job description</label>
-            <textarea class="form-control" id="job-description" name="job_description_text" rows="6" maxlength="{{ settings.max_job_description_chars }}" placeholder="Paste up to {{ settings.max_job_description_chars }} characters"></textarea>
-            <label class="form-label mt-3" for="job-description-file">Or add a UTF-8 .txt file</label>
-            <input class="form-control" id="job-description-file" name="job_description_file" type="file" accept=".txt,text/plain">
-          </fieldset>
-          <hr class="my-4">
-          <div class="row g-4">
-            <fieldset class="col-lg-6">
-              <legend class="h5">Analysis capabilities</legend>
-              <p class="small text-secondary">Each switch controls a separate result. Most analysis is rule-based and does not use a language model.</p>
-              {% for name, label, description, method, checked in [
-                ('enable_target_role', 'Target-role suggestion', 'Compares resume evidence with a fixed role catalog. The percentage is a weighted evidence-match score, not a hiring probability.', 'Rules', true),
-                ('enable_recommendations', 'Recommendations', 'Uses the selected local model when available; otherwise uses conservative evidence-based rules.', 'AI optional', true),
-                ('enable_ats', 'ATS analysis', 'Checks text readability, headings, layout, formatting, and contact accessibility.', 'Rules', true),
-                ('enable_job_match', 'Job-description matching', 'Runs only when a job description is supplied and compares explicit keywords offline.', 'Rules', true),
-                ('enable_rewrites', 'Resume rewriting', 'Generates review-only summary and bullet proposals. Ollama is recommended.', 'Local AI', false),
-                ('enable_ocr', 'OCR when required', 'Uses local OCR only when selectable text is unavailable.', 'Local OCR', true)
-              ] %}
-              <div class="feature-option mb-3">
-                <div class="form-check form-switch">
-                  <input class="form-check-input feature-toggle" type="checkbox" role="switch" id="{{name}}" name="{{ name }}" {% if checked %}checked{% endif %}>
-                  <label class="form-check-label fw-semibold" for="{{ name }}">{{ label }}</label>
-                  <span class="badge text-bg-light ms-1">{{ method }}</span>
+        <div class="card-body p-3 p-lg-4 pt-2 pt-lg-3">
+          <div id="form-error" class="alert alert-danger d-none mb-1" role="alert" aria-live="assertive"></div>
+            <fieldset class="pt-0 mt-3">
+              <legend class="visually-hidden">Resume document</legend>
+
+              <label id="drop-zone" class="upload-zone" for="resume-file">
+                <div class="upload-icon-wrapper mb-2">
+                  <svg width="110" height="110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 10C18 7.79086 19.7909 6 22 6H38L48 16V42C48 44.2091 46.2091 46 44 46H22C19.7909 46 18 44.2091 18 42V10Z" stroke="var(--app-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M38 6V16H48" stroke="var(--app-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="24" y1="24" x2="36" y2="24" stroke="var(--app-gold)" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="24" y1="30" x2="32" y2="30" stroke="var(--app-gold)" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="40" cy="38" r="11" fill="#0d172a" stroke="var(--app-gold)" stroke-width="2.5"/>
+                    <path d="M40 43V33M40 33L36 37M40 33L44 37" stroke="var(--app-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <div class="icon-glow-rings"></div>
                 </div>
-                <div class="form-text">{{ description }}</div>
-              </div>
-              {% endfor %}
+
+                <span class="upload-title text-white fw-bold fs-5 mb-1">Drag & drop your CV here</span>
+                <span class="text-muted-custom small mb-2">or click the button below to browse (max {{ settings.max_upload_mb }} MB · up to {{ settings.max_pages }} pages)</span>
+
+                <div class="d-flex gap-2 mt-1">
+                  <span class="file-type-pill">
+                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1"><path d="M14 14V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1zM4.5 3h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1z"/></svg> PDF
+                  </span>
+                  <span class="file-type-pill">
+                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.113 3.181a.5.5 0 0 0-.938.351l1.5 5.5a.5.5 0 0 0 .96 0l1.353-4.111 1.353 4.111a.5.5 0 0 0 .96 0l1.5-5.5a.5.5 0 0 0-.938-.351L10.5 9.405 9.146 5.253a.5.5 0 0 0-.952 0L6.84 9.405 5.463 5.181z"/>
+                  </svg>
+                  DOCX
+                </span>
+                </div>
+
+                <span id="selected-file" class="small text-gold fw-semibold mt-2">No file selected</span>
+              </label>
+              <input class="visually-hidden" id="resume-file" name="resume" type="file" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
             </fieldset>
+
+          <hr class="my-4 border-gold-subtle opacity-25">
+
+          <fieldset class="mt-2 pt-0">
+            <legend class="h6 text-gold d-flex align-items-center gap-2 mb-2">
+              <svg width="17" height="17" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v1.384l7.614 2.03a1.5 1.5 0 0 0 .772 0L16 5.884V4.5A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5z"/>
+                <path d="M0 12.5A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5V6.85L8.335 8.913a2.5 2.5 0 0 1-1.67 0L0 6.85v5.65z"/>
+              </svg>
+              <span>Optional Job Description</span>
+            </legend>
+            <textarea class="form-control custom-job-input" id="job-description" name="job_description_text" rows="3" maxlength="{{ settings.max_job_description_chars }}" placeholder="Paste job description here (Up to {{ settings.max_job_description_chars }} chars · Private offline processing)..."></textarea>
+          </fieldset>
+
+          <hr class="my-4 border-gold-subtle opacity-25">
+
+          <!-- شبكة متوازنة تستغل العرض -->
+          <div class="row g-4">
+
+            <!-- 1. قسم القدرات والخيارات (Analysis Capabilities) -->
             <fieldset class="col-lg-6">
-              <legend class="h5">Local AI</legend>
-              <div class="alert alert-primary small">
-                <strong>Recommended for this installation:</strong> Ollama with <code>{{ configured_model or 'gemma3:4b' }}</code>.
-                The model affects recommendations and rewrite proposals only. Extraction, ATS, target roles, job matching, and OCR stay deterministic.
+              <legend class="h6 text-gold d-flex align-items-center gap-2 mb-2">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.93 2.93 0 1 1 0-5.86 2.93 2.93 0 0 1 0 5.86z"/></svg>
+                <span>Analysis Capabilities</span>
+              </legend>
+              <p class="fs-8 text-slate-400 mb-2">Each switch controls a separate result. Most processing is deterministic.</p>
+
+              <div class="interactive-switch-list">
+                {% for name, label, description, method, checked in [
+                  ('enable_target_role', 'Target-role suggestion', 'Compares resume evidence with a fixed role catalog. The percentage is a weighted evidence-match score.', 'Rules', true),
+                  ('enable_recommendations', 'Recommendations', 'Uses the selected local model when available; otherwise uses conservative evidence-based rules.', 'AI optional', true),
+                  ('enable_ats', 'ATS analysis', 'Checks text readability, headings, layout, formatting, and contact accessibility.', 'Rules', true),
+                  ('enable_job_match', 'Job-description matching', 'Runs only when a job description is supplied and compares explicit keywords offline.', 'Rules', true),
+                  ('enable_rewrites', 'Resume rewriting', 'Generates review-only summary and bullet proposals. Ollama is recommended.', 'Local AI', false),
+                  ('enable_ocr', 'OCR when required', 'Uses local OCR only when selectable text is unavailable.', 'Local OCR', true)
+                ] %}
+                <div class="cyber-switch-row">
+                  <div class="d-flex align-items-center justify-content-between gap-2">
+                    <label class="form-check-label fw-semibold text-slate-200 fs-7 cursor-pointer m-0 d-flex align-items-center gap-1" for="{{ name }}">
+                      <span>{{ label }}</span>
+                      <span class="cyber-badge">{{ method }}</span>
+                    </label>
+                    <div class="form-check form-switch p-0 m-0">
+                      <input class="form-check-input feature-toggle" type="checkbox" role="switch" id="{{ name }}" name="{{ name }}" {% if checked %}checked{% endif %}>
+                    </div>
+                  </div>
+                  <div class="cyber-desc fs-8 text-slate-400 mt-1">{{ description }}</div>
+                </div>
+                {% endfor %}
               </div>
-              <label class="form-label" for="ai-provider">Provider</label>
-              <select class="form-select" id="ai-provider" name="ai_provider">
-                <option value="none" {% if selected_provider == 'none' %} selected {% endif %}>None — rules only, no generated rewrites</option>
-                <option value="ollama" {% if selected_provider == 'ollama' %} selected{% endif %}>Ollama — recommended local service</option>
-                <option value="transformers" {% if selected_provider == 'transformers' %}selected{% endif %} {% if not transformers_info.installed %} disabled{% endif %}>Transformers — advanced local model path{% if not transformers_info.installed %} (not installed){% endif %}</option>
-              </select>
-              <div id="provider-help-none" class="form-text provider-help">Recommendations use deterministic rules. Summary and bullet generation are unavailable.</div>
-              <div id="provider-help-ollama" class="form-text provider-help d-none">Runs a model through your local Ollama service. This is the tested and recommended option.</div>
-              <div id="provider-help-transformers" class="form-text provider-help d-none">Loads an already installed Hugging Face model from a local path or cache. This advanced option can use considerably more RAM.</div>
-              <label class="form-label mt-3" for="ai-model">Model used by AI-enabled operations</label>
-              <input class="form-control" id="ai-model" name="ai_model" list="installed-local-models" maxlength="160" value="{{ configured_model }}" data-default-model="{{ configured_model or 'gemma3:4b' }}" data-configured-provider="{{ configured_provider }}" placeholder="gemma3:4b" {% if selected_provider=='none' %} disabled {% else %}required{% endif %}>
-              <datalist id="installed-local-models">{% for model_name in ollama_info['available_models'] %}<option value="{{ model_name }}"></option>{% endfor %}</datalist>
-              <div class="form-text">
-                {% if ollama_info['reachable'] %}
-                Ollama is connected · {{ ollama_info['available_models']|length }} installed model(s) detected.
-                {% else %}
-                Ollama is not currently reachable. Start it before choosing Ollama.
-                {% endif %}
-              </div>
-              <label class="form-label mt-3" for="output-language">Rewrite language</label>
-              <select class="form-select" id="output-language" name="output_language">
-                <option value="auto" selected>Auto — preserve the resume language</option><option value="en">English</option><option value="ar">Arabic</option>
-              </select>
             </fieldset>
+
+            <!-- 2. قسم الذكاء الاصطناعي المحلي (Local AI) -->
+            <fieldset class="col-lg-6">
+              <legend class="h6 text-gold d-flex align-items-center gap-2 mb-2">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M5 2a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-1V4a2 2 0 0 0-2-2H5zm8 10H3a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1zM4 4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V4z"/></svg>
+                <span>Local AI Environment</span>
+              </legend>
+
+              <!-- شريط التوصية المضيء -->
+              <div class="cyber-banner p-3 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="status-pulse-dot"></span>
+                  <strong class="text-gold fs-8">Recommended Setup:</strong>
+                  <span class="fs-8 text-slate-200">Ollama with <code>{{ configured_model or 'gemma3:4b' }}</code></span>
+                </div>
+                <p class="fs-8 text-slate-400 mb-0 mt-1">Affects recommendations & rewrites only. Extractions, ATS & OCR stay deterministic.</p>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label text-slate-300 fs-8 mb-1 fw-medium" for="ai-provider">Provider</label>
+                <select class="form-select cyber-input" id="ai-provider" name="ai_provider">
+                  <option value="none" {% if selected_provider == 'none' %} selected {% endif %}>None — rules only, no generated rewrites</option>
+                  <option value="ollama" {% if selected_provider == 'ollama' %} selected{% endif %}>Ollama — recommended local service</option>
+                  <option value="transformers" {% if selected_provider == 'transformers' %}selected{% endif %} {% if not transformers_info.installed %} disabled{% endif %}>Transformers — advanced local model path{% if not transformers_info.installed %} (not installed){% endif %}</option>
+                </select>
+                <div id="provider-help-none" class="form-text provider-help fs-8 text-slate-400">Recommendations use deterministic rules. Summary and bullet generation are unavailable.</div>
+                <div id="provider-help-ollama" class="form-text provider-help fs-8 text-slate-400 d-none">Runs a model through your local Ollama service. Recommended option.</div>
+                <div id="provider-help-transformers" class="form-text provider-help fs-8 text-slate-400 d-none">Loads local model from Hugging Face path/cache. Uses considerably more RAM.</div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label text-slate-300 fs-8 mb-1 fw-medium" for="ai-model">Model used by AI-enabled operations</label>
+                <input class="form-control cyber-input" id="ai-model" name="ai_model" list="installed-local-models" maxlength="160" value="{{ configured_model }}" data-default-model="{{ configured_model or 'gemma3:4b' }}" data-configured-provider="{{ configured_provider }}" placeholder="gemma3:4b" {% if selected_provider=='none' %} disabled {% else %}required{% endif %}>
+                <datalist id="installed-local-models">{% for model_name in ollama_info['available_models'] %}<option value="{{ model_name }}"></option>{% endfor %}</datalist>
+                <div class="form-text fs-8 text-gold-light mt-1">
+                  {% if ollama_info['reachable'] %}
+                  ✓ Ollama is connected · {{ ollama_info['available_models']|length }} installed model(s) detected.
+                  {% else %}
+                  ⚠ Ollama is not currently reachable. Start it before choosing Ollama.
+                  {% endif %}
+                </div>
+              </div>
+
+              <div>
+                <label class="form-label text-slate-300 fs-8 mb-1 fw-medium" for="output-language">Rewrite language</label>
+                <select class="form-select cyber-input" id="output-language" name="output_language">
+                  <option value="auto" selected>Auto — preserve the resume language</option>
+                  <option value="en">English</option>
+                  <option value="ar">Arabic</option>
+                </select>
+              </div>
+            </fieldset>
+
           </div>
-          <fieldset id="rewrite-options" class="mt-4 d-none">
-            <legend class="h6">Rewrite sections <span class="badge text-bg-warning">Human review required</span></legend>
-            <p class="small text-secondary">The application creates text proposals only. It never edits or downloads a new resume automatically.</p>
-            <div class="d-flex flex-wrap gap-4">
-              {% for name, label in [('rewrite_summary', 'Summary'), ('rewrite_experience', 'Experience bullets'), ('rewrite_skills', 'Skills section')] %}
-              <div class="form-check"><input class="form-check-input feature-toggle" type="checkbox" id="{{ name }}" name="{{ name }}" checked><label class="form-check-label" for="{{ name }}">{{ label }}</label></div>
-              {% endfor %}
-            </div>
-            <div id="bullet-rewrite-options" class="border rounded-3 p-3 mt-3">
-              <span class="form-label d-block">Experience bullet selection</span>
-              <div class="form-check"><input class="form-check-input bullet-mode" type="radio" id="bullet-mode-first" name="bullet_rewrite_mode" value="first" checked><label class="form-check-label" for="bullet-mode-first"><strong>First N eligible bullets</strong> — recommended for CPU</label></div>
-              <div class="form-text mb-2">Processes the first complete bullets in resume order, up to the number below.</div>
-              <div class="form-check"><input class="form-check-input bullet-mode" type="radio" id="bullet-mode-specific" name="bullet_rewrite_mode" value="specific"><label class="form-check-label" for="bullet-mode-specific"><strong>Specific bullet numbers</strong></label></div>
-              <div class="form-text mb-2">Use the position of complete experience bullets in the resume: 1, 2, 3, and so on.</div>
-              <div class="form-check"><input class="form-check-input bullet-mode" type="radio" id="bullet-mode-all" name="bullet_rewrite_mode" value="all"><label class="form-check-label" for="bullet-mode-all"><strong>All eligible bullets</strong></label></div>
-              <div class="form-text">Runs one bounded model request per bullet and can be slow on CPU.</div>
-              <div id="bullet-count-field" class="mt-3"><label class="form-label" for="bullet-rewrite-count">Maximum bullets</label><input class="form-control form-control-sm" id="bullet-rewrite-count" name="bullet_rewrite_count" type="number" inputmode="numeric" dir="ltr" min="1" max="20" value="20"><div class="form-text">Default: all eligible bullets, up to the hard safety maximum of 20.</div></div>
-              <div id="bullet-selection-field" class="mt-3 d-none"><label class="form-label" for="bullet-rewrite-selection">Bullet numbers</label><input class="form-control form-control-sm" id="bullet-rewrite-selection" name="bullet_rewrite_selection" inputmode="numeric" dir="ltr" placeholder="For example: 1, 3, 5"><div class="form-text">Numbers follow the eligible bullets in resume order.</div></div>
-              <div id="bullet-all-warning" class="alert alert-warning mt-3 mb-0 d-none"><strong>Performance notice:</strong> processing all bullets can take several minutes on CPU. A hard safety limit of 20 still applies.</div>
+
+          <!-- 3. خيارات إعادة الصياغة المتقدمة -->
+          <fieldset id="rewrite-options" class="mt-3 animated-expand-box d-none">
+            <div class="cyber-glass-panel p-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <legend class="h6 text-gold m-0 d-flex align-items-center gap-2">
+                  <span>Rewrite sections</span>
+                  <span class="badge bg-warning text-dark fs-8">Human review required</span>
+                </legend>
+              </div>
+              <p class="fs-8 text-slate-400 mb-2">The application creates text proposals only. It never edits or downloads a new resume automatically.</p>
+
+              <div class="d-flex flex-wrap gap-4 mb-3">
+                {% for name, label in [('rewrite_summary', 'Summary'), ('rewrite_experience', 'Experience bullets'), ('rewrite_skills', 'Skills section')] %}
+                <div class="form-check custom-checkbox-gold">
+                  <input class="form-check-input feature-toggle" type="checkbox" id="{{ name }}" name="{{ name }}" checked>
+                  <label class="form-check-label text-slate-200 fs-7 fw-medium" for="{{ name }}">{{ label }}</label>
+                </div>
+                {% endfor %}
+              </div>
+
+              <!-- تفاصيل اختيار Bullet Selection -->
+              <div id="bullet-rewrite-options" class="bullet-interactive-zone p-3">
+                <span class="form-label d-block text-gold fs-8 fw-semibold mb-2">Experience bullet selection</span>
+
+                <div class="form-check mb-1">
+                  <input class="form-check-input bullet-mode" type="radio" id="bullet-mode-first" name="bullet_rewrite_mode" value="first" checked>
+                  <label class="form-check-label text-slate-200 fs-8" for="bullet-mode-first"><strong>First N eligible bullets</strong> — recommended for CPU</label>
+                </div>
+                <div class="form-text fs-8 text-slate-400 mb-2">Processes the first complete bullets in resume order, up to the number below.</div>
+
+                <div class="form-check mb-1">
+                  <input class="form-check-input bullet-mode" type="radio" id="bullet-mode-specific" name="bullet_rewrite_mode" value="specific">
+                  <label class="form-check-label text-slate-200 fs-8" for="bullet-mode-specific"><strong>Specific bullet numbers</strong></label>
+                </div>
+                <div class="form-text fs-8 text-slate-400 mb-2">Use the position of complete experience bullets in the resume: 1, 2, 3, and so on.</div>
+
+                <div class="form-check mb-1">
+                  <input class="form-check-input bullet-mode" type="radio" id="bullet-mode-all" name="bullet_rewrite_mode" value="all">
+                  <label class="form-check-label text-slate-200 fs-8" for="bullet-mode-all"><strong>All eligible bullets</strong></label>
+                </div>
+                <div class="form-text fs-8 text-slate-400">Runs one bounded model request per bullet and can be slow on CPU.</div>
+
+                <div id="bullet-count-field" class="mt-3">
+                  <label class="form-label text-slate-300 fs-8 mb-1" for="bullet-rewrite-count">Maximum bullets</label>
+                  <input class="form-control form-control-sm cyber-input w-25" id="bullet-rewrite-count" name="bullet_rewrite_count" type="number" inputmode="numeric" dir="ltr" min="1" max="20" value="20">
+                  <div class="form-text fs-8 text-slate-400">Default: all eligible bullets, up to the hard safety maximum of 20.</div>
+                </div>
+
+                <div id="bullet-selection-field" class="mt-3 d-none">
+                  <label class="form-label text-slate-300 fs-8 mb-1" for="bullet-rewrite-selection">Bullet numbers</label>
+                  <input class="form-control form-control-sm cyber-input w-50" id="bullet-rewrite-selection" name="bullet_rewrite_selection" inputmode="numeric" dir="ltr" placeholder="For example: 1, 3, 5">
+                  <div class="form-text fs-8 text-slate-400">Numbers follow the eligible bullets in resume order.</div>
+                </div>
+
+                <div id="bullet-all-warning" class="alert alert-warning py-2 fs-8 mt-3 mb-0 d-none">
+                  <strong>Performance notice:</strong> processing all bullets can take several minutes on CPU. A hard safety limit of 20 still applies.
+                </div>
+              </div>
             </div>
           </fieldset>
-          <div class="privacy-panel p-3 rounded-3 mt-4 small">Documents are processed through generated private temporary paths and removed after the analysis. Rewrite suggestions never overwrite your original resume and require human review.</div>
-          <div class="d-flex justify-content-end mt-4">
-            <button id="submit-analysis" class="btn btn-primary btn-lg" type="submit">Start analysis</button>
+
+          <!-- 4. شريط الخصوصية السفلي + زر التشغيل العائم -->
+          <!-- شريط الخصوصية السفلي + زر التشغيل المتوهج -->
+        <div class="cyber-footer-dock d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 my-4">
+
+          <div class="d-flex align-items-center gap-2 text-slate-300 fs-8">
+            <svg width="20" height="20" fill="var(--app-gold)" viewBox="0 0 16 16" class="flex-shrink-0">
+              <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+            </svg>
+            <span>Documents are processed through generated private temporary paths and removed after analysis.</span>
           </div>
+
+          <button id="submit-analysis" class="btn-cyber-gold text-nowrap" type="submit">
+            <span>Start Analysis</span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+            </svg>
+          </button>
+        </div>
         </div>
       </form>
     </div>

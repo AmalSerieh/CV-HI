@@ -50,20 +50,28 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   };
   const updateProvider = () => {
+    if (!provider) return;
     const selectedProvider = provider.value;
     const usesModel = selectedProvider !== "none";
-    model.disabled = !usesModel;
-    model.required = usesModel;
-    outputLanguage.disabled = !usesModel;
-    rewriteToggle.disabled = !usesModel;
-    if (!usesModel) rewriteToggle.checked = false;
-    if (selectedProvider === "ollama" && !model.value.trim()) {
-      model.value = model.dataset.defaultModel || "gemma3:4b";
+    if (model) {
+      model.disabled = !usesModel;
+      model.required = usesModel;
+    }
+    if (outputLanguage) {
+      outputLanguage.disabled = !usesModel;
+    }
+    if (rewriteToggle) {
+      rewriteToggle.disabled = !usesModel;
+      if (!usesModel) rewriteToggle.checked = false;
+    }
+    if (selectedProvider === "ollama" && model && !model.value.trim()) {
+      model.value = model.dataset?.defaultModel || "gemma3:4b";
     }
     if (
       selectedProvider === "transformers"
-      && model.dataset.configuredProvider === "ollama"
-      && model.value === model.dataset.defaultModel
+      && model
+      && model.dataset?.configuredProvider === "ollama"
+      && model.value === model.dataset?.defaultModel
     ) {
       model.value = "";
     }
@@ -93,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!["pdf", "docx"].includes(extension)) { showError("Only PDF and DOCX resumes are supported."); return; }
     const data = new FormData(form);
     document.querySelectorAll(".feature-toggle").forEach((toggle) => data.set(toggle.name, toggle.checked ? "true" : "false"));
-    submit.disabled = true; submit.textContent = "Uploading…";
+    if (submit) { submit.disabled = true; submit.textContent = "Uploading…"; }
     try {
       const response = await fetch("/api/analyses", { method: "POST", body: data, headers: { "Accept": "application/json" } });
       const payload = await response.json();
@@ -106,7 +114,23 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (_error) {
       showError("The local application could not be reached. Try again.");
     } finally {
-      submit.disabled = false; submit.textContent = "Start analysis";
+      if (submit) { submit.disabled = false; submit.textContent = "Start analysis"; }
     }
   });
+});
+const form = document.getElementById('analysis-form');
+const progressContainer = document.getElementById('analysis-progress-container');
+const submitBtn = document.getElementById('submit-analysis');
+
+form.addEventListener('submit', function(e) {
+    // إظهار شريط التقدم
+    if (progressContainer) {
+        progressContainer.classList.remove('d-none');
+    }
+
+    // إيقاف الزر مؤقتاً لمنع التكرار
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.7';
+    }
 });

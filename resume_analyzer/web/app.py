@@ -74,11 +74,14 @@ def create_app(
             response.headers.setdefault("X-Content-Type-Options", "nosniff")
         response.headers.setdefault("X-Frame-Options", "DENY")
         response.headers.setdefault("Referrer-Policy", "no-referrer")
+
+        # تعديل الـ CSP هنا لإتاحة الـ inline styles مثل تعديل شريط التقدم بالـ JS
         response.headers.setdefault(
             "Content-Security-Policy",
-            "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; "
+            "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; "
             "connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
         )
+
         response.headers.setdefault("X-Resume-Build", source["build_id"])
         response.headers.setdefault(
             "X-Resume-Source-Stale",

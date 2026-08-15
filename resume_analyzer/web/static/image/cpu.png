@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="none">
+  <!-- Gradient definition for Gold effect -->
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37" />
+      <stop offset="50%" stop-color="#FFDF00" />
+      <stop offset="100%" stop-color="#AA771C" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer Frame -->
+  <rect x="5" y="5" width="14" height="14" rx="2" stroke="url(#goldGradient)" stroke-width="1.5" fill="none"/>
+  <!-- Inner Chip Core -->
+  <rect x="9" y="9" width="6" height="6" fill="url(#goldGradient)" />
+  
+  <!-- Pins -->
+  <path d="M9 2V5 M12 2V5 M15 2V5 M9 19V22 M12 19V22 M15 19V22 M2 9H5 M2 12H5 M2 15H5 M19 9H22 M19 12H22 M19 15H22" 
+        stroke="url(#goldGradient)" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

@@ -15,6 +15,17 @@ from resume_analyzer.diagnostics.models import model_status
 from ..build_info import build_state
 from ..models import AnalysisOptions
 from ..services import AnalysisNotFound, TooManyAnalyses, UploadValidationError
+from fastapi import APIRouter, HTTPException, Response
+from docx import Document
+import io
+import io
+import json
+from fastapi import APIRouter, Request, HTTPException, Response
+from docx import Document
+from docx.shared import Pt, Inches, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 
 router = APIRouter(prefix="/api")
 
@@ -210,6 +221,197 @@ def analysis_download(request: Request, analysis_id: str):
         },
     )
 
+
+
+
+# تأكد من استيراد الدوال اللازمة لجلب الـ record مثلما فعلت في كودك
+
+from fastapi import APIRouter, Request, HTTPException, Response
+from docx import Document
+from docx.shared import Pt, Inches, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+import io
+
+@router.get("/analyses/{analysis_id}/download-docx")
+def download_docx(request: Request, analysis_id: str, template: str = "single_column"):
+    record = _record(request, analysis_id)
+    if record.status != "completed" or record.result is None:
+        raise HTTPException(status_code=409, detail="The result is not available yet.")
+
+    report = record.result
+
+    # 1. استخراج البيانات والترتيب الديناميكي
+    entities = report.get("entities") or {}
+    contact = entities.get("contact") or {}
+    extraction = report.get("extraction") or {}
+    raw_sections = extraction.get("sections") or {}
+    section_order = extraction.get("section_order") or list(raw_sections.keys())
+    rewrites = report.get("rewrites") or {}
+
+    # تجميع كافة مفاتيح الأقسام المتاحة
+    all_section_keys = []
+    for k in section_order + list(raw_sections.keys()) + list(entities.keys()):
+        if k not in all_section_keys and k not in ("contact", "contact_header"):
+            all_section_keys.append(k)
+
+    doc = Document()
+    style = doc.styles['Normal']
+    style.font.name = 'Arial'
+    style.font.size = Pt(10.5)
+
+    def get_heading(sec_key):
+        sec_data = raw_sections.get(sec_key) or {}
+        return sec_data.get("heading") or sec_key.replace("_", " ").title()
+
+    # معلومات التواصل والاسم
+    name = contact.get("name") or (report.get("document") or {}).get("name", "Candidate Name")
+    target_role = report.get("target_role") or {}
+    primary_role = target_role.get("primary") or {}
+    job_title = contact.get("job_title") or primary_role.get("title_en", "")
+
+    # ================= 1. نموذج العمود الواحد (Classic) =================
+    if template == "single_column":
+        # الترويسة
+        p_name = doc.add_paragraph()
+        p_name.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r_name = p_name.add_run(str(name).upper())
+        r_name.bold = True
+        r_name.font.size = Pt(18)
+
+        if job_title:
+            p_job = doc.add_paragraph()
+            p_job.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            r_job = p_job.add_run(str(job_title))
+            r_job.font.size = Pt(11)
+            r_job.font.color.rgb = RGBColor(80, 80, 80)
+
+        details = [v for v in [contact.get("phone"), contact.get("location"), contact.get("email"), contact.get("linkedin")] if v]
+        if details:
+            p_det = doc.add_paragraph()
+            p_det.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            p_det.add_run("  |  ".join(details)).font.size = Pt(9.5)
+
+        # الأقسام الديناميكية
+        for sec_key in all_section_keys:
+            heading = get_heading(sec_key)
+            raw_content = (raw_sections.get(sec_key) or {}).get("content", "").strip()
+
+            p_h = doc.add_heading(level=2)
+            p_h.add_run(heading.upper()).bold = True
+            p_h.paragraph_format.space_before = Pt(14)
+            p_h.paragraph_format.space_after = Pt(4)
+
+            if sec_key == "summary":
+                text = (rewrites.get("summary") or {}).get("improved") or raw_content or entities.get("summary", "")
+                if text: doc.add_paragraph(text)
+
+            elif sec_key == "experience":
+                exps = entities.get("experience") or []
+                exp_rewrites = rewrites.get("experience_bullets") or []
+
+                if exps:
+                    for exp in exps:
+                        t = exp.get("job_title") or "Position"
+                        c = exp.get("company") or ""
+                        dates = f"{exp.get('start_date', '')} - {exp.get('end_date', 'Present')}" if exp.get("start_date") else ""
+
+                        table = doc.add_table(rows=1, cols=2)
+                        table.autofit = False
+                        table.columns[0].width = Inches(5.2)
+                        table.columns[1].width = Inches(1.3)
+                        row = table.rows[0]
+                        row.cells[0].paragraphs[0].add_run(f"{t} | {c}" if c else t).bold = True
+                        p_r = row.cells[1].paragraphs[0]
+                        p_r.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+                        p_r.add_run(dates)
+
+                        for b in exp.get("responsibilities") or exp.get("bullets") or []:
+                            b_str = b.get("text", "") if isinstance(b, dict) else str(b)
+                            final_text = b_str
+                            for r in exp_rewrites:
+                                if r.get("original", "").strip() == b_str.strip() and r.get("improved"):
+                                    final_text = r.get("improved")
+                                    break
+                            doc.add_paragraph(final_text.lstrip("•- "), style='List Bullet')
+                elif raw_content:
+                    for line in raw_content.split("\n"):
+                        if line.strip(): doc.add_paragraph(line.lstrip("•- ").strip())
+
+            else:
+                if raw_content:
+                    for line in raw_content.split("\n"):
+                        if line.strip():
+                            is_bullet = line.strip().startswith("•") or line.strip().startswith("-")
+                            doc.add_paragraph(line.lstrip("•- ").strip(), style='List Bullet' if is_bullet else 'Normal')
+
+    # ================= 2. نموذج العمودين والشريط الجانبي (Modern Two-Column) =================
+    else:
+        table = doc.add_table(rows=1, cols=2)
+        table.autofit = False
+        table.columns[0].width = Inches(4.8) # 68% العمود الرئيسي
+        table.columns[1].width = Inches(2.2) # 32% الشريط الجانبي
+        row = table.rows[0]
+        cell_left = row.cells[0]
+        cell_right = row.cells[1]
+
+        # اليسار: الاسم والخبرات والملخص
+        p_l_name = cell_left.paragraphs[0]
+        p_l_name.add_run(str(name)).bold = True
+        p_l_name.runs[0].font.size = Pt(16)
+        p_l_name.runs[0].font.color.rgb = RGBColor(15, 41, 66)
+
+        if job_title:
+            cell_left.add_paragraph(job_title).runs[0].font.color.rgb = RGBColor(100, 100, 100)
+
+        sidebar_keys = {"skills", "languages", "certifications", "contact"}
+
+        for sec_key in all_section_keys:
+            if sec_key in sidebar_keys: continue
+            heading = get_heading(sec_key)
+            p_h = cell_left.add_paragraph()
+            r_h = p_h.add_run(heading.upper())
+            r_h.bold = True
+            r_h.font.color.rgb = RGBColor(15, 41, 66)
+
+            raw_content = (raw_sections.get(sec_key) or {}).get("content", "").strip()
+            if raw_content:
+                for line in raw_content.split("\n"):
+                    if line.strip():
+                        cell_left.add_paragraph(line.lstrip("•- ").strip())
+
+        # اليمين: معلومات التواصل والمهارات واللغات
+        p_r_head = cell_right.paragraphs[0]
+        p_r_head.add_run("CONTACT").bold = True
+        p_r_head.runs[0].font.color.rgb = RGBColor(15, 41, 66)
+
+        for detail in [contact.get("phone"), contact.get("email"), contact.get("location"), contact.get("linkedin")]:
+            if detail: cell_right.add_paragraph(detail)
+
+        for sec_key in all_section_keys:
+            if sec_key not in sidebar_keys: continue
+            heading = get_heading(sec_key)
+            p_h = cell_right.add_paragraph()
+            r_h = p_h.add_run(heading.upper())
+            r_h.bold = True
+            r_h.font.color.rgb = RGBColor(15, 41, 66)
+
+            raw_content = (raw_sections.get(sec_key) or {}).get("content", "").strip()
+            if raw_content:
+                for line in raw_content.split("\n"):
+                    if line.strip(): cell_right.add_paragraph(line.lstrip("•- ").strip())
+
+    stream = io.BytesIO()
+    doc.save(stream)
+    stream.seek(0)
+
+    filename = f"Optimized-Resume-{template}-{record.id}.docx"
+    return Response(
+        content=stream.getvalue(),
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 @router.delete("/analyses/{analysis_id}", status_code=204)
 def delete_analysis(request: Request, analysis_id: str):

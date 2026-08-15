@@ -1,0 +1,22 @@
+{
+  "name": "resume-intelligence-platform",
+  "version": "2.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx server.js",
+    "build": "node -c server.js",
+    "start": "node server.js",
+    "lint": "node -c server.js services/extractor.js services/analyzer.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mammoth": "^1.12.0",
+    "multer": "^2.2.0",
+    "nunjucks": "^3.2.4",
+    "pdf-parse": "^2.4.5",
+    "uuid": "^14.0.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.9"
+  }
+}

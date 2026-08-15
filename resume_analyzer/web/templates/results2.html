@@ -1,0 +1,619 @@
+{% extends "base.html" %}
+{% macro evidence_refs(ids) -%}
+  {% if ids %}
+  <details class="supporting-evidence small mt-2">
+    <summary>Why this result? {{ ids|length }} supporting item{% if ids|length != 1 %}s{% endif %}</summary>
+    <div class="mt-2">
+      {% for evidence_id in ids %}
+      {% if loop.index <= 3 %}
+      {% set evidence = evidence_by_id[evidence_id] if (evidence_by_id and evidence_id in evidence_by_id) else none %}
+      {% if evidence %}
+      <div class="evidence-preview">
+        <div><strong>{{ evidence['label'] }}</strong> <span class="badge text-bg-light">{{ evidence['kind'] }}</span></div>
+        <div class="text-secondary">{{ evidence['value']|string|truncate(240, true, '…') }}</div>
+      </div>
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+      {% if ids|length > 3 %}<p class="text-secondary mb-0 mt-2">Plus {{ ids|length - 3 }} additional audit item(s). The complete registry is available in the JSON download.</p>{% endif %}
+    </div>
+  </details>
+  {% endif %}
+{%- endmacro %}
+{% block content %}
+{% set ats = report.ats or {} %}{% set entities = report.entities or {} %}{% set rewrites = report.rewrites or {} %}{% set data_quality = report.data_quality or {} %}
+{% set layout_risk = 'low' %}
+{% if report['extraction'] and report['extraction']['page_layouts'] %}
+  {% for page in report['extraction']['page_layouts'] %}
+    {% if page['reading_order_risk'] == 'high' %}
+      {% set layout_risk = 'high' %}
+    {% elif page['reading_order_risk'] == 'medium' and layout_risk != 'high' %}
+      {% set layout_risk = 'medium' %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% set ats_max = {'text_extractability':15,'section_structure':20,'layout_safety':20,'formatting_consistency':15,'content_clarity':15,'contact_accessibility':5,'consistency':10} %}
+{% set role_max = {'skills':40,'experience_titles':25,'experience_bullets':15,'projects':10,'summary':5,'education_certifications':5} %}
+{% set notice_labels = {'MODEL_OUTPUT_TRUNCATED':'Model response was incomplete','NO_MATERIAL_CHANGE':'No material change','BULLET_REWRITE_LIMIT_APPLIED':'Processing limit applied','INVALID_MODEL_RESPONSE':'Model response was rejected','AI_PROVIDER_TIMEOUT':'Local model timed out','AI_PROVIDER_UNAVAILABLE':'Local model unavailable','SKILLS_DETERMINISTIC_FALLBACK_APPLIED':'Safe skills grouping used'} %}
+{% set message_labels = {'AI_PROVIDER_TIMEOUT':'Local AI timeout','RECOMMENDATION_FALLBACK_APPLIED':'Recommendation fallback used','rewrite_warning':'Rewrite notice','ats_warning':'ATS notice','ai_warmup_failed':'Model warm-up notice'} %}
+<section class="container-fluid results-shell py-4 py-lg-5">
+  <div class="container-xxl">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+      <div><span class="eyebrow">Canonical report · schema {{ report['schema_version'] }}</span><h1 class="h2 mt-2 mb-1">{{ report['document']['name'] }}</h1><p class="text-secondary mb-0">Review every suggestion before editing your resume.</p></div>
+      <div class="d-flex flex-wrap gap-2 no-print">
+        <a class="btn btn-outline-secondary" href="/analyze">New analysis</a>
+        <button class="btn btn-outline-secondary" type="button" id="print-result">Print</button>
+        <a class="btn btn-primary" href="/api/analyses/{{ analysis_id }}/download">Download JSON</a>
+        <button class="btn btn-success fw-semibold" type="button" data-bs-toggle="modal" data-bs-target="#docxTemplateModal">
+          📄 تحميل السيرة Word (.docx)
+        </button>
+      </div>
+    </div>
+    <ul class="nav nav-tabs results-tabs no-print" id="resultTabs" role="tablist">
+      {% for key, label in [('overview','Overview'),('candidate','Candidate'),('sections','Sections'),('roles','Target role'),('ats','ATS'),('recommendations','Recommendations'),('rewrites','Rewrites'),('evidence','Evidence'),('messages','Warnings'),('json','Raw JSON')] %}
+      <li class="nav-item" role="presentation"><button class="nav-link {% if loop.first %}active{% endif %}" id="{{ key }}-tab" data-bs-toggle="tab" data-bs-target="#{{ key }}" type="button" role="tab" aria-controls="{{ key }}" aria-selected="{{ 'true' if loop.first else 'false' }}">{{ label }}</button></li>
+      {% endfor %}
+    </ul>
+    <div class="tab-content card border-0 shadow-sm rounded-top-0" id="resultTabContent">
+      <section class="tab-pane fade show active p-4" id="overview" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+        {% set score_bd = report.score_breakdown or (report.scoring_engine and report.scoring_engine.score_breakdown) or (report.scoringReport and report.scoringReport.score_breakdown) or (report.data and report.data.score_breakdown) or {} %}
+        {% set overall_val = report.overall_score if (report.overall_score is defined and report.overall_score is not none) else ((report.scoring_engine.overall_score if (report.scoring_engine and report.scoring_engine.overall_score is defined and report.scoring_engine.overall_score is not none) else 0)) %}
+        {% set score_cls = 'excellent' if overall_val >= 85 else ('good' if overall_val >= 70 else ('fair' if overall_val >= 50 else 'needs-improvement')) %}
+        {% set score_lbl_ar = 'ممتاز' if overall_val >= 85 else ('جيد' if overall_val >= 70 else ('متوسط' if overall_val >= 50 else 'يحتاج تحسين')) %}
+        {% set overall_status_en = report.scoring_engine.overall_status if (report.scoring_engine and report.scoring_engine.overall_status) else ('Excellent' if overall_val >= 85 else ('Good' if overall_val >= 70 else ('Fair' if overall_val >= 50 else 'Needs Improvement'))) %}
+        {% set overall_status_ar = report.scoring_engine.overall_status_ar if (report.scoring_engine and report.scoring_engine.overall_status_ar) else score_lbl_ar %}
+
+        <!-- Master Score Header Banner with Circular Score Gauge -->
+        <div class="card border-0 shadow-sm p-4 mb-4 rounded-3 bg-white">
+          <div class="row align-items-center g-4">
+            <div class="col-md-4 text-center border-end-md">
+              <span class="eyebrow d-block mb-2">Overall Score / الدرجة الكلية</span>
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg"
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                <path class="circle {{ score_cls }}"
+                  stroke-dasharray="{{ overall_val }}, 100"
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                <text x="18" y="19" class="percentage-text">{{ overall_val }}</text>
+                <text x="18" y="25" class="percentage-label">/ 100</text>
+              </svg>
+              <div class="mt-2">
+                <span class="badge fs-6 px-3 py-2 text-bg-{{ 'success' if overall_val >= 70 else ('warning' if overall_val >= 50 else 'danger') }}">
+                  {{ overall_status_en }} ({{ overall_status_ar }})
+                </span>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <h2 class="h4 fw-bold mb-2">Resume Intelligence Analysis / تقييم السيرة الذاتية</h2>
+              <p class="text-secondary mb-3">
+                Calculated by MasterScorer using weighted academic weights: Contact (5%), Section (5%), Summary (10%), Projects (10%), Skills (20%), Experience (25%), and Achievements XYZ (25%).
+              </p>
+              <div class="row g-2">
+                <div class="col-6 col-sm-4"><div class="p-2 border rounded text-center bg-light"><small class="text-secondary d-block">Parsing Integrity</small><strong>{{ data_quality['parsing_integrity_score'] }}%</strong></div></div>
+                <div class="col-6 col-sm-4"><div class="p-2 border rounded text-center bg-light"><small class="text-secondary d-block">Job Match</small><strong>{{ ats['job_match']['match_score'] if ats['job_match']['match_score'] is not none else 'N/A' }}</strong></div></div>
+                <div class="col-6 col-sm-4"><div class="p-2 border rounded text-center bg-light"><small class="text-secondary d-block">Layout Risk</small><strong class="text-capitalize">{{ layout_risk }}</strong></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section Score Breakdown Circular Cards -->
+        {% set default_refs = {
+          'contact': [
+            '[Purdue OWL] Contact Information Formatting guidelines.',
+            '[Resume Worded] ATS passability and required contact formats.',
+            '[Sabbar] Middle East & ATS CV standards.',
+            '[ThinkIN] ATS parsing risks with Headers/Footers.'
+          ],
+          'section': [
+            '[Workday, Greenhouse & Taleo Resume Guide] Single-column format and standard headers requirement.',
+            '[Resume Worded] Section Quality and Structure score validation.',
+            '[SHRM & CIMS] Standard formatting guidelines for recruiters.'
+          ],
+          'summary': [
+            '[Standard CV Guidelines] The summary is a core section highlighting skills and achievements.',
+            '[Brevity Standards] A summary must be concise, typically 3-4 lines (30-85 words).',
+            '[Professional Tone] Resumes should be written without first-person pronouns (I, me, my).'
+          ],
+          'projects': [
+            '[Tech Resume Standards] Proof of Work: Projects must include repository links (GitHub/GitLab) or live URLs.',
+            '[Content Guidelines] Projects must have adequate descriptions rather than just titles.'
+          ],
+          'skills': [
+            '[Taqdeem.net] Specificity & Naming: Write technical skills explicitly and remove fluff.',
+            '[Jobseeker & Resumk] Structure & Categorization: Clear headings, categorized into Hard/Soft, bullet points.',
+            '[Taqdeem & Basmah Aljuhani] Focus & Brevity: Ideal count is 6-12 skills.',
+            '[Taqdeem & ETFC-KSA] Evidence in Experience: Skills must be proven in experience bullet points.'
+          ],
+          'experience': [
+            '[Resume Worded] Impact & Action Verbs: Bullet points must start with strong action verbs.',
+            '[Resume Worded] Past Tense: Achievements and past responsibilities should be formulated in past tense.',
+            '[Standard Industry Practices] Structure: Experience must be formatted as bullet points, not paragraphs.'
+          ],
+          'achievements': [
+            '[Google re:Work] XYZ Formula: Accomplished [X] as measured by [Y], by doing [Z].',
+            '[Resume Worded] Quantified Impact: Strong resumes use numbers, percentages, and currencies to prove scale.'
+          ]
+        } %}
+        <div class="card border-0 shadow-sm p-4 mb-4 rounded-3 bg-white">
+          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4 pb-2 border-bottom">
+            <div>
+              <h3 class="h5 mb-1 fw-bold text-dark">Section Score Breakdown / تفاصيل التقييم حسب القسم</h3>
+              <p class="text-secondary small mb-0">Weighted academic scoring modules with circular indicators and interactive citations.</p>
+            </div>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 fs-6 fw-semibold">7 Core Evaluation Modules</span>
+          </div>
+          <div class="row g-3">
+            {% set sec_keys = [
+              ['contact', 'Contact Info', 'معلومات التواصل', 10.0, '5%'],
+              ['section', 'Section Structure', 'جودة وبنية الأقسام', 10.0, '5%'],
+              ['summary', 'Summary Quality', 'الملخص المهني', 100.0, '10%'],
+              ['projects', 'Projects & Portfolio', 'المشاريع والأعمال', 100.0, '10%'],
+              ['skills', 'Skills Quality', 'المهارات والتقنيات', 100.0, '20%'],
+              ['experience', 'Work Experience', 'الخبرات العملية', 100.0, '25%'],
+              ['achievements', 'Quantified Impact', 'الإنجازات والأرقام', 100.0, '25%']
+            ] %}
+            {% for item in sec_keys %}
+              {% set key = item[0] %}
+              {% set sec = (score_bd[key] if (score_bd and key in score_bd) else (score_bd[key|title] if (score_bd and key|title in score_bd) else (score_bd[key|lower] if (score_bd and key|lower in score_bd) else none))) or {} %}
+              {% set name_en = sec.section_name or item[1] %}
+              {% set name_ar = sec.section_name_ar or item[2] %}
+              {% set max_pts = item[3] %}
+              {% set w_pct = sec.weight_percentage or item[4] %}
+              {% set cur_score = sec.score if (sec.score is defined and sec.score is not none) else (sec.raw_score if (sec.raw_score is defined and sec.raw_score is not none) else 0.0) %}
+              {% set max_sec_score = sec.max_score if (sec.max_score is defined and sec.max_score is not none) else max_pts %}
+              {% set pct = sec.percentage if (sec.percentage is defined and sec.percentage is not none) else (sec.normalized_100 if (sec.normalized_100 is defined and sec.normalized_100 is not none) else (((cur_score / max_sec_score) * 100)|round|int if max_sec_score > 0 else 0)) %}
+              {% set circle_cls = 'excellent' if pct >= 80 else ('good' if pct >= 60 else ('fair' if pct >= 40 else 'needs-improvement')) %}
+              {% set status_cls = 'success' if pct >= 80 else ('primary' if pct >= 60 else ('warning' if pct >= 40 else 'danger')) %}
+              {% set refs = sec.academic_references or (default_refs[key] if (default_refs and key in default_refs) else []) %}
+              <div class="col-6 col-md-4 col-xl">
+                <div class="section-circle-card h-100 p-3 d-flex flex-column justify-content-between text-center shadow-sm">
+                  <div>
+                    <!-- Top Info Bar: Weight Badge & Academic Reference Hover Popover -->
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 fw-bold" style="font-size: 0.72rem;">
+                        {{ w_pct }}
+                      </span>
+                      {% if refs %}
+                        <button type="button"
+                                class="btn btn-sm p-0 border-0 academic-ref-btn"
+                                data-bs-toggle="popover"
+                                data-bs-trigger="hover focus click"
+                                data-bs-html="true"
+                                data-bs-placement="top"
+                                title="🎓 Academic References / المراجع الأكاديمية"
+                                data-bs-content="<div class='small text-start'><strong class='d-block mb-1 text-primary'>Academic References for {{ name_en }}:</strong><ul class='mb-0 ps-3 text-secondary'>{% for r in refs %}<li class='mb-1'>{{ r|e }}</li>{% endfor %}</ul></div>"
+                                aria-label="Academic references for {{ name_en }}">
+                          <span class="academic-ref-icon" title="View Academic References">🎓</span>
+                        </button>
+                      {% endif %}
+                    </div>
+
+                    <!-- Module Title -->
+                    <h4 class="h6 fw-bold text-dark mb-0 fs-6">{{ name_en }}</h4>
+                    <div class="text-secondary small mb-2" style="font-size: 0.75rem;">{{ name_ar }}</div>
+
+                    <!-- Circular Score Gauge -->
+                    <div class="circle-gauge-wrapper my-2 mx-auto">
+                      <svg viewBox="0 0 36 36" class="circular-chart mini-chart">
+                        <path class="circle-bg"
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path class="circle {{ circle_cls }}"
+                          stroke-dasharray="{{ pct }}, 100"
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <text x="18" y="18.5" class="percentage-text mini-text">{{ pct }}%</text>
+                        <text x="18" y="24.5" class="percentage-label mini-label">{{ cur_score }} / {{ max_sec_score }}</text>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <!-- Bottom Status Badge -->
+                  <div class="mt-2 pt-2 border-top">
+                    <span class="badge bg-{{ status_cls }}-subtle text-{{ status_cls }} border border-{{ status_cls }}-subtle fw-semibold w-100 py-1 text-truncate" style="font-size: 0.73rem;">
+                      {{ sec.status_ar or sec.status or ('ممتاز' if pct >= 80 else ('جيد' if pct >= 60 else ('متوسط' if pct >= 40 else 'يحتاج تحسين'))) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Penalties & Missing Sections Improvement Panel -->
+        {% set all_penalties = (report.scoring_engine and report.scoring_engine.all_penalties) or report.all_penalties or (ats and ats.all_penalties) or [] %}
+        {% set all_missing = (report.scoring_engine and report.scoring_engine.all_missing_elements) or report.all_missing_elements or (ats and ats.all_missing_elements) or [] %}
+        <div class="card border-0 shadow-sm p-4 mb-4 rounded-3 bg-white">
+          <h3 class="h5 mb-3 fw-bold text-dark d-flex align-items-center gap-2">
+            <span>⚠️ Penalties & Missing Sections / الخصومات وعناصر التقييم المفقودة</span>
+          </h3>
+          {% if all_penalties and all_penalties|length > 0 %}
+            <h4 class="h6 text-danger fw-bold mt-2">Applied Penalties & Deductions / الخصومات المطبقة</h4>
+            <div class="row g-2 mb-3">
+              {% for pen in all_penalties %}
+                <div class="col-12">
+                  <div class="alert alert-danger d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-1 py-2 px-3">
+                    <div>
+                      <span class="badge bg-danger text-white me-2">{{ pen['section'] or 'General' }}</span>
+                      <strong>{{ pen['reason'] }}</strong>
+                      {% if pen['reference'] %}<small class="text-secondary d-block mt-1">Reference: {{ pen['reference'] }}</small>{% endif %}
+                    </div>
+                    <span class="fw-bold fs-6 text-danger text-nowrap mt-2 mt-sm-0">{{ pen['penalty'] }} pts</span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="alert alert-success py-2 mb-3">
+              ✓ No formatting or structure penalties were applied to your resume.
+            </div>
+          {% endif %}
+
+          {% if all_missing and all_missing|length > 0 %}
+            <h4 class="h6 text-warning-emphasis fw-bold mt-3">Missing Resume Elements / العناصر المفقودة للتحسين</h4>
+            <ul class="list-group list-group-flush border rounded-2">
+              {% for item in all_missing %}
+                <li class="list-group-item p-2 px-3 d-flex align-items-center gap-2">
+                  <span class="text-warning fw-bold">!</span>
+                  <span>{{ item }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <div class="alert alert-info py-2 mb-0">
+              ✓ All recommended core sections were identified in your document.
+            </div>
+          {% endif %}
+        </div>  -->
+
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">ATS compatibility</span><strong class="metric-value">{{ ats['ats_compatibility_score'] if ats['ats_compatibility_score'] is not none else '—' }}</strong><span class="badge text-bg-{{ 'success' if (ats['score_label'] == 'excellent' or ats['score_label'] == 'good') else ('warning' if ats['score_label'] == 'fair' else 'secondary') }}">{{ ats['score_label'] }}</span>{% if ats['ats_compatibility_score'] is not none %}<progress class="score-progress mt-3" max="100" value="{{ ats['ats_compatibility_score'] }}">{{ ats['ats_compatibility_score'] }}%</progress>{% endif %}</div></div>
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">Parsing integrity</span><strong class="metric-value">{{ data_quality['parsing_integrity_score'] if data_quality['parsing_integrity_score'] is not none else '—' }}</strong><span class="small text-secondary">{{ data_quality['status']|replace('_',' ') }}</span></div></div>
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">Extraction confidence</span><strong class="metric-value">{{ data_quality['text_extraction_quality'] if data_quality['text_extraction_quality'] is not none else report['extraction']['quality_score'] }}</strong><span class="small text-secondary">{{ report['extraction']['engine'] }} · {{ report['document']['pages'] }} page(s)</span></div></div>
+          <div class="col-md-6 col-xl-3"><div class="metric-card"><span class="metric-label">Job match</span><strong class="metric-value">{{ ats['job_match']['match_score'] if ats['job_match']['match_score'] is not none else '—' }}</strong><span class="small text-secondary">{{ ats['job_match']['status'] }}</span></div></div>
+        </div>
+        <div class="alert {{ 'alert-success' if data_quality['status']=='good' else 'alert-warning' }} mt-4 mb-0"><strong>Parsing integrity:</strong> {{ data_quality['interpretation'] }}{% if data_quality['issues'] %}<ul class="mb-0 mt-2">{% for issue in data_quality['issues'] %}<li>{{ issue['message'] }}</li>{% endfor %}</ul>{% endif %}</div>
+        {% if data_quality['breakdown'] %}
+        <details class="content-card mt-4">
+          <summary><strong>How parsing integrity was calculated</strong></summary>
+          <div class="row g-3 mt-1">
+            {% for name, detail in (data_quality['breakdown']['dimensions'].items() if data_quality['breakdown']['dimensions'] and data_quality['breakdown']['dimensions'].items is defined else (data_quality['breakdown']['dimensions'] or {})) %}
+            <div class="col-md-6"><div class="status-card h-100">
+              <div class="d-flex justify-content-between gap-3"><span>{{ name|replace('_',' ')|title }}</span><strong>{{ detail['score'] }} / 100</strong></div>
+              <progress class="score-progress my-2" max="100" value="{{ detail['score'] }}">{{ detail['score'] }}%</progress>
+              <div class="small text-secondary">Weight {{ (detail['weight'] * 100)|round|int }}% · contribution {{ detail['weighted_points']|round(2) }}</div>
+              {% for explanation in detail['explanations'] %}<div class="small mt-1">{{ explanation }}</div>{% endfor %}
+            </div></div>
+            {% endfor %}
+          </div>
+          <div class="mt-3"><strong>Weighted subtotal:</strong> {{ data_quality['breakdown']['weighted_subtotal'] }}</div>
+          {% for adjustment in data_quality['breakdown']['adjustments'] %}<div class="alert alert-warning py-2 mt-2 mb-0"><strong>{{ adjustment['points'] }} point adjustment:</strong> {{ adjustment['explanation'] }}</div>{% endfor %}
+          <div class="mt-2"><strong>Final parsing integrity:</strong> {{ data_quality['breakdown']['total'] }}</div>
+        </details>
+        {% endif %}
+        {% if ats['parsing_integrity_context'] %}<div class="alert alert-info mt-3 mb-0"><strong>ATS and parsing context:</strong> {{ ats['parsing_integrity_context'] }}</div>{% endif %}
+        {% if data_quality['fields_requiring_review'] %}<div class="mt-4"><h2 class="h5">Fields requiring review</h2><div class="d-flex flex-wrap gap-2">{% for field in data_quality['fields_requiring_review'] %}<span class="badge text-bg-warning">Needs review · {{ field|replace('entities.','')|replace('extraction.','')|replace('_',' ') }}</span>{% endfor %}</div></div>{% endif %}
+        {% if data_quality['ambiguities'] %}<div class="mt-4"><h2 class="h5">Detected ambiguities</h2><ul>{% for ambiguity in data_quality['ambiguities'] %}<li>{{ ambiguity|replace('_',' ')|replace(':',' · ') }}</li>{% endfor %}</ul></div>{% endif %}
+        {% if data_quality['issues'] %}
+        <div class="mt-4"><h2 class="h5">Parsing issue groups</h2>
+          {% for area, label in [('layout','Layout'),('contact','Contact'),('sections','Sections'),('experience','Experience'),('projects','Projects'),('education','Education'),('skills','Skills'),('content_quality','Content quality'),('evidence','Evidence')] %}
+          {% set grouped_issues = data_quality['issues']|selectattr('area','equalto',area)|list %}
+          {% if grouped_issues %}<section class="content-card mb-3"><h3 class="h6">{{ label }}</h3>{% for issue in grouped_issues %}<div class="d-flex justify-content-between gap-3"><span>{{ issue['title'] or issue['message'] }}</span><span class="badge severity-{{ issue['severity'] }}">{{ issue['severity'] }}</span></div><p class="small text-secondary mb-2">{{ issue['suggested_action'] or issue['message'] }}</p>{% endfor %}</section>{% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+        <h2 class="h5 mt-5">Module status</h2><div class="row g-3">{% for name, status in (report['module_status'].items() if report['module_status'] and report['module_status'].items is defined else (report['module_status'] or {})) %}<div class="col-sm-6 col-xl"><div class="status-card"><span>{{ name|replace('_',' ')|title }}</span><span class="badge text-bg-light">{{ status['status'] }}</span></div></div>{% endfor %}</div>
+      </section>
+      <section class="tab-pane fade p-4" id="candidate" role="tabpanel" aria-labelledby="candidate-tab" tabindex="0">
+        <h2 class="h4">Candidate information</h2>
+        <dl class="row definition-grid">
+          {% for name, value in (entities['contact'].items() if entities['contact'] and entities['contact'].items is defined else (entities['contact'] or {})) %}
+            {% if name != 'evidence_ids' and name != 'source_types' %}
+              <dt class="col-sm-4">{{ name|replace('_',' ')|title }}</dt>
+              <dd class="col-sm-8">
+                {% if name == 'phone' and not value %}
+                  No reliable phone number was extracted.
+                {% else %}
+                  {{ value or 'Not found' }}
+                {% endif %}
+                {% if value and (entities['contact']['source_types'] and entities['contact']['source_types'][name]) %}
+                  <span class="badge text-bg-light">{{ entities['contact']['source_types'][name]|replace('_',' ') }}</span>
+                {% endif %}
+              </dd>
+            {% endif %}
+          {% endfor %}
+        </dl>
+        {% if report['extraction']['ocr_usage']['used'] %}<div class="alert alert-info"><strong>OCR scope:</strong> {{ report['extraction']['ocr_usage']['scope']|replace('_',' ') }}{% if report['extraction']['ocr_usage']['pages'] %} · page(s) {{ report['extraction']['ocr_usage']['pages']|join(', ') }}{% endif %}{% if report['extraction']['ocr_usage']['fields'] %} · field(s) {{ report['extraction']['ocr_usage']['fields']|join(', ') }}{% endif %}</div>{% endif %}
+        {% if report['extraction']['visual_metadata']['possible_image_only_contact'] %}<div class="alert alert-warning"><strong>Needs review:</strong> Contact information may be embedded in an image.</div>{% endif %}
+        <h3 class="h5 mt-4">Summary</h3><p class="preserve-lines">{{ entities['summary'] or 'No summary was extracted.' }}</p>
+        {% for collection, label in [('skills','Skills'),('experience','Experience'),('education','Education'),('projects','Projects'),('languages','Languages'),('certifications','Certifications')] %}
+          <h3 class="h5 mt-4">{{ label }}</h3>
+          <div class="stack-list">
+            {% for item in entities[collection] %}
+              <article class="content-card">
+                {% if collection == 'experience' %}
+                  <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge {{ 'text-bg-warning' if item['parsing_needs_review'] else 'text-bg-success' }}">Parsing {{ 'needs review' if item['parsing_needs_review'] else 'verified' }}</span>
+                    <span class="badge {{ 'text-bg-warning' if item['content_needs_review'] else ('text-bg-info' if item['review_reasons'] else 'text-bg-success') }}">Content {{ 'needs review' if item['content_needs_review'] else ('suggestions noted' if item['review_reasons'] else 'checks passed') }}</span>
+                  </div>
+                {% endif %}
+                <dl class="mb-0">
+                  {% for key, value in (item.items() if item and item.items is defined else (item or {})) %}
+                    {% if key != 'evidence_ids' and key != 'needs_review' and key != 'parsing_needs_review' and key != 'content_needs_review' and key != 'review_reasons' %}
+                      <div>
+                        <dt>{{ key|replace('_',' ')|title }}</dt>
+                        <dd>{{ value if (value and value != '') else '—' }}</dd>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </dl>
+                {% if collection == 'experience' and item['review_reasons'] %}
+                  <div class="mt-3">
+                    <strong>Content review notes</strong>
+                    <ul class="mb-0 mt-1">
+                      {% for reason in item['review_reasons'] %}
+                        <li>{{ reason|replace('_',' ') }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+              </article>
+            {% else %}
+              <p class="empty-state">No {{ label|lower }} extracted.</p>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </section>
+      <section class="tab-pane fade p-4" id="sections" role="tabpanel" aria-labelledby="sections-tab" tabindex="0"><h2 class="h4">Extracted sections</h2>{% for key, section in (report['extraction']['sections'].items() if report['extraction']['sections'] and report['extraction']['sections'].items is defined else (report['extraction']['sections'] or {})) %}<article class="content-card mb-3" id="section-{{ key|replace('_','-') }}"><div class="d-flex justify-content-between gap-3"><h3 class="h6">{{ section['heading'] or key|replace('_',' ')|title }}</h3><span class="badge text-bg-light">{{ section['words'] }} words</span></div><p class="preserve-lines mb-0">{{ section['content'] or 'No content.' }}</p></article>{% else %}<p class="empty-state">No sections were detected.</p>{% endfor %}</section>
+      <section class="tab-pane fade p-4" id="roles" role="tabpanel" aria-labelledby="roles-tab" tabindex="0">
+        <h2 class="h4">Target-role evidence match</h2>
+        <div class="alert alert-info">
+          This section is calculated by deterministic rules, not by the language model.
+          The percentage measures weighted resume evidence that matches the role catalog; it is not a hiring probability or seniority rating.
+        </div>
+        {% if report['target_role'] and report['target_role']['primary'] %}
+        {% set role=report['target_role']['primary'] %}
+        <article class="highlight-card">
+          <span class="eyebrow">Strongest catalog match</span>
+          <h3 class="h4 mt-2">{{ role['title_en'] }} · {{ role['title_ar'] }}</h3>
+          <p class="mb-2"><strong>Evidence match:</strong> {{ (role['confidence'] * 100)|round|int }}%</p>
+          <progress class="score-progress mb-3" max="100" value="{{ role['confidence'] * 100 }}">{{ (role['confidence'] * 100)|round|int }}%</progress>
+          <p class="small text-secondary mb-2">Matched resume signals</p>
+          <div class="d-flex flex-wrap gap-2">{% for signal in role['matched_signals'] %}<span class="badge bg-primary-subtle text-primary border border-primary-subtle">{{ signal }}</span>{% endfor %}</div>
+          <details class="mt-3">
+            <summary>How the score was calculated</summary>
+            <div class="row g-2 mt-2">
+              {% for key, contribution in (role['score_breakdown'].items() if role['score_breakdown'] and role['score_breakdown'].items is defined else (role['score_breakdown'] or {})) %}
+              <div class="col-sm-6"><div class="status-card"><span>{{ key|replace('_',' ')|title }}</span><strong>{{ (contribution * 100)|round|int }} / {{ role_max[key] if (role_max and key in role_max) else 0 }}</strong></div></div>
+              {% endfor %}
+            </div>
+            <p class="small text-secondary mt-2 mb-0">Maximum weights: skills 40, job titles 25, experience bullets 15, projects 10, summary 5, education/certifications 5.</p>
+          </details>
+        </article>
+        <h3 class="h5 mt-4">Other evidence-supported matches</h3>
+        <div class="row g-3">
+          {% for alternative in report['target_role']['alternatives'] %}
+          <div class="col-md-6"><article class="content-card h-100">
+            <strong>{{ alternative['title_en'] }}</strong>
+            <div>{{ alternative['title_ar'] }}</div>
+            <p class="mb-2"><strong>{{ (alternative['confidence']*100)|round|int }}%</strong> evidence match</p>
+            <div class="d-flex flex-wrap gap-1">{% for signal in alternative['matched_signals'] %}{% if loop.index <= 6 %}<span class="badge text-bg-light">{{ signal }}</span>{% endif %}{% endfor %}</div>
+          </article></div>
+          {% else %}<p class="empty-state">No alternative roles met the evidence threshold.</p>{% endfor %}
+        </div>
+        {% else %}<p class="empty-state">There was not enough independent resume evidence to suggest a target role.</p>{% endif %}
+      </section>
+      <section class="tab-pane fade p-4" id="ats" role="tabpanel" aria-labelledby="ats-tab" tabindex="0">
+        <h2 class="h4">ATS compatibility</h2>
+        <div class="alert alert-info">
+          ATS compatibility measures whether software can read and navigate the document. It does not measure candidate quality, hiring probability, or semantic correctness; parsing integrity is reported separately on the Overview tab.
+          <div class="mt-2">{{ ats['interpretation'] }}</div>
+          {% if ats['parsing_integrity_context'] %}<div class="mt-2"><strong>Separate parsing result:</strong> {{ ats['parsing_integrity_context'] }}</div>{% endif %}
+        </div>
+        <div class="row g-3 my-2">{% for key, value in (ats['score_breakdown'].items() if ats['score_breakdown'] and ats['score_breakdown'].items is defined else (ats['score_breakdown'] or {})) %}<div class="col-sm-6 col-lg-4"><div class="status-card"><span>{{ key|replace('_',' ')|title }}</span><strong>{{ value }} / {{ ats_max[key] if (ats_max and key in ats_max) else '—' }}</strong></div></div>{% endfor %}</div>
+        <p class="small text-secondary">The category values add up to the ATS score. A deduction appears in the related issue below.</p>
+        <h3 class="h5 mt-4">Issues affecting the score</h3>
+        {% for issue in ats['issues'] %}<article class="content-card mb-3"><div class="d-flex justify-content-between gap-3"><h4 class="h6">{{ issue['title'] }}</h4><span class="badge severity-{{ issue['severity'] }}">{{ issue['severity'] }}</span></div><p>{{ issue['problem'] }}</p><p class="mb-2"><strong>Suggested action:</strong> {{ issue['suggestion'] }}</p>{{ evidence_refs(issue['evidence_ids']) }}</article>{% else %}<p class="empty-state">No ATS issues were reported.</p>{% endfor %}
+        <h3 class="h5 mt-4">Strengths</h3>{% for strength in ats['strengths'] %}<article class="content-card mb-2"><strong>{{ strength['title'] }}</strong></article>{% else %}<p class="empty-state">No strengths were reported.</p>{% endfor %}
+        <h3 class="h5 mt-4">Job-description match</h3>
+        {% if ats['job_match']['status'] == 'not_run' %}
+        <div class="alert alert-secondary mb-0"><strong>Not calculated.</strong> Add a job description and keep “Job-description matching” enabled to compare keywords. “None” here does not mean zero compatibility.</div>
+        {% else %}
+        <p>Status: {{ ats['job_match']['status'] }}{% if ats['job_match']['match_score'] is not none %} · {{ ats['job_match']['match_score'] }}%{% endif %}</p>
+        <div class="row g-3"><div class="col-md-6"><h4 class="h6">Matched keywords</h4><p>{{ ats['job_match']['matched_keywords']|join(', ') or 'None' }}</p></div><div class="col-md-6"><h4 class="h6">Conditional missing keywords</h4><ul>{% for item in ats['job_match']['missing_keywords'] %}<li>{{ item['phrase'] }} — {{ item['suggestion'] }}</li>{% else %}<li>None</li>{% endfor %}</ul></div></div>
+        {% endif %}
+      </section>
+      <section class="tab-pane fade p-4" id="recommendations" role="tabpanel" aria-labelledby="recommendations-tab" tabindex="0">
+        <h2 class="h4">Recommendations</h2>
+        {% set recommendation_status = report['module_status']['recommendations'] %}
+        {% if recommendation_status['status'] == 'fallback' %}
+        <div class="alert alert-secondary"><strong>Method: evidence-based rules.</strong> No local-model recommendation was accepted for this result. A conservative deterministic recommendation was used instead.</div>
+        {% elif report['recommendations'] and report['recommendations'][0]['source'] == 'hybrid' %}
+        <div class="alert alert-primary"><strong>Method: deterministic evidence focus with validated local-model response.</strong> The application selected and worded the grounded focus; Provider: {{ recommendation_status['provider'] or 'local provider' }}{% if recommendation_status['model'] %} · Model: <code>{{ recommendation_status['model'] }}</code>{% endif %} returned the constrained response.</div>
+        {% else %}
+        <div class="alert alert-primary"><strong>Method: local AI.</strong> Provider: {{ recommendation_status['provider'] or 'local provider' }}{% if recommendation_status['model'] %} · Model: <code>{{ recommendation_status['model'] }}</code>{% endif %}. The output passed schema and evidence validation.</div>
+        {% endif %}
+        <p class="text-secondary">Only grounded, actionable gaps are listed. If the resume has one remaining supported gap, seeing one recommendation is expected.</p>
+        <div class="row g-3">{% for rec in report['recommendations'] %}<div class="col-lg-6"><article class="content-card h-100"><div class="d-flex justify-content-between gap-3"><h3 class="h6">{{ rec['title'] }}</h3><div><span class="badge text-bg-light">{{ 'Rule based' if rec['source']=='fallback' else ('Evidence ranked + local model' if rec['source']=='hybrid' else 'Local AI') }}</span> <span class="badge severity-{{ rec['severity'] }}">{{ rec['severity'] }}</span></div></div><p>{{ rec['problem'] }}</p><p><strong>Action:</strong> {{ rec['suggestion'] }}</p>{{ evidence_refs(rec['evidence_ids']) }}</article></div>{% else %}<p class="empty-state">No grounded recommendation was needed.</p>{% endfor %}</div>
+      </section>
+      <section class="tab-pane fade p-4" id="rewrites" role="tabpanel" aria-labelledby="rewrites-tab" tabindex="0">
+        <div class="alert alert-warning"><strong>Review-only proposals.</strong> Nothing on this page edits the uploaded resume or creates a replacement document automatically.</div>
+        {% if rewrites['provider'] %}
+        <p class="small text-secondary"><strong>Generation provider:</strong> {{ rewrites['provider'] }}{% if rewrites['model'] %} · <strong>Model:</strong> <code>{{ rewrites['model'] }}</code>{% endif %}. Individual components below clearly state when deterministic rules were used instead.</p>
+        {% endif %}
+        {% for notice in rewrites['notices'] %}
+        <div class="alert {{ 'alert-info' if notice['severity']=='information' else 'alert-warning' }}">
+          <strong>{{ notice_labels[notice['code']] if (notice_labels and notice['code'] in notice_labels) else 'Rewrite notice' }}</strong>
+          {% if notice['code'] == 'BULLET_REWRITE_LIMIT_APPLIED' %}
+          <div>{{ rewrites['bullet_stats']['selected'] }} of {{ rewrites['bullet_stats']['total_eligible'] }} complete bullets were selected. The other {{ rewrites['bullet_stats']['skipped'] }} were intentionally not sent to the model; this is a performance choice, not an error.</div>
+          {% elif notice['code'] == 'SKILLS_DETERMINISTIC_FALLBACK_APPLIED' %}
+          <div>The existing supported skills were organized into categories without calling the language model. No skill was invented, and the original resume was not changed.</div>
+          {% else %}<div>{{ notice['message'] }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <h2 class="h4">Summary rewrite</h2>
+        <div class="comparison-grid"><div><h3 class="h6">Original</h3><p class="preserve-lines">{{ rewrites['summary']['original'] or 'Not available' }}</p></div>
+        {% if (rewrites['summary']['status'] == 'improved' or rewrites['summary']['status'] == 'generated') and rewrites['summary']['improved'] %}<div><h3 class="h6">Proposed</h3><p class="preserve-lines" id="rewrite-summary">{{ rewrites['summary']['improved'] }}</p>{% for warning in rewrites['summary']['warnings'] %}<p class="alert alert-warning small">{{ warning }}</p>{% endfor %}<button class="btn btn-sm btn-outline-secondary copy-button no-print" type="button" data-copy-target="rewrite-summary">Copy proposal</button></div>
+        {% elif rewrites['summary']['status']=='unchanged' %}<div><h3 class="h6">Result</h3><p>No material improvement was produced.</p></div>
+        {% elif (rewrites['summary']['status'] == 'rejected' or rewrites['summary']['status'] == 'unavailable') %}<div><h3 class="h6">Result</h3><p>No valid rewrite was generated.</p>{% if rewrites['summary']['warnings'] %}<p class="small text-secondary">{{ rewrites['summary']['warnings'][0] }}</p>{% endif %}</div>
+        {% else %}<div><h3 class="h6">Result</h3><p>Summary rewriting was not run.</p></div>{% endif %}</div>
+        <h2 class="h4 mt-4">Experience bullets</h2>
+        {% if rewrites['bullet_stats']['total_eligible'] %}<p class="text-secondary"><strong>{{ rewrites['bullet_stats']['processed'] }}</strong> processed · {{ rewrites['bullet_stats']['selected'] }} selected from {{ rewrites['bullet_stats']['total_eligible'] }} complete bullets · {{ rewrites['bullet_stats']['skipped'] }} intentionally skipped</p>{% endif %}
+        {% for bullet in rewrites['experience_bullets'] %}
+        <article class="comparison-grid content-card mb-3">
+          <div><h3 class="h6">Original</h3><p>{{ bullet['original'] }}</p></div>
+          {% if (bullet['status'] == 'improved' or bullet['status'] == 'generated') and bullet['improved'] %}
+          <div><h3 class="h6">Proposed</h3><p>{{ bullet['improved'] }}</p>{% for warning in bullet['warnings'] %}<p class="alert alert-warning small">{{ warning }}</p>{% endfor %}</div>
+          {% elif bullet['status']=='unchanged' %}
+          <div><h3 class="h6">Result</h3><p>No material improvement was produced.</p>{% for warning in bullet['warnings'] %}<p class="small text-secondary">{{ warning }}</p>{% endfor %}</div>
+          {% else %}
+          <div><h3 class="h6">Result</h3><p>No valid rewrite was generated.</p>{% for warning in bullet['warnings'] %}<p class="small text-secondary">{{ warning }}</p>{% endfor %}</div>
+          {% endif %}
+        </article>
+        {% else %}<p class="empty-state">No bullet rewrites were produced.</p>{% endfor %}
+        <h2 class="h4 mt-4">Skills organization</h2>
+        {% if rewrites['skills_section']['method'] == 'deterministic' %}<div class="alert alert-secondary"><strong>Method: deterministic organization.</strong> The application only regrouped supported skills already extracted from the resume; no language model generated or added skills.</div>
+        {% elif rewrites['skills_section']['method'] == 'ai' %}<div class="alert alert-primary"><strong>Method: validated local-AI proposal.</strong> Every returned item was checked against the original supported skills.</div>{% endif %}
+        {% for group in rewrites['skills_section']['improved_groups'] %}<article class="content-card mb-2"><strong>{{ group['group'] }}</strong><p class="mb-0">{{ group['items']|join(', ') }}</p></article>{% else %}{% if (rewrites['skills_section']['status'] == 'rejected' or rewrites['skills_section']['status'] == 'unavailable') %}<p class="empty-state">No valid skills organization was generated.</p>{% else %}<p class="empty-state">Skills organization was not run.</p>{% endif %}{% endfor %}
+        {% if not rewrites['notices'] %}{% for warning in rewrites['skills_section']['warnings'] %}<p class="alert alert-info mt-2 mb-0">{{ warning }}</p>{% endfor %}{% endif %}
+      </section>
+      <section class="tab-pane fade p-4" id="evidence" role="tabpanel" aria-labelledby="evidence-tab" tabindex="0">
+        <h2 class="h4">Evidence and audit trail</h2>
+        <div class="alert alert-info"><strong>Most users can ignore this tab.</strong> Evidence means the exact resume text or layout observation used to justify a result. Relevant evidence is now shown in plain language directly under each recommendation or issue; internal IDs are intentionally not displayed here.</div>
+        <div class="row g-3">
+          <div class="col-sm-6 col-lg-3"><div class="metric-card"><span class="metric-label">Total audit records</span><strong class="metric-value">{{ report['evidence']|length }}</strong></div></div>
+          <div class="col-sm-6 col-lg-3"><div class="metric-card"><span class="metric-label">Present facts</span><strong class="metric-value">{{ report['evidence']|selectattr('kind','equalto','present')|list|length }}</strong></div></div>
+          <div class="col-sm-6 col-lg-3"><div class="metric-card"><span class="metric-label">Layout observations</span><strong class="metric-value">{{ report['evidence']|selectattr('kind','equalto','layout')|list|length }}</strong></div></div>
+          <div class="col-sm-6 col-lg-3"><div class="metric-card"><span class="metric-label">Missing fields</span><strong class="metric-value">{{ report['evidence']|selectattr('kind','equalto','missing')|list|length }}</strong></div></div>
+        </div>
+        <p class="text-secondary mt-4 mb-0">The complete machine-readable registry remains available through “Download JSON” for audit and development use.</p>
+      </section>
+      <section class="tab-pane fade p-4" id="messages" role="tabpanel" aria-labelledby="messages-tab" tabindex="0"><h2 class="h4">Warnings and errors</h2>{% for kind in ['warnings','errors'] %}<h3 class="h5 mt-4">{{ kind|title }}</h3>{% for message in report[kind] %}<article class="alert {{ 'alert-warning' if kind == 'warnings' else 'alert-danger' }}"><strong>{{ message_labels[message['code']] if (message_labels and message['code'] in message_labels) else ('Processing notice' if kind == 'warnings' else 'Processing error') }}</strong><div>{{ message['message'] }}</div><details class="small mt-2"><summary>Technical details</summary><code>{{ message['stage'] }} · {{ message['code'] }}</code></details></article>{% else %}<p class="empty-state">No {{ kind }}.</p>{% endfor %}{% endfor %}</section>
+      <section class="tab-pane fade p-4" id="json" role="tabpanel" aria-labelledby="json-tab" tabindex="0" data-result-url="/api/analyses/{{ analysis_id }}/result">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3"><div><h2 class="h4">Canonical JSON</h2><p class="text-secondary mb-0">Developer-oriented technical data. It is not loaded into the page until requested.</p></div><div class="d-flex gap-2"><button class="btn btn-sm btn-outline-primary no-print" id="load-json" type="button">Load technical JSON</button><button class="btn btn-sm btn-outline-secondary copy-button no-print" id="copy-json" type="button" data-copy-target="raw-json" disabled>Copy JSON</button></div></div>
+        <div id="json-status" class="alert alert-secondary mt-3 mb-0">JSON is not loaded. Use the normal report tabs unless you need the canonical developer output.</div>
+        <pre id="raw-json" class="json-view mt-3 d-none"></pre>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- Modal for Resume Template Selection -->
+<div class="modal fade" id="docxTemplateModal" tabindex="-1" aria-labelledby="docxTemplateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title fw-bold text-dark" id="docxTemplateModalLabel">
+          📄 اختر نموذج السيرة الذاتية للتصدير (Select Resume Template)
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <p class="text-secondary mb-4">
+          اختر النموذج المفضل لديك للتصدير إلى ملف Word (.docx). جميع القوالب مصممة خصيصاً للتحسين الأكاديمي والتوافق التام مع أنظمة تتبع المتقدمين (ATS).
+        </p>
+
+        <div class="row g-4">
+          <!-- Template 1 Option Card -->
+          <div class="col-md-6">
+            <div class="template-card card h-100 border-2 p-3 active-template" id="card-template-single" onclick="selectTemplate('single_column')">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="docxTemplateRadio" id="radio-single" value="single_column" checked>
+                  <label class="form-check-label fw-bold text-dark" for="radio-single">
+                    1. النموذج الكلاسيكي (عمود واحد)
+                  </label>
+                </div>
+                <span class="badge text-bg-primary">Classic ATS</span>
+              </div>
+              <p class="small text-secondary mb-3">
+                تصميم كلاسيكي منظم بخطوط واضحة (مثل نموذج Mohammed Al-Dossari). مخصص لجميع أنظمة ATS والشركات التقنية والإدارية.
+              </p>
+              <!-- Mini Preview -->
+              <div class="template-preview-box border rounded p-2 bg-white shadow-sm text-center">
+                <div class="mx-auto bg-dark rounded-1 mb-1" style="width: 60%; height: 6px;"></div>
+                <div class="mx-auto bg-secondary rounded-1 mb-2" style="width: 40%; height: 4px;"></div>
+                <div class="border-bottom pb-1 mb-2">
+                  <div class="bg-primary rounded-1" style="width: 35%; height: 5px;"></div>
+                </div>
+                <div class="d-flex justify-content-between mb-1">
+                  <div class="bg-secondary rounded-1" style="width: 45%; height: 4px;"></div>
+                  <div class="bg-secondary rounded-1" style="width: 25%; height: 4px;"></div>
+                </div>
+                <div class="bg-light rounded-1 mb-1" style="width: 90%; height: 3px;"></div>
+                <div class="bg-light rounded-1 mb-2" style="width: 80%; height: 3px;"></div>
+                <div class="border-bottom pb-1 mb-2">
+                  <div class="bg-primary rounded-1" style="width: 35%; height: 5px;"></div>
+                </div>
+                <div class="bg-light rounded-1" style="width: 85%; height: 3px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Template 2 Option Card -->
+          <div class="col-md-6">
+            <div class="template-card card h-100 border-2 p-3" id="card-template-two" onclick="selectTemplate('two_column')">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="docxTemplateRadio" id="radio-two" value="two_column">
+                  <label class="form-check-label fw-bold text-dark" for="radio-two">
+                    2. النموذج الحديث (عمودين / شريط جانبي)
+                  </label>
+                </div>
+                <span class="badge text-bg-success">Sidebar ATS</span>
+              </div>
+              <p class="small text-secondary mb-3">
+                تصميم حديث بجدول شريطي جانبي (مثل نموذج Amani al-Maliki). يفصل بين الخبرات والتواصل والمهارات بشكل أنيق.
+              </p>
+              <!-- Mini Preview -->
+              <div class="template-preview-box border rounded p-2 bg-white shadow-sm">
+                <div class="row g-1">
+                  <div class="col-7 border-end pe-2">
+                    <div class="bg-dark rounded-1 mb-1" style="width: 80%; height: 6px;"></div>
+                    <div class="bg-secondary rounded-1 mb-2" style="width: 50%; height: 4px;"></div>
+                    <div class="bg-primary rounded-1 mb-1" style="width: 60%; height: 4px;"></div>
+                    <div class="bg-light rounded-1 mb-1" style="width: 95%; height: 3px;"></div>
+                    <div class="bg-light rounded-1 mb-2" style="width: 85%; height: 3px;"></div>
+                    <div class="bg-primary rounded-1 mb-1" style="width: 50%; height: 4px;"></div>
+                    <div class="bg-light rounded-1" style="width: 90%; height: 3px;"></div>
+                  </div>
+                  <div class="col-5 ps-2 bg-light rounded-1 p-1">
+                    <div class="bg-primary rounded-1 mb-1" style="width: 70%; height: 4px;"></div>
+                    <div class="bg-secondary rounded-1 mb-1" style="width: 90%; height: 3px;"></div>
+                    <div class="bg-secondary rounded-1 mb-2" style="width: 80%; height: 3px;"></div>
+                    <div class="bg-primary rounded-1 mb-1" style="width: 60%; height: 4px;"></div>
+                    <div class="bg-secondary rounded-1 mb-1" style="width: 85%; height: 3px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إلغاء (Cancel)</button>
+        <a id="confirmDocxDownloadBtn" href="/api/analyses/{{ analysis_id }}/download-docx?template=single_column" class="btn btn-success fw-bold px-4" download>
+          📄 تصدير ملف Word (.docx)
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script id="analysis-report-json" type="application/json">
+  {{ report | tojson }}
+</script>
+<script src="{{ url_for('static', path='js/results.js') }}" defer></script>
+{% endblock %}

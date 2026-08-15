@@ -1,0 +1,6 @@
+{
+  "name": "Resume Intelligence Platform",
+  "description": "Turn a resume into evidence-grounded career intelligence with ATS compatibility, target roles, recommendations, and rewrites.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

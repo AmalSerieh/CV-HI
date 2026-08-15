@@ -26,7 +26,7 @@ class SummaryGenerator:
         prompt_builder: RewritePromptBuilder,
         parser: RewriteResponseParser,
         validator: RewriteValidator,
-        max_characters: int = 800,
+        max_characters: int = 1000,
     ) -> None:
         self.prompt_builder = prompt_builder
         self.parser = parser

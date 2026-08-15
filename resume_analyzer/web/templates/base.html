@@ -9,21 +9,25 @@
   <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='css/rtl.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='css/print.css') }}" media="print">
+  <link rel="icon" href="{{ url_for('static', path='logCVHI.png') }}" type="image/png">
 </head>
 <body>
   {% set backend_build = backend_build_state() %}
   <a class="visually-hidden-focusable skip-link" href="#main-content">Skip to content</a>
-  <nav class="navbar navbar-expand-lg navbar-dark app-navbar" aria-label="Primary navigation">
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar border-bottom-gold-glow" aria-label="Primary navigation">
     <div class="container">
-      <a class="navbar-brand fw-semibold" href="/">Resume Intelligence</a>
+      <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="/">
+          <img src="{{ url_for('static', path='logCVHI.png') }}" alt="CVHI Logo" width="32" height="32" class="rounded-circle object-fit-cover d-inline-block align-text-top">
+          Resume Intelligence
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNav" aria-controls="primaryNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="primaryNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">Overview</a></li>
-          <li class="nav-item"><a class="nav-link" href="/analyze">Analyze resume</a></li>
-          <li class="nav-item"><a class="nav-link" href="/api/health">Health</a></li>
+          <li class="nav-item"><a class="nav-link text-gold" href="/">Overview</a></li>
+          <li class="nav-item"><a class="nav-link text-gold" href="/analyze">Analyze resume</a></li>
+          <li class="nav-item"><a class="nav-link text-gold" href="/api/health">Health</a></li>
         </ul>
       </div>
     </div>
@@ -41,7 +45,7 @@
   <main id="main-content">
     {% block content %}{% endblock %}
   </main>
-  <footer class="border-top py-4 mt-5 no-print">
+  <footer class="py-4 mt-5 no-print border-top-gold-glow">
     <div class="container d-flex flex-column flex-md-row justify-content-between gap-2 small text-secondary">
       <span>Resume Intelligence Platform</span>
       <span>Temporary local processing · Human review required</span>
