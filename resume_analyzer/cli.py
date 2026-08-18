@@ -8,14 +8,6 @@ import sys
 from dataclasses import replace
 from pathlib import Path
 
-# ====== FIX: استيراد ContactExtractor من الموقع الصحيح ======
-from resume_analyzer.extraction.contact_extractor import ContactExtractor
-
-# تسجيل ContactExtractor في مجلد extractors المهمل
-import resume_analyzer.extractors as extractors
-extractors.ContactExtractor = ContactExtractor
-# ============================================================
-
 from .config import PipelineConfig
 from .pipeline import ResumePipeline
 

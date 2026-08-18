@@ -13,6 +13,20 @@ Windows PowerShell:
 .\scripts\setup.ps1
 ```
 
+If PowerShell blocks scripts extracted from the ZIP, inspect the scripts and use either:
+
+```powershell
+Unblock-File .\scripts\*.ps1
+```
+
+or a process-only execution policy for the current terminal:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+Do not change the permanent machine execution policy for this application.
+
 Linux/macOS:
 
 ```sh
@@ -96,4 +110,3 @@ path remains available without Ollama.
 python scripts/doctor.py
 python -c "from resume_analyzer import ResumePipeline; from resume_analyzer.web.app import app; print('OK')"
 ```
-

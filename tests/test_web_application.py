@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 import json
+import re
 import threading
 import time
 import zipfile
@@ -17,12 +18,14 @@ from fastapi.testclient import TestClient
 
 from pipeline import PipelineConfig, ResumePipeline
 from resume_analyzer.ats import ATSAnalyzer
+from resume_analyzer.export import FinalResumeBuilder
 from resume_analyzer.extraction.data_quality import CanonicalDataQualityAnalyzer
 from resume_analyzer.schemas import PipelineReport
 from resume_analyzer.web.app import create_app
 from resume_analyzer.web.app import main as web_main
 from resume_analyzer.web.config import WebSettings
 from tests.report_fixtures import make_report
+from tests.test_resume_export import reviewable_report
 
 
 class ReportBackend:
@@ -547,6 +550,16 @@ def test_ttl_cleanup_removes_expired_record(web_client):
     record = client.app.state.job_store.get(__import__("uuid").UUID(identifier))
     record.updated_at = datetime.now(timezone.utc) - timedelta(minutes=2)
     assert client.get(payload["status_url"]).status_code == 404
+    review_url = f"/api/analyses/{identifier}/resume-review"
+    assert client.get(review_url).status_code == 404
+    assert client.get(f"/api/analyses/{identifier}/final-resume").status_code == 404
+    assert (
+        client.post(
+            f"/api/analyses/{identifier}/download-docx",
+            json={"template_id": "template-1"},
+        ).status_code
+        == 404
+    )
 
 
 def test_unknown_analysis_id(web_client):
@@ -566,6 +579,16 @@ def test_result_is_conflict_until_ready(settings, rich_report):
         response = submit(client)
         assert factory.started.wait(timeout=1)
         assert client.get(response.json()["result_url"]).status_code == 409
+        identifier = response.json()["analysis_id"]
+        assert client.get(f"/api/analyses/{identifier}/resume-review").status_code == 409
+        assert client.get(f"/api/analyses/{identifier}/final-resume").status_code == 409
+        assert (
+            client.post(
+                f"/api/analyses/{identifier}/download-docx",
+                json={"template_id": "template-1"},
+            ).status_code
+            == 409
+        )
         factory.release.set()
 
 
@@ -1033,3 +1056,288 @@ def test_download_filename_never_uses_uploaded_name(web_client):
     response = client.get(payload["result_url"].replace("/result", "/download"))
     assert "candidate-private" not in response.headers["content-disposition"]
     assert payload["analysis_id"] in response.headers["content-disposition"]
+
+
+def test_resume_review_api_persists_decisions_and_keeps_analysis_immutable(settings):
+    report = reviewable_report().model_dump(mode="json")
+    factory = RecordingFactory(report)
+    with TestClient(create_app(settings, pipeline_factory=factory)) as client:
+        payload = completed_submission(client)
+        result_before = client.get(payload["result_url"]).json()
+        review_url = f"/api/analyses/{payload['analysis_id']}/resume-review"
+        initial = client.get(review_url)
+        assert initial.status_code == 200
+        assert initial.json()["summary"]["decision"] == "pending"
+        bullet_id = initial.json()["experience_bullets"][0]["id"]
+
+        updated = client.patch(
+            review_url,
+            json={
+                "summary": "accepted",
+                "skills": "accepted",
+                "experience_bullets": {bullet_id: "accepted"},
+            },
+        )
+        assert updated.status_code == 200
+        assert updated.json()["summary"]["final"] == ("Python engineer delivering reliable APIs.")
+        assert updated.json()["experience_bullets"][0]["final"] == ("Built reliable Python APIs.")
+        assert client.get(review_url).json()["summary"]["decision"] == "accepted"
+        assert client.get(payload["result_url"]).json() == result_before
+
+
+def test_review_update_is_transactional_for_unknown_item(settings):
+    report = reviewable_report().model_dump(mode="json")
+    with TestClient(create_app(settings, pipeline_factory=RecordingFactory(report))) as client:
+        payload = completed_submission(client)
+        review_url = f"/api/analyses/{payload['analysis_id']}/resume-review"
+        response = client.patch(
+            review_url,
+            json={
+                "summary": "accepted",
+                "experience_bullets": {"../../unknown": "accepted"},
+            },
+        )
+        assert response.status_code == 422
+        current = client.get(review_url).json()
+        assert current["summary"]["decision"] == "pending"
+
+
+def test_review_state_is_isolated_between_analysis_ids(settings):
+    report = reviewable_report().model_dump(mode="json")
+    with TestClient(create_app(settings, pipeline_factory=RecordingFactory(report))) as client:
+        first = completed_submission(client)
+        second = completed_submission(client)
+        first_url = f"/api/analyses/{first['analysis_id']}/resume-review"
+        second_url = f"/api/analyses/{second['analysis_id']}/resume-review"
+        assert client.patch(first_url, json={"summary": "accepted"}).status_code == 200
+        assert client.get(first_url).json()["summary"]["decision"] == "accepted"
+        assert client.get(second_url).json()["summary"]["decision"] == "pending"
+
+
+def test_final_resume_api_and_page_reflect_current_decisions(settings):
+    report = reviewable_report().model_dump(mode="json")
+    with TestClient(create_app(settings, pipeline_factory=RecordingFactory(report))) as client:
+        payload = completed_submission(client)
+        review_url = f"/api/analyses/{payload['analysis_id']}/resume-review"
+        review = client.get(review_url).json()
+        accepted_bullet = review["experience_bullets"][0]["id"]
+        accepted_achievement = review["experience_bullets"][2]["id"]
+        client.patch(
+            review_url,
+            json={
+                "summary": "accepted",
+                "experience_bullets": {
+                    accepted_bullet: "accepted",
+                    accepted_achievement: "rejected",
+                },
+            },
+        )
+        final_url = f"/api/analyses/{payload['analysis_id']}/final-resume"
+        final = client.get(final_url)
+        assert final.status_code == 200
+        assert final.json()["summary"] == "Python engineer delivering reliable APIs."
+        assert final.json()["experience"][0]["responsibilities"][0] == (
+            "Built reliable Python APIs."
+        )
+        assert final.json()["experience"][0]["achievements"][0] == ("Reduced response times.")
+
+        page = client.get(f"/results/{payload['analysis_id']}/final-resume")
+        assert page.status_code == 200
+        assert "Final Resume Preview" in page.text
+        assert "Python engineer delivering reliable APIs." in page.text
+        assert "Reduced response times." in page.text
+        assert "Reduced API response times." not in page.text
+        assert "← Back to Review Changes" in page.text
+        assert "Download Resume" in page.text
+        assert 'id="template-modal"' in page.text
+        assert 'id="generate-resume" disabled' in page.text
+        assert "ATS compatibility" not in page.text
+        assert "Parsing integrity" not in page.text
+        assert "Ollama" not in page.text
+
+
+def test_review_controls_render_only_for_valid_proposals(settings):
+    report = reviewable_report().model_dump(mode="json")
+    with TestClient(create_app(settings, pipeline_factory=RecordingFactory(report))) as client:
+        payload = completed_submission(client)
+        page = client.get(payload["page_url"])
+    assert page.status_code == 200
+    analysis_id = payload["analysis_id"]
+    assert f'data-results-page data-analysis-id="{analysis_id}"' in page.text
+    assert f'data-review-url="/api/analyses/{analysis_id}/resume-review"' in page.text
+    assert "/static/js/results.js?v=2.1.0" in page.text
+    assert 'data-review-kind="summary"' in page.text
+    assert 'data-review-kind="bullet"' in page.text
+    assert 'data-review-kind="skills"' in page.text
+    assert "Review Final Resume" in page.text
+    assert "Review / Export Resume" in page.text
+    assert f'href="/results/{analysis_id}/final-resume">Review / Export Resume</a>' in page.text
+    assert "Accept" in page.text and "Reject" in page.text
+    actionable = re.findall(r'<button[^>]+class="[^"]*review-decision[^"]*"[^>]*>', page.text)
+    review = FinalResumeBuilder(reviewable_report()).review_payload().model_dump(mode="json")
+    valid_ids = {
+        "summary",
+        "skills",
+        *(item["id"] for item in review["experience_bullets"] if item["can_accept"]),
+    }
+    assert len(actionable) == len(valid_ids) * 2
+    assert all('type="button"' in tag for tag in actionable)
+    assert all(
+        'data-decision="accepted"' in tag or 'data-decision="rejected"' in tag for tag in actionable
+    )
+    for item_id in valid_ids:
+        assert page.text.count(f'data-review-id="{item_id}"') == 2
+    invalid_id = next(item["id"] for item in review["experience_bullets"] if not item["can_accept"])
+    assert f'data-review-item="{invalid_id}"' in page.text
+    assert f'data-review-id="{invalid_id}"' not in page.text
+
+
+def test_results_javascript_matches_rendered_review_contract():
+    source = Path("resume_analyzer/web/static/js/results.js").read_text(encoding="utf-8")
+    assert 'document.querySelector("[data-results-page]")' in source
+    assert "window.bootstrap?.Tab" in source
+    assert 'page.querySelector("[data-review-url]")' in source
+    assert 'reviewSection?.addEventListener("click"' in source
+    assert 'event.target.closest?.(".review-decision")' in source
+    assert 'button.closest("[data-review-item]")' in source
+    assert 'method: "PATCH"' in source
+    assert '"Content-Type": "application/json"' in source
+    assert "if (!response.ok)" in source
+    assert "response.status !== 204" in source
+    assert "The decision could not be saved. Please try again." in source
+
+
+def test_review_accept_reject_refresh_final_page_and_pending_resolution(settings):
+    report = reviewable_report().model_dump(mode="json")
+    with TestClient(create_app(settings, pipeline_factory=RecordingFactory(report))) as client:
+        payload = completed_submission(client)
+        analysis_id = payload["analysis_id"]
+        review_url = f"/api/analyses/{analysis_id}/resume-review"
+        initial = client.get(review_url).json()
+        accepted_id = initial["experience_bullets"][0]["id"]
+        rejected_id = initial["experience_bullets"][2]["id"]
+
+        accepted = client.patch(
+            review_url,
+            json={"summary": "accepted", "experience_bullets": {accepted_id: "accepted"}},
+        )
+        assert accepted.status_code == 200
+        refreshed = client.get(review_url).json()
+        assert refreshed["summary"]["decision"] == "accepted"
+        assert refreshed["experience_bullets"][0]["decision"] == "accepted"
+
+        rejected = client.patch(
+            review_url,
+            json={"experience_bullets": {rejected_id: "rejected"}},
+        )
+        assert rejected.status_code == 200
+        refreshed = client.get(review_url).json()
+        assert refreshed["experience_bullets"][2]["decision"] == "rejected"
+        assert refreshed["skills"]["decision"] == "pending"
+
+        refreshed_page = client.get(f"/results/{analysis_id}")
+        assert refreshed_page.status_code == 200
+        assert 'status-accepted" data-review-status="summary">Accepted' in refreshed_page.text
+        assert (
+            f'status-rejected" data-review-status="{rejected_id}">Rejected' in refreshed_page.text
+        )
+        assert 'class="review-choice is-final-choice" data-review-content="proposed"' in (
+            refreshed_page.text
+        )
+        assert 'status-pending" data-review-status="skills">Pending' in refreshed_page.text
+
+        final = client.get(f"/api/analyses/{analysis_id}/final-resume")
+        assert final.status_code == 200
+        final_payload = final.json()
+        assert final_payload["summary"] == "Python engineer delivering reliable APIs."
+        assert final_payload["experience"][0]["responsibilities"][0] == (
+            "Built reliable Python APIs."
+        )
+        assert final_payload["experience"][0]["achievements"][0] == "Reduced response times."
+        assert [group["group"] for group in final_payload["skills"]] == ["Skills"]
+
+        page = client.get(f"/results/{analysis_id}/final-resume")
+        assert page.status_code == 200
+        assert f'data-final-resume-page data-analysis-id="{analysis_id}"' in page.text
+        assert "/static/js/final_resume.js?v=2.1.0" in page.text
+        assert "Python engineer delivering reliable APIs." in page.text
+        assert "Built reliable Python APIs." in page.text
+        assert "Reduced response times." in page.text
+        assert "Reduced API response times." not in page.text
+        assert "Programming" not in page.text
+        assert "Databases" not in page.text
+
+
+def test_template_api_exposes_only_allowlisted_metadata_and_previews(settings, rich_report):
+    with TestClient(create_app(settings, pipeline_factory=RecordingFactory(rich_report))) as client:
+        response = client.get("/api/resume-templates")
+        assert response.status_code == 200
+        assert [item["id"] for item in response.json()] == ["template-1", "template-2"]
+        assert "docx_path" not in response.text and "C:\\Users" not in response.text
+        for item in response.json():
+            preview = client.get(item["preview_url"])
+            assert preview.status_code == 200
+            assert preview.headers["content-type"].startswith("image/")
+        assert client.get("/api/resume-templates/../../private/preview").status_code == 404
+
+
+@pytest.mark.parametrize("template_id", ["template-1", "template-2"])
+def test_docx_download_uses_final_resume_without_rerunning_pipeline(settings, template_id):
+    report = reviewable_report().model_dump(mode="json")
+    factory = RecordingFactory(report)
+    with TestClient(create_app(settings, pipeline_factory=factory)) as client:
+        payload = completed_submission(client)
+        review_url = f"/api/analyses/{payload['analysis_id']}/resume-review"
+        review = client.get(review_url).json()
+        client.patch(
+            review_url,
+            json={
+                "summary": "accepted",
+                "experience_bullets": {
+                    review["experience_bullets"][0]["id"]: "accepted",
+                    review["experience_bullets"][2]["id"]: "rejected",
+                },
+            },
+        )
+        calls_before_export = factory.calls
+        response = client.post(
+            f"/api/analyses/{payload['analysis_id']}/download-docx",
+            json={"template_id": template_id},
+        )
+        assert response.status_code == 200
+        assert response.headers["content-type"].startswith(
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+        assert "Jane-Doe-Resume.docx" in response.headers["content-disposition"]
+        text = "\n".join(
+            paragraph.text for paragraph in Document(io.BytesIO(response.content)).paragraphs
+        )
+        document = Document(io.BytesIO(response.content))
+        text += "\n" + "\n".join(
+            paragraph.text
+            for table in document.tables
+            for row in table.rows
+            for cell in row.cells
+            for paragraph in cell.paragraphs
+        )
+        assert "Python engineer delivering reliable APIs." in text
+        assert "Built reliable Python APIs." in text
+        assert "Reduced response times." in text
+        assert "Reduced API response times." not in text
+        assert factory.calls == calls_before_export
+
+
+def test_unknown_template_and_unavailable_analysis_fail_safely(settings, rich_report):
+    with TestClient(create_app(settings, pipeline_factory=RecordingFactory(rich_report))) as client:
+        payload = completed_submission(client)
+        response = client.post(
+            f"/api/analyses/{payload['analysis_id']}/download-docx",
+            json={"template_id": "../../../private.docx"},
+        )
+        assert response.status_code == 422
+        assert "C:\\Users" not in response.text
+        missing = client.post(
+            "/api/analyses/00000000-0000-4000-8000-000000000000/download-docx",
+            json={"template_id": "template-1"},
+        )
+        assert missing.status_code == 404

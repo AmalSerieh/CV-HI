@@ -7,11 +7,11 @@ Empty optional values are intentional.
 
 | Variable | Default | Purpose |
 |---|---:|---|
-| `APP_ENV` | `development` | Environment label used in diagnostics. |
+| `APP_ENV` | `production` | Delivered local-use environment label. Use `development` only while editing source. |
 | `APP_HOST` | `127.0.0.1` | Bind address; loopback is the safe default. |
 | `APP_PORT` | `8000` | TCP port. |
 | `APP_DEBUG` | `false` | FastAPI debug responses; keep false outside controlled development. |
-| `APP_RELOAD` | `true` | Source reload for local development. |
+| `APP_RELOAD` | `false` | Keep disabled for normal client use; enable only during development. |
 | `RESUME_PUBLIC_ABSOLUTE_PATHS` | `false` | Must remain false for the web application. |
 | `RESUME_TEMP_DIR` | `runtime/temp` | Private temporary-upload directory. |
 | `RESUME_OUTPUT_DIR` | `runtime/outputs` | Temporary result directory. |
@@ -83,4 +83,3 @@ APP_RELOAD=false
 
 Keep `APP_HOST=127.0.0.1` unless a reverse proxy, authentication boundary, TLS, access control,
 and retention policy have been designed for the deployment.
-

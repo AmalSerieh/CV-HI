@@ -46,12 +46,12 @@ class PipelineConfig:
     ai_rewrite_timeout_seconds: float = 90.0
     ai_temperature: float = 0.0
     ai_seed: int = 42
-    ai_max_tokens: int = 2048
+    ai_max_tokens: int = 900
     recommendation_max_output_tokens: int = 224
-    rewrite_max_output_tokens: int = 1024
-    summary_rewrite_max_output_tokens: int = 1024
-    bullet_rewrite_max_output_tokens: int = 1024
-    skills_rewrite_max_output_tokens: int = 1024
+    rewrite_max_output_tokens: int = 256
+    summary_rewrite_max_output_tokens: int = 384
+    bullet_rewrite_max_output_tokens: int = 256
+    skills_rewrite_max_output_tokens: int = 768
     skills_rewrite_ai_max_items: int = 24
     ollama_num_ctx: int = 4096
     ollama_keep_alive: str = "10m"
@@ -154,7 +154,7 @@ class PipelineConfig:
             raise ValueError(f"{name} must be a boolean value")
 
         legacy_timeout = float(os.getenv("RESUME_AI_TIMEOUT_SECONDS", "60"))
-        legacy_max_tokens = int(os.getenv("RESUME_AI_MAX_TOKENS", "2048"))
+        legacy_max_tokens = int(os.getenv("RESUME_AI_MAX_TOKENS", "900"))
         legacy_rewrite_tokens = int(os.getenv("RESUME_REWRITE_MAX_OUTPUT_TOKENS", "256"))
         raw_bullet_selection = os.getenv("RESUME_REWRITE_BULLET_SELECTION", "").strip()
         bullet_selection = (

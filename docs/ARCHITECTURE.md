@@ -19,8 +19,11 @@ serialize the same schema-versioned report.
 5. **Recommendations and rewrites** — provides deterministic recommendations by default and
    optional validated local-AI output through Ollama or an explicitly configured local
    Transformers model.
-6. **Delivery interfaces** — the CLI exports JSON; FastAPI supplies local pages, asynchronous
-   analysis status, result views, and JSON downloads.
+6. **Human review** — `ResumeReviewState` records explicit accepted/rejected decisions while
+   pending and rejected proposals continue to resolve to canonical original content.
+7. **Delivery interfaces** — the CLI exports JSON; FastAPI supplies local pages, asynchronous
+   analysis status, result views, JSON downloads, FinalResume preview, and allowlisted DOCX
+   templates.
 
 Compatibility packages at the repository root are intentionally retained as thin import shims.
 New integrations should use `resume_analyzer` directly.
@@ -37,6 +40,10 @@ PDF/DOCX
   -> target-role analysis
   -> deterministic or optional local-AI recommendations/rewrites
   -> schema 2.1.0 JSON
+  -> explicit human review decisions
+  -> semantic FinalResume
+  -> allowlisted docxtpl renderer
+  -> DOCX download
 ```
 
 ## Runtime Data
@@ -54,4 +61,3 @@ delete endpoint removes an analysis and its associated temporary data.
 - Bounded extraction, prompt, output, and concurrency limits
 - Privacy-safe public diagnostics and report paths
 - Local Bootstrap assets, restrictive response headers, and no required CDN
-

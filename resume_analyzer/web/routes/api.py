@@ -6,26 +6,33 @@ import json
 from typing import Annotated
 from uuid import UUID
 
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Pt, Inches, RGBColor
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+import io
+
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, Response
+from pydantic import ValidationError
 
 from resume_analyzer.diagnostics.health import application_health, system_capabilities
 from resume_analyzer.diagnostics.models import model_status
+from resume_analyzer.export import (
+    DOCX_MEDIA_TYPE,
+    DocxRenderError,
+    FinalResumeBuilder,
+    ReviewStateError,
+    ReviewUpdate,
+    TemplateNotFound,
+    TemplateSelection,
+    content_disposition,
+)
 
 from ..build_info import build_state
 from ..models import AnalysisOptions
 from ..services import AnalysisNotFound, TooManyAnalyses, UploadValidationError
-from fastapi import APIRouter, HTTPException, Response
-from docx import Document
-import io
-import io
-import json
-from fastapi import APIRouter, Request, HTTPException, Response
-from docx import Document
-from docx.shared import Pt, Inches, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
 
 router = APIRouter(prefix="/api")
 
@@ -53,6 +60,25 @@ def _record(request: Request, analysis_id: str):
         return request.app.state.job_store.get(_identifier(analysis_id))
     except AnalysisNotFound as exc:
         raise HTTPException(status_code=404, detail="Analysis not found or expired.") from exc
+
+
+def _completed_record(request: Request, analysis_id: str):
+    record = _record(request, analysis_id)
+    if record.status != "completed" or record.result is None:
+        raise HTTPException(status_code=409, detail="The result is not available yet.")
+    return record
+
+
+def _builder_and_state(request: Request, analysis_id: str):
+    record = _completed_record(request, analysis_id)
+    try:
+        builder = FinalResumeBuilder(record.result)
+        state = request.app.state.job_store.get_or_create_review_state(
+            record.id, builder.initial_state
+        )
+    except (ValidationError, ReviewStateError) as exc:
+        raise HTTPException(status_code=409, detail="Resume review state is unavailable.") from exc
+    return record, builder, state
 
 
 @router.post("/analyses", status_code=202)
@@ -200,17 +226,13 @@ def analysis_status(request: Request, analysis_id: str):
 
 @router.get("/analyses/{analysis_id}/result")
 def analysis_result(request: Request, analysis_id: str):
-    record = _record(request, analysis_id)
-    if record.status != "completed" or record.result is None:
-        raise HTTPException(status_code=409, detail="The result is not available yet.")
+    record = _completed_record(request, analysis_id)
     return record.result
 
 
 @router.get("/analyses/{analysis_id}/download")
 def analysis_download(request: Request, analysis_id: str):
-    record = _record(request, analysis_id)
-    if record.status != "completed" or record.result is None:
-        raise HTTPException(status_code=409, detail="The result is not available yet.")
+    record = _completed_record(request, analysis_id)
     payload = json.dumps(record.result, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
     return Response(
         content=payload.encode("utf-8"),
@@ -222,19 +244,105 @@ def analysis_download(request: Request, analysis_id: str):
     )
 
 
+@router.get("/analyses/{analysis_id}/resume-review")
+def resume_review(request: Request, analysis_id: str):
+    _record_value, builder, state = _builder_and_state(request, analysis_id)
+    return builder.review_payload(state).model_dump(mode="json")
 
 
-# تأكد من استيراد الدوال اللازمة لجلب الـ record مثلما فعلت في كودك
+@router.patch("/analyses/{analysis_id}/resume-review")
+def update_resume_review(request: Request, analysis_id: str, update: ReviewUpdate):
+    record = _completed_record(request, analysis_id)
+    try:
+        builder = FinalResumeBuilder(record.result)
+        state = request.app.state.job_store.update_review_state(
+            record.id,
+            builder.initial_state,
+            lambda current: builder.apply_update(current, update),
+        )
+    except ReviewStateError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except ValidationError as exc:
+        raise HTTPException(status_code=409, detail="Resume review state is unavailable.") from exc
+    return builder.review_payload(state).model_dump(mode="json")
 
-from fastapi import APIRouter, Request, HTTPException, Response
-from docx import Document
-from docx.shared import Pt, Inches, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
-import io
 
-@router.get("/analyses/{analysis_id}/download-docx")
+@router.get("/analyses/{analysis_id}/final-resume")
+def final_resume(request: Request, analysis_id: str):
+    _record_value, builder, state = _builder_and_state(request, analysis_id)
+    return builder.build(state).model_dump(mode="json")
+
+
+@router.get("/resume-templates")
+def resume_templates(request: Request):
+    return request.app.state.template_registry.public_metadata()
+
+
+@router.get("/resume-templates/{template_id}/preview", response_class=FileResponse)
+def resume_template_preview(request: Request, template_id: str):
+    try:
+        definition = request.app.state.template_registry.get(template_id)
+    except TemplateNotFound as exc:
+        raise HTTPException(status_code=404, detail="Resume template not found.") from exc
+    if not definition.preview_path.is_file():
+        raise HTTPException(status_code=404, detail="Resume template preview is unavailable.")
+    media_type = (
+        "image/jpeg" if definition.preview_path.suffix.casefold() in {".jpg", ".jpeg"} else None
+    )
+    return FileResponse(definition.preview_path, media_type=media_type)
+
+
+@router.post("/analyses/{analysis_id}/download-docx")
+def download_resume_docx(request: Request, analysis_id: str, selection: TemplateSelection):
+    _record_value, builder, state = _builder_and_state(request, analysis_id)
+    final = builder.build(state)
+    try:
+        content = request.app.state.docx_renderer.render(final, selection.template_id)
+    except TemplateNotFound as exc:
+        raise HTTPException(status_code=422, detail="Unsupported resume template.") from exc
+    except DocxRenderError as exc:
+        raise HTTPException(
+            status_code=503, detail="The Word resume could not be generated."
+        ) from exc
+    return Response(
+        content=content,
+        media_type=DOCX_MEDIA_TYPE,
+        headers={
+            "Content-Disposition": content_disposition(final.contact.name),
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
+
+
+@router.delete("/analyses/{analysis_id}", status_code=204)
+def delete_analysis(request: Request, analysis_id: str):
+    try:
+        request.app.state.job_store.delete(_identifier(analysis_id))
+    except AnalysisNotFound as exc:
+        raise HTTPException(status_code=404, detail="Analysis not found or expired.") from exc
+    return Response(status_code=204)
+
+
+@router.get("/health")
+def health(request: Request):
+    payload = application_health(request.app.state.settings)
+    payload["build"] = build_state(
+        request.app.state.startup_source_fingerprint,
+        request.app.state.source_fingerprint_provider,
+    )
+    return payload
+
+
+@router.get("/system")
+def system(request: Request):
+    return system_capabilities(request.app.state.settings, public=True)
+
+
+@router.get("/models")
+def models():
+    return model_status(public=True)
+
+@router.get("/analyses/{analysis_id}/download-docxx")
 def download_docx(request: Request, analysis_id: str, template: str = "single_column"):
     record = _record(request, analysis_id)
     if record.status != "completed" or record.result is None:
@@ -413,30 +521,3 @@ def download_docx(request: Request, analysis_id: str, template: str = "single_co
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
-@router.delete("/analyses/{analysis_id}", status_code=204)
-def delete_analysis(request: Request, analysis_id: str):
-    try:
-        request.app.state.job_store.delete(_identifier(analysis_id))
-    except AnalysisNotFound as exc:
-        raise HTTPException(status_code=404, detail="Analysis not found or expired.") from exc
-    return Response(status_code=204)
-
-
-@router.get("/health")
-def health(request: Request):
-    payload = application_health(request.app.state.settings)
-    payload["build"] = build_state(
-        request.app.state.startup_source_fingerprint,
-        request.app.state.source_fingerprint_provider,
-    )
-    return payload
-
-
-@router.get("/system")
-def system(request: Request):
-    return system_capabilities(request.app.state.settings, public=True)
-
-
-@router.get("/models")
-def models():
-    return model_status(public=True)

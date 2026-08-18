@@ -36,7 +36,7 @@
   <div class="container-xxl">
     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
       <div><span class="eyebrow">Canonical report · schema {{ report['schema_version'] }}</span><h1 class="h2 mt-2 mb-1">{{ report['document']['name'] }}</h1><p class="text-secondary mb-0">Review every suggestion before editing your resume.</p></div>
-      <div class="d-flex flex-wrap gap-2 no-print"><a class="btn btn-outline-secondary" href="/analyze">New analysis</a><button class="btn btn-outline-secondary" type="button" id="print-result">Print</button><a class="btn btn-primary" href="/api/analyses/{{ analysis_id }}/download">Download  Your Improved Resume</a></div>
+      <div class="d-flex flex-wrap gap-2 no-print"><a class="btn btn-outline-secondary" href="/analyze">New analysis</a><button class="btn btn-outline-secondary" type="button" id="print-result">Print</button><a class="btn btn-primary" href="/api/analyses/{{ analysis_id }}/download">Download  Json</a><a class="btn btn-primary" href="/results/{{ analysis_id }}/final-resume">Review / Export Resume</a></div>
     </div>
     <ul class="nav nav-tabs results-tabs no-print overflow-hidden flex-nowrap" id="resultTabs" role="tablist">
       {% for key, label in [('overview','Overview'),('candidate','Candidate'),('sections','Sections'),('roles','Target role'),('ats','ATS'),('recommendations','Recommendations'),('rewrites','Rewrites'),('evidence','Evidence'),('messages','Warnings'),('json','Raw JSON')] %}

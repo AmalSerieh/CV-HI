@@ -24,103 +24,146 @@ window.selectTemplate = function(templateType) {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Console log resume analysis calculations for user debugging
-  try {
-    const reportScript = document.getElementById("analysis-report-json");
-    if (reportScript && reportScript.textContent) {
-      const reportData = JSON.parse(reportScript.textContent);
-      console.group("%c📊 Resume Intelligence Scoring Engine - Calculation Debugger", "color: #0d6efd; font-size: 14px; font-weight: bold;");
-      console.log("%c🎯 Overall Score:", "font-weight: bold; font-size: 13px; color: #198754;", (reportData.overall_score !== undefined ? reportData.overall_score : reportData.scoring_engine?.overall_score || 0), "/ 100");
-      console.log("📑 Full Analysis Report Object:", reportData);
-      console.log("⚠️ Applied Penalties:", reportData.all_penalties || reportData.scoring_engine?.all_penalties || []);
-      console.log("❗ Missing Elements:", reportData.all_missing_elements || reportData.scoring_engine?.all_missing_elements || []);
-
-      const scoreBd = reportData.score_breakdown || reportData.scoring_engine?.score_breakdown || {};
-      if (Object.keys(scoreBd).length > 0) {
-        console.group("🔢 Section Breakdown (7 Evaluation Modules):");
-        const tableData = {};
-        for (const [secKey, secVal] of Object.entries(scoreBd)) {
-          tableData[secKey] = {
-            "Module Name (EN)": secVal.section_name || secKey,
-            "Module Name (AR)": secVal.section_name_ar || secKey,
-            "Weight": secVal.weight_percentage || "N/A",
-            "Score": `${secVal.score !== undefined ? secVal.score : 0} / ${secVal.max_score || 100}`,
-            "Percentage": `${secVal.percentage !== undefined ? secVal.percentage : (secVal.normalized_100 || 0)}%`,
-            "Status": secVal.status_ar || secVal.status || "N/A"
-          };
-        }
-        console.table(tableData);
-        console.groupEnd();
-      }
-      console.groupEnd();
-    }
-  } catch (err) {
-    console.warn("Could not parse analysis report for console logging:", err);
-  }
-
-  // Initialize Bootstrap Popovers for Academic References and Citations
-  if (typeof bootstrap !== 'undefined' && bootstrap.Popover) {
-    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-    [...popoverTriggerList].forEach(popoverTriggerEl => {
-      new bootstrap.Popover(popoverTriggerEl, {
-        html: true,
-        trigger: 'hover focus click',
-        sanitize: false
-      });
-    });
-  }
-
-  // Initialize Bootstrap Tooltips
-  if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    [...tooltipTriggerList].forEach(tooltipTriggerEl => {
-      new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-  }
+  const page = document.querySelector("[data-results-page]");
+  if (!page) return;
 
   document.getElementById("print-result")?.addEventListener("click", () => window.print());
+
+  if (window.location.hash === "#rewrites") {
+    const rewriteTab = document.getElementById("rewrites-tab");
+    const tabApi = window.bootstrap?.Tab;
+    if (rewriteTab && tabApi?.getOrCreateInstance) {
+      try {
+        tabApi.getOrCreateInstance(rewriteTab).show();
+      } catch (_error) {
+        // Review controls remain usable even if optional tab activation fails.
+      }
+    }
+  }
+
+  const reviewSection = page.querySelector("[data-review-url]");
+  const reviewSaveStatus = document.getElementById("review-save-status");
+
+  const showReviewMessage = (message, isError = false) => {
+    if (!reviewSaveStatus) return;
+    reviewSaveStatus.classList.remove("d-none", "alert-secondary", "alert-warning");
+    reviewSaveStatus.classList.add(isError ? "alert-warning" : "alert-secondary");
+    reviewSaveStatus.textContent = message;
+  };
+
+  const setReviewStatus = (item, decision) => {
+    const badge = item.querySelector("[data-review-status]");
+    if (badge) {
+      badge.textContent = decision.charAt(0).toUpperCase() + decision.slice(1);
+      badge.classList.remove("status-pending", "status-accepted", "status-rejected");
+      badge.classList.add(`status-${decision}`);
+    }
+
+    item.querySelectorAll(".review-decision").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.decision === decision));
+    });
+    item.querySelectorAll("[data-review-content]").forEach((choice) => {
+      const selected = decision === "accepted"
+        ? choice.dataset.reviewContent === "proposed"
+        : choice.dataset.reviewContent === "original";
+      choice.classList.toggle("is-final-choice", selected);
+      choice.querySelector("[data-review-final-marker]")?.classList.toggle("d-none", !selected);
+    });
+  };
+
+  const fetchJson = async (url, options) => {
+    const response = await fetch(url, options);
+    const contentType = response.headers.get("Content-Type") || "";
+    let payload = null;
+    if (response.status !== 204 && contentType.includes("application/json")) {
+      payload = await response.json();
+    }
+    if (!response.ok) {
+      const detail = payload && typeof payload.detail === "string" ? payload.detail : "Request failed.";
+      throw new Error(detail);
+    }
+    return payload;
+  };
+
+  const saveReviewDecision = async (button) => {
+    const item = button.closest("[data-review-item]");
+    const itemId = button.dataset.reviewId;
+    const decision = button.dataset.decision;
+    const kind = button.dataset.reviewKind;
+    if (
+      !reviewSection ||
+      !item ||
+      item.dataset.reviewItem !== itemId ||
+      !["accepted", "rejected"].includes(decision) ||
+      !["summary", "bullet", "skills"].includes(kind)
+    ) {
+      showReviewMessage("This review action is unavailable. Reload the page and try again.", true);
+      return;
+    }
+
+    const body = kind === "bullet"
+      ? { experience_bullets: { [itemId]: decision } }
+      : { [kind]: decision };
+    const itemButtons = item.querySelectorAll(".review-decision");
+    const originalLabel = button.textContent;
+    itemButtons.forEach((itemButton) => { itemButton.disabled = true; });
+    button.textContent = "Saving…";
+    showReviewMessage("Saving decision…");
+
+    try {
+      const payload = await fetchJson(reviewSection.dataset.reviewUrl, {
+        method: "PATCH",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const saved = kind === "bullet"
+        ? payload?.experience_bullets?.find((entry) => entry.id === itemId)
+        : payload?.[kind];
+      if (!saved || saved.decision !== decision) throw new Error("Decision was not persisted.");
+      setReviewStatus(item, decision);
+      showReviewMessage("Decision saved. The final resume preview will use this choice.");
+    } catch (_error) {
+      showReviewMessage("The decision could not be saved. Please try again.", true);
+    } finally {
+      button.textContent = originalLabel;
+      itemButtons.forEach((itemButton) => { itemButton.disabled = false; });
+    }
+  };
+
+  reviewSection?.addEventListener("click", (event) => {
+    const button = event.target.closest?.(".review-decision");
+    if (!button || !reviewSection.contains(button) || button.disabled) return;
+    void saveReviewDecision(button);
+  });
+
   const jsonSection = document.getElementById("json");
   const loadJson = document.getElementById("load-json");
   const copyJson = document.getElementById("copy-json");
   const rawJson = document.getElementById("raw-json");
   const jsonStatus = document.getElementById("json-status");
-  loadJson?.addEventListener("click", async () => {
-    if (loadJson) {
+  if (jsonSection && loadJson && copyJson && rawJson && jsonStatus) {
+    loadJson.addEventListener("click", async () => {
       loadJson.disabled = true;
       loadJson.textContent = "Loading…";
-    }
-    try {
-      if (!jsonSection?.dataset?.resultUrl) throw new Error("no_result_url");
-      const response = await fetch(jsonSection.dataset.resultUrl, {
-        headers: { "Accept": "application/json" }
-      });
-      if (!response.ok) throw new Error("json_request_failed");
-      const payload = await response.json();
-      if (rawJson) {
+      try {
+        const payload = await fetchJson(jsonSection.dataset.resultUrl, {
+          headers: { "Accept": "application/json" }
+        });
         rawJson.textContent = JSON.stringify(payload, null, 2);
         rawJson.classList.remove("d-none");
-      }
-      if (jsonStatus) {
         jsonStatus.classList.add("d-none");
-      }
-      if (copyJson) {
         copyJson.disabled = false;
-      }
-      if (loadJson) {
         loadJson.textContent = "JSON loaded";
-      }
-    } catch (_error) {
-      if (jsonStatus) {
+      } catch (_error) {
         jsonStatus.textContent = "The technical JSON could not be loaded. Use Download JSON instead.";
         jsonStatus.classList.remove("alert-secondary");
         jsonStatus.classList.add("alert-warning");
-      }
-      if (loadJson) {
         loadJson.disabled = false;
         loadJson.textContent = "Try again";
       }
-    }
-  });
+    });
+  }
+
   document.querySelectorAll(".copy-button").forEach((button) => {
     button.addEventListener("click", async () => {
       const target = document.getElementById(button.dataset.copyTarget);

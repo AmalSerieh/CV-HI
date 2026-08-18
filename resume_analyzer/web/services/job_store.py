@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -31,6 +32,7 @@ class JobRecord:
     result: dict[str, Any] | None = None
     error: dict[str, str] | None = None
     completed_stages: list[str] = field(default_factory=list)
+    review_state: Any | None = None
     deleted: bool = False
 
     def public_status(self) -> dict[str, Any]:
@@ -111,6 +113,38 @@ class JobStore:
             record.stage = "failed"
             record.error = {"code": code, "message": message}
             record.updated_at = datetime.now(timezone.utc)
+
+    def get_or_create_review_state(self, analysis_id: UUID, factory: Callable[[], Any]) -> Any:
+        """Return an isolated copy of state that expires with its analysis."""
+
+        self.cleanup_expired()
+        with self._lock:
+            record = self._jobs.get(analysis_id)
+            if record is None or record.deleted:
+                raise AnalysisNotFound(str(analysis_id))
+            if record.review_state is None:
+                record.review_state = deepcopy(factory())
+            return deepcopy(record.review_state)
+
+    def update_review_state(
+        self,
+        analysis_id: UUID,
+        factory: Callable[[], Any],
+        updater: Callable[[Any], Any],
+    ) -> Any:
+        """Validate and commit a review update atomically under the store lock."""
+
+        self.cleanup_expired()
+        with self._lock:
+            record = self._jobs.get(analysis_id)
+            if record is None or record.deleted:
+                raise AnalysisNotFound(str(analysis_id))
+            current = record.review_state
+            candidate = deepcopy(current if current is not None else factory())
+            updated = updater(candidate)
+            record.review_state = deepcopy(updated)
+            record.updated_at = datetime.now(timezone.utc)
+            return deepcopy(updated)
 
     def delete(self, analysis_id: UUID) -> None:
         with self._lock:

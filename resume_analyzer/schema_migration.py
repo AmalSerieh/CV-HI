@@ -1009,7 +1009,7 @@ class SchemaMigrator:
                     category=(_optional_text(data.get("category")) or skill_categories.get(key)),
                     confidence=_confidence(data.get("confidence"), 0.8),
                     evidence_ids=evidence_ids,
-                    #field_evidence_ids={"value": evidence_ids},
+                    field_evidence_ids={"value": evidence_ids},
                 )
             )
 

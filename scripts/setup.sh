@@ -8,7 +8,7 @@ for argument in "$@"; do
   [ "$argument" = "--dev" ] && INSTALL_DEV=true
   [ "$argument" = "--nlp" ] && INSTALL_NLP=true
 done
-python3 -c 'import sys; assert (3,10) <= sys.version_info[:2] < (3,13), "Python 3.10-3.12 is required"'
+python3 -c 'import sys; assert (3,10) <= sys.version_info[:2] < (3,13), "Python 3.10-3.13 is required"'
 [ -x .venv/bin/python ] || python3 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip
 .venv/bin/python -m pip install -r requirements.txt

@@ -5,6 +5,7 @@ from __future__ import annotations
 import shutil
 import stat
 import tempfile
+import xml.etree.ElementTree as ET
 import zipfile
 from pathlib import Path
 
@@ -30,15 +31,22 @@ class UploadService:
     }
     TEXT_MIME = {"text/plain", "application/octet-stream"}
 
+    # الكلمات المفتاحية الأساسية للسيرة الذاتية
+    CV_KEYWORDS = [
+        "experience", "education", "skills", "projects", "summary",
+        "work history", "employment", "certifications", "contact", "profile",
+        "الخبرات", "التعليم", "المهارات", "المشاريع", "الملخص", "الشهادات", "الاتصال", "المؤهلات"
+    ]
+
     def __init__(self, settings: WebSettings) -> None:
         self.settings = settings
 
     async def prepare(
-        self,
-        resume: UploadFile,
-        *,
-        job_description_text: str | None,
-        job_description_file: UploadFile | None,
+            self,
+            resume: UploadFile,
+            *,
+            job_description_text: str | None,
+            job_description_file: UploadFile | None,
     ) -> PreparedUpload:
         directory = Path(
             tempfile.mkdtemp(
@@ -54,7 +62,13 @@ class UploadService:
             original_name, extension = self._validate_resume_metadata(resume)
             destination = directory / f"resume{extension}"
             await self._stream_to_path(resume, destination, self.settings.max_upload_bytes)
+
+            # 1. الفحص الهيكلي للملف (تأكد أنه PDF أو DOCX غير تالف)
             self._validate_document(destination, extension)
+
+            # 2. الفحص الجديد: التأكد من أن الملف سيرة ذاتية فعلاً وليس نصاً عشوائياً
+            self._validate_cv_content(destination, extension)
+
             job_description = await self._job_description(
                 job_description_text, job_description_file
             )
@@ -176,8 +190,8 @@ class UploadService:
                             "unsafe_archive", "Symbolic links are not allowed in DOCX packages."
                         )
                     if (
-                        member.file_size > 1_000_000
-                        and member.file_size > max(1, member.compress_size) * 200
+                            member.file_size > 1_000_000
+                            and member.file_size > max(1, member.compress_size) * 200
                     ):
                         raise UploadValidationError(
                             "unsafe_archive", "The DOCX compression ratio is unsafe."
@@ -193,6 +207,43 @@ class UploadService:
             raise UploadValidationError(
                 "corrupt_document", "The DOCX could not be opened safely."
             ) from exc
+
+    def _validate_cv_content(self, path: Path, extension: str) -> None:
+        """يستخرج النص من الملف ويرفضه إذا لم يحتوِ على هيكل سيرة ذاتية."""
+        text = self._extract_text(path, extension)
+
+        if not text or len(text.strip()) < 50:
+            raise UploadValidationError(
+                "invalid_cv_content",
+                "The file does not contain readable text or is empty."
+            )
+
+        text_lower = text.lower()
+        matches = sum(1 for kw in self.CV_KEYWORDS if kw in text_lower)
+
+        # يتطلب وجود كلمتين مفتاحيتين على الأقل من أقسام الـ CV
+        if matches < 2:
+            raise UploadValidationError(
+                "not_a_resume",
+                "The uploaded file does not appear to be a valid resume (missing sections like Education, Experience, or Skills)."
+            )
+
+    def _extract_text(self, path: Path, extension: str) -> str:
+        """دالة مساعدة لاستخراج النص الأول لمعاينة المحتوى."""
+        text = ""
+        try:
+            if extension == ".pdf":
+                with fitz.open(path) as doc:
+                    for page in doc:
+                        text += page.get_text() + "\n"
+            elif extension == ".docx":
+                with zipfile.ZipFile(path) as archive:
+                    xml_content = archive.read("word/document.xml")
+                    tree = ET.fromstring(xml_content)
+                    text = " ".join([elem.text for elem in tree.iter() if elem.text])
+        except Exception:
+            pass
+        return text
 
     async def _job_description(self, text: str | None, upload: UploadFile | None) -> str | None:
         parts: list[str] = []

@@ -17,7 +17,8 @@ if (-not (Test-Path -LiteralPath ".venv\Scripts\python.exe")) {
 $python = Join-Path $root ".venv\Scripts\python.exe"
 & $python -m pip install --upgrade pip
 & $python -m pip install -r requirements.txt
-if ($Dev) { & $python -m pip install -r requirements-dev.txt }
+if ($Dev) { & $python -m pip install -r requir
+ements-dev.txt }
 if ($Nlp) { & $python -m pip install -r requirements-nlp.txt }
 & $python -m pip install -e . --no-deps
 if (-not (Test-Path -LiteralPath ".env")) { Copy-Item -LiteralPath ".env.example" -Destination ".env" }

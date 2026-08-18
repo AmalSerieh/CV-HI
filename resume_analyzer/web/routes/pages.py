@@ -8,6 +8,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
 from resume_analyzer.diagnostics.models import model_status
+from resume_analyzer.export import FinalResumeBuilder, ReviewStateError
 
 from ..services import AnalysisNotFound
 
@@ -164,6 +165,14 @@ def result_page(request: Request, analysis_id: str):
         or "en"
     )
     direction = "rtl" if language == "ar" else "ltr"
+    builder = FinalResumeBuilder(report)
+    try:
+        review_state = request.app.state.job_store.get_or_create_review_state(
+            record.id, builder.initial_state
+        )
+        review_payload = builder.review_payload(review_state).model_dump(mode="json")
+    except ReviewStateError:
+        review_payload = builder.review_payload(builder.initial_state()).model_dump(mode="json")
     return templates.TemplateResponse(
         request=request,
         name="results.html",
@@ -173,5 +182,72 @@ def result_page(request: Request, analysis_id: str):
             "analysis_id": str(identifier),
             "report": report,
             "evidence_by_id": _evidence_view(report),
+            "review": review_payload,
+        },
+    )
+
+
+@router.get("/results/{analysis_id}/final-resume", response_class=HTMLResponse)
+def final_resume_page(request: Request, analysis_id: str):
+    templates = request.app.state.templates
+    try:
+        identifier = UUID(analysis_id)
+        record = request.app.state.job_store.get(identifier)
+    except ValueError:
+        return templates.TemplateResponse(
+            request=request,
+            name="error.html",
+            context={
+                "page_title": "Invalid analysis",
+                "direction": "ltr",
+                "message": "The analysis identifier is not valid.",
+            },
+            status_code=400,
+        )
+    except AnalysisNotFound:
+        return templates.TemplateResponse(
+            request=request,
+            name="error.html",
+            context={
+                "page_title": "Analysis not found",
+                "direction": "ltr",
+                "message": "This temporary analysis does not exist or has expired.",
+            },
+            status_code=404,
+        )
+    if record.status != "completed" or record.result is None:
+        return templates.TemplateResponse(
+            request=request,
+            name="progress.html",
+            context={
+                "page_title": "Analysis in progress",
+                "direction": "ltr",
+                "analysis_id": str(identifier),
+            },
+        )
+    report = record.result
+    language = (
+        (report.get("target_role") or {}).get("language")
+        or (report.get("ats") or {}).get("language")
+        or "en"
+    )
+    direction = "rtl" if language == "ar" else "ltr"
+    builder = FinalResumeBuilder(report)
+    try:
+        state = request.app.state.job_store.get_or_create_review_state(
+            record.id, builder.initial_state
+        )
+        final = builder.build(state)
+    except ReviewStateError:
+        final = builder.build(builder.initial_state())
+    return templates.TemplateResponse(
+        request=request,
+        name="final_resume.html",
+        context={
+            "page_title": "Final Resume Preview",
+            "direction": direction,
+            "analysis_id": str(identifier),
+            "resume": final.model_dump(mode="json"),
+            "resume_templates": request.app.state.template_registry.public_metadata(),
         },
     )

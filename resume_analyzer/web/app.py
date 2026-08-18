@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import mimetypes
 import socket
 from collections.abc import Callable
 from contextlib import asynccontextmanager
@@ -14,11 +15,29 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from resume_analyzer.export import DEFAULT_TEMPLATE_REGISTRY, DocxRenderer
+
 from .build_info import SourceFingerprintMonitor, build_state, source_fingerprint
 from .config import WebSettings
 from .routes.api import router as api_router
 from .routes.pages import router as page_router
 from .services import AnalysisService, JobStore, UploadService
+
+# تصحيح تسجيل أنواع MIME في بايثون
+mimetypes.init()
+mimetypes.add_type("text/javascript", ".js")
+mimetypes.add_type("text/css", ".css")
+
+
+class FixedStaticFiles(StaticFiles):
+    """StaticFiles custom implementation to guarantee correct Javascript MIME types on Windows."""
+
+    def file_response(self, *args: Any, **kwargs: Any):
+        response = super().file_response(*args, **kwargs)
+        path = args[0] if args else kwargs.get("path", "")
+        if str(path).endswith(".js"):
+            response.headers["content-type"] = "text/javascript; charset=utf-8"
+        return response
 
 
 def create_app(
@@ -50,6 +69,8 @@ def create_app(
     app.state.upload_service = uploads
     app.state.job_store = store
     app.state.analysis_service = analysis
+    app.state.template_registry = DEFAULT_TEMPLATE_REGISTRY
+    app.state.docx_renderer = DocxRenderer(DEFAULT_TEMPLATE_REGISTRY)
     app.state.startup_source_fingerprint = startup_fingerprint
     app.state.source_fingerprint_provider = fingerprint_monitor
     app.state.templates = Jinja2Templates(directory=package_dir / "templates")
@@ -57,8 +78,9 @@ def create_app(
         app.state.startup_source_fingerprint,
         app.state.source_fingerprint_provider,
     )
-    from fastapi.staticfiles import StaticFiles
-    app.mount("/static", StaticFiles(directory=package_dir / "static", html=True), name="static")
+
+    # استخدام الـ FixedStaticFiles بدلاً من الترافيج العادي
+    app.mount("/static", FixedStaticFiles(directory=package_dir / "static"), name="static")
     app.include_router(page_router)
     app.include_router(api_router)
 
@@ -69,19 +91,14 @@ def create_app(
             request.app.state.startup_source_fingerprint,
             request.app.state.source_fingerprint_provider,
         )
-        # فقط أضف nosniff للملفات غير الثابتة
-        if not request.url.path.startswith("/static/"):
-            response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
         response.headers.setdefault("X-Frame-Options", "DENY")
         response.headers.setdefault("Referrer-Policy", "no-referrer")
-
-        # تعديل الـ CSP هنا لإتاحة الـ inline styles مثل تعديل شريط التقدم بالـ JS
         response.headers.setdefault(
             "Content-Security-Policy",
-            "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; "
+            "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; "
             "connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
         )
-
         response.headers.setdefault("X-Resume-Build", source["build_id"])
         response.headers.setdefault(
             "X-Resume-Source-Stale",
